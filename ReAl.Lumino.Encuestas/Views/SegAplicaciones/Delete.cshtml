@@ -1,0 +1,120 @@
+@model ReAl.Lumino.Encuestas.Models.SegAplicaciones
+
+@section Styles
+{
+	<!-- Bootstrap-Table CSS -->
+	<link href="~/lib/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+	<!-- Sweetalert CSS -->
+	<link href="~/lib/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+}	
+	
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">SegAplicaciones</h1>
+	</div>
+</div><!--/.row-->
+
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">¿Est&aacute; seguro que desea ELIMINAR &eacute;ste registro?</div>
+<div class="panel-body">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Sigla)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sigla)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Apiestado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Apiestado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Apitransaccion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Apitransaccion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Usucre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usucre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Feccre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Feccre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Usumod)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usumod)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecmod)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fecmod)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete" role="form" method="post" id="DeleteForm" class="form-horizontal row-border">
+        <input type="hidden" asp-for="Idsap" />
+        <input type="submit" value="Eliminar" class="btn btn-default" onclick="Validate(this, event);"/> |
+        <a asp-action="Index">Volver</a>
+    </form>
+</div>
+</div>
+</div>
+</div><!-- /.row -->
+
+@section Scripts
+{
+	<!-- Sweetalert JavaScript -->
+	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+	
+	<script>
+		function Validate(ctl, event)
+		{
+			event.preventDefault();
+			swal({
+				title: "¿Seguro que desea ELIMINAR el registro?",
+				text: "Verifique la información antes de aceptar!",
+				type: "question",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Eliminar",
+				cancelButtonText: "Cancelar"
+			}).then(function(isConfirm) {
+				if (isConfirm.value) {
+					$("#DeleteForm").submit();
+				} else {
+					swal("Cancelled", "Se ha cancelado la accion", "error");
+				}
+			});
+		}
+	</script>
+}	
+

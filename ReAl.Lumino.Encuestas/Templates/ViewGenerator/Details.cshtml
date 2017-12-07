@@ -1,0 +1,142 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.Collections.Generic
+@using System.Linq
+@@model @Model.ViewDataTypeName
+
+@{
+    if (Model.IsPartialView)
+    {
+    }
+    else if (Model.IsLayoutPageSelected)
+    {
+@:@@section Styles
+@:{
+	@:<!-- Bootstrap-Table CSS -->
+	@:<link href="~/lib/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+@:}	
+@:
+@:@@{
+    @:ViewData["Title"] = "@Model.ViewName";
+        if (!string.IsNullOrEmpty(Model.LayoutPageFile))
+        {
+    @:Layout = "@Model.LayoutPageFile";
+        }
+@:}
+@:
+@:<div class="row">
+	@:<div class="col-lg-12">
+		@:<h1 class="page-header">@Model.ViewDataTypeShortName</h1>
+	@:</div>
+@:</div><!--/.row-->
+@:
+    }
+    else
+    {
+@:@@{
+    @:Layout = null;
+@:}
+@:
+@:<!DOCTYPE html>
+@:
+@:<html>
+@:<head>
+    @:<meta name="viewport" content="width=device-width" />
+    @:<title>@Model.ViewName</title>
+@:</head>
+@:<body>
+@:
+        //    PushIndent("    ");
+    }
+}
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">@Model.ViewName</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @{
+                            string pkName = GetPrimaryKeyName();
+                            if (pkName != null)
+                            {
+                                @:<a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
+                                @:<a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@@Model.@pkName"><i class="fa fa-edit"></i></a>                                
+                            }
+                            else
+                            {
+                                @:<a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
+                                @:@@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |                                
+                            }
+                        }
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <dl class="dl-horizontal">
+            @{
+                foreach (var property in Model.ModelMetadata.Properties)
+                {
+                    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey)
+                    {
+                        <dt>
+                            @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+                        </dt>
+                        <dd>
+                            @@Html.DisplayFor(model => model.@GetValueExpression(property))
+                        </dd>
+                    }
+                }
+                foreach (var navigation in Model.ModelMetadata.Navigations)
+                {
+                    <dt>
+                        @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+                    </dt>
+                    <dd>
+                        @@Html.DisplayFor(model => model.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
+                    </dd>
+                }
+            } </dl>
+    </div>
+</div>
+</div>
+</div><!-- /.row -->
+
+
+@{
+    if (!Model.IsPartialView && !Model.IsLayoutPageSelected)
+    {
+        //ClearIndent();
+@:</body>
+@:</html>
+    }
+
+@:@@section Scripts
+@:{
+	@:<!-- Sweetalert JavaScript -->
+	@:<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+@:}	
+@:
+
+}
+@functions
+{
+    string GetPrimaryKeyName()
+    {
+        return (Model.ModelMetadata.PrimaryKeys != null && Model.ModelMetadata.PrimaryKeys.Length == 1)
+        ? Model.ModelMetadata.PrimaryKeys[0].PropertyName
+        : null;
+    }
+
+    string GetValueExpression(IPropertyMetadata property)
+    {
+        return property.PropertyName;
+    }
+
+    string GetValueExpression(INavigationMetadata navigation)
+    {
+        return navigation.AssociationPropertyName;
+    }
+}

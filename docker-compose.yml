@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  test.coremvc:
+    image: real.lumino.encuestas
+    build:
+      context: ./ReAl.Lumino.Encuestas
+      dockerfile: Dockerfile
