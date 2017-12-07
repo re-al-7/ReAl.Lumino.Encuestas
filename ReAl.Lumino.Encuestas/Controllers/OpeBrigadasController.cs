@@ -48,8 +48,8 @@ namespace ReAl.Lumino.Encuestas.Controllers
         // GET: OpeBrigadas/Create
         public IActionResult Create()
         {			
-            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado");
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado");
+            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, CatDepartamentos.Fields.Idcde.ToString(), CatDepartamentos.Fields.Nombre.ToString());
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, OpeProyectos.Fields.Idopy.ToString(), OpeProyectos.Fields.Nombre.ToString());
             return View();
         }
 
@@ -75,13 +75,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         ViewBag.ErrorDb = exp.InnerException.Message;                        
                     else
                         ModelState.AddModelError("", exp.Message);
-                    ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado");
-                    ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado");
+                    ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, CatDepartamentos.Fields.Idcde.ToString(), CatDepartamentos.Fields.Apiestado.ToString());
+                    ViewData["Idopy"] = new SelectList(_context.OpeProyectos, OpeProyectos.Fields.Idopy.ToString(), OpeProyectos.Fields.Apiestado.ToString());
                     return View();
                 }  
             }
-            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado", opeBrigadas.Idcde);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado", opeBrigadas.Idopy);
+            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, CatDepartamentos.Fields.Idcde.ToString(), CatDepartamentos.Fields.Apiestado.ToString(), opeBrigadas.Idcde);
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, OpeProyectos.Fields.Idopy.ToString(), OpeProyectos.Fields.Apiestado.ToString(), opeBrigadas.Idopy);
             return View(opeBrigadas);
         }
 
@@ -98,8 +98,8 @@ namespace ReAl.Lumino.Encuestas.Controllers
             {
                 return NotFound();
             }
-            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado", opeBrigadas.Idcde);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado", opeBrigadas.Idopy);
+            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, CatDepartamentos.Fields.Idcde.ToString(), CatDepartamentos.Fields.Apiestado.ToString(), opeBrigadas.Idcde);
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, OpeProyectos.Fields.Idopy.ToString(), OpeProyectos.Fields.Apiestado.ToString(), opeBrigadas.Idopy);
             return View(opeBrigadas);
         }
 
@@ -141,14 +141,14 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         ViewBag.ErrorDb = exp.InnerException.Message;                        
                     else
                         ModelState.AddModelError("", exp.Message);
-                    ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado");
-                    ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado");
+                    ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, CatDepartamentos.Fields.Idcde.ToString(), CatDepartamentos.Fields.Apiestado.ToString());
+                    ViewData["Idopy"] = new SelectList(_context.OpeProyectos, OpeProyectos.Fields.Idopy.ToString(), OpeProyectos.Fields.Apiestado.ToString());
                     return View(opeBrigadas);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado", opeBrigadas.Idcde);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado", opeBrigadas.Idopy);
+            ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, CatDepartamentos.Fields.Idcde.ToString(), CatDepartamentos.Fields.Apiestado.ToString(), opeBrigadas.Idcde);
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos, OpeProyectos.Fields.Idopy.ToString(), OpeProyectos.Fields.Apiestado.ToString(), opeBrigadas.Idopy);
             return View(opeBrigadas);
         }
 
@@ -190,8 +190,8 @@ namespace ReAl.Lumino.Encuestas.Controllers
                     ViewBag.ErrorDb = exp.InnerException.Message;                        
                 else
                     ModelState.AddModelError("", exp.Message);
-                ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado");
-                ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado");
+                ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, CatDepartamentos.Fields.Idcde.ToString(), CatDepartamentos.Fields.Apiestado.ToString());
+                ViewData["Idopy"] = new SelectList(_context.OpeProyectos, OpeProyectos.Fields.Idopy.ToString(), OpeProyectos.Fields.Apiestado.ToString());
                 return View();
             }     
         }

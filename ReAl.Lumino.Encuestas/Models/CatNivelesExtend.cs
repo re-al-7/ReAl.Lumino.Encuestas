@@ -20,18 +20,19 @@ namespace ReAl.Lumino.Encuestas.Models
 	{
 		public const string StrNombreTabla = "Cat_niveles";
 		public const string StrAliasTabla = "cat_niveles";
+
 		public enum Fields
 		{
-			Idcnv
-			,Nivel
-			,Descripcion
-			,Apiestado
-			,Apitransaccion
-			,Usucre
-			,Feccre
-			,Usumod
-			,Fecmod
-		
+			Idcnv,
+			Nivel,
+			Descripcion,
+			Apiestado,
+			Apitransaccion,
+			Usucre,
+			Feccre,
+			Usumod,
+			Fecmod
+		}
 	}
 }
 

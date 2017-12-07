@@ -20,25 +20,26 @@ namespace ReAl.Lumino.Encuestas.Models
 	{
 		public const string StrNombreTabla = "Seg_usuarios";
 		public const string StrAliasTabla = "seg_usuarios";
+
 		public enum Fields
 		{
-			Idsus
-			,Login
-			,Password
-			,Nombres
-			,Apellidos
-			,Correo
-			,Vigente
-			,Idcde
-			,Idobr
-			,Tablet
-			,Apiestado
-			,Apitransaccion
-			,Usucre
-			,Feccre
-			,Usumod
-			,Fecmod
-		
+			Idsus,
+			Login,
+			Password,
+			Nombres,
+			Apellidos,
+			Correo,
+			Vigente,
+			Idcde,
+			Idobr,
+			Tablet,
+			Apiestado,
+			Apitransaccion,
+			Usucre,
+			Feccre,
+			Usumod,
+			Fecmod
+		}
 	}
 }
 

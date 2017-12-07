@@ -20,20 +20,21 @@ namespace ReAl.Lumino.Encuestas.Models
 	{
 		public const string StrNombreTabla = "Cat_tipos_pregunta";
 		public const string StrAliasTabla = "cat_tipos_pregunta";
+
 		public enum Fields
 		{
-			Idctp
-			,Tipo_pregunta
-			,Descripcion
-			,Respuesta_valor
-			,Exportar_codigo
-			,Apiestado
-			,Apitransaccion
-			,Usucre
-			,Feccre
-			,Usumod
-			,Fecmod
-		
+			Idctp,
+			Tipo_pregunta,
+			Descripcion,
+			Respuesta_valor,
+			Exportar_codigo,
+			Apiestado,
+			Apitransaccion,
+			Usucre,
+			Feccre,
+			Usumod,
+			Fecmod
+		}
 	}
 }
 
