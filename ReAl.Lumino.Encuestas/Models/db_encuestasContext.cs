@@ -6,11 +6,6 @@ namespace ReAl.Lumino.Encuestas.Models
 {
     public partial class db_encuestasContext : DbContext
     {
-        public db_encuestasContext(DbContextOptions<db_encuestasContext> options) :  
-            base(options)  
-        {  
-        }
-        
         public virtual DbSet<CatDepartamentos> CatDepartamentos { get; set; }
         public virtual DbSet<CatNiveles> CatNiveles { get; set; }
         public virtual DbSet<CatTiposPregunta> CatTiposPregunta { get; set; }
@@ -544,6 +539,10 @@ namespace ReAl.Lumino.Encuestas.Models
             modelBuilder.Entity<OpeBrigadas>(entity =>
             {
                 entity.ForNpgsqlHasComment("Registro de las brigadas para los operativos de campo");
+
+                entity.HasIndex(e => new { e.Idopy, e.Codigo })
+                    .HasName("uk_obr_codigo")
+                    .IsUnique();
 
                 entity.Property(e => e.Idobr)
                     .HasDefaultValueSql("nextval(('public.ope_obr_seq'::text)::regclass)")
@@ -1390,13 +1389,11 @@ namespace ReAl.Lumino.Encuestas.Models
 
                 entity.Property(e => e.Fecmod).ForNpgsqlHasComment("Fecha en la que se realizó la última modificación del registro");
 
+                entity.Property(e => e.Idopy).ForNpgsqlHasComment("Identificador primario de del proyecto");
+
                 entity.Property(e => e.Idsro).ForNpgsqlHasComment("Identificador primario de rol de operación que se asigna al usuario");
 
                 entity.Property(e => e.Idsus).ForNpgsqlHasComment("Identificador primario de usuario al que se le asigna el rol");
-
-                entity.Property(e => e.Restriccion)
-                    .HasDefaultValueSql("'E'::character varying")
-                    .ForNpgsqlHasComment("Indica el nivel de restricción a la que está sujeto el rol de operación cuando se accede al sistema con el mismo. N: Ninguna Restricción; E: Evento; U: Personal o Usuario");
 
                 entity.Property(e => e.Rolactivo).ForNpgsqlHasComment("Si el usuartio tiene más de un rol, este campo indica si este rol es el rol activo para realizar operaciones en la aplicación");
 
@@ -1409,6 +1406,12 @@ namespace ReAl.Lumino.Encuestas.Models
                 entity.Property(e => e.Vigente)
                     .HasDefaultValueSql("1")
                     .ForNpgsqlHasComment("Indica si el rol de operación está vigente. Este valor tiene mayor eso específico que la fecha de vigencia, si este campo indica 0 (No vigente) no importa si la fecha de vigencia si lo está, el rol no está vigente. 1: Vigente; 0 No vigente");
+
+                entity.HasOne(d => d.IdopyNavigation)
+                    .WithMany(p => p.SegUsuariosRestriccion)
+                    .HasForeignKey(d => d.Idopy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sur_opy");
 
                 entity.HasOne(d => d.IdsroNavigation)
                     .WithMany(p => p.SegUsuariosRestriccion)

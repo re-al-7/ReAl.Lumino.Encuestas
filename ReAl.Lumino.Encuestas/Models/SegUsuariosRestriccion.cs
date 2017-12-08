@@ -15,11 +15,10 @@ namespace ReAl.Lumino.Encuestas.Models
         public long Idsus { get; set; }
         [Column("idsro")]
         public long Idsro { get; set; }
+        [Column("idopy")]
+        public long Idopy { get; set; }
         [Column("rolactivo")]
         public int Rolactivo { get; set; }
-        [Required]
-        [Column("restriccion")]
-        public string Restriccion { get; set; }
         [Column("vigente")]
         public int Vigente { get; set; }
         [Required]
@@ -38,6 +37,9 @@ namespace ReAl.Lumino.Encuestas.Models
         [Column("fecmod")]
         public DateTime? Fecmod { get; set; }
 
+        [ForeignKey("Idopy")]
+        [InverseProperty("SegUsuariosRestriccion")]
+        public OpeProyectos IdopyNavigation { get; set; }
         [ForeignKey("Idsro")]
         [InverseProperty("SegUsuariosRestriccion")]
         public SegRoles IdsroNavigation { get; set; }

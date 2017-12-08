@@ -23,13 +23,13 @@ namespace ReAl.Lumino.Encuestas.Models
         [Required]
         [Column("codigo")]
         public string Codigo { get; set; }
-        
+        [Required]
         [Column("apiestado")]
         public string Apiestado { get; set; }
-        
+        [Required]
         [Column("apitransaccion")]
         public string Apitransaccion { get; set; }
-        
+        [Required]
         [Column("usucre")]
         public string Usucre { get; set; }
         [Column("feccre")]

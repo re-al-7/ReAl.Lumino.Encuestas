@@ -14,8 +14,6 @@ namespace ReAl.Lumino.Encuestas.Models
             SegUsuariosRestriccion = new HashSet<SegUsuariosRestriccion>();
         }
 
-
-        
         [Key]
         [Column("idsus")]
         public long Idsus { get; set; }
@@ -39,10 +37,13 @@ namespace ReAl.Lumino.Encuestas.Models
         public long? Idobr { get; set; }
         [Column("tablet")]
         public string Tablet { get; set; }
+        [Required]
         [Column("apiestado")]
         public string Apiestado { get; set; }
+        [Required]
         [Column("apitransaccion")]
         public string Apitransaccion { get; set; }
+        [Required]
         [Column("usucre")]
         public string Usucre { get; set; }
         [Column("feccre")]
@@ -54,11 +55,9 @@ namespace ReAl.Lumino.Encuestas.Models
 
         [ForeignKey("Idcde")]
         [InverseProperty("SegUsuarios")]
-        [Display(Name = "Depto")]
         public CatDepartamentos IdcdeNavigation { get; set; }
         [ForeignKey("Idobr")]
         [InverseProperty("SegUsuarios")]
-        [Display(Name = "Brigada")]
         public OpeBrigadas IdobrNavigation { get; set; }
         [InverseProperty("IdsusNavigation")]
         public ICollection<OpeMovimientos> OpeMovimientos { get; set; }
