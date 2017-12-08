@@ -82,15 +82,31 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 return null;
         }
 
+        public SegRoles GetUserRole()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var obj = _context.SegRoles.SingleOrDefault(m => m.Idsro.ToString() == User.Identity.GetRole());                
+                return obj; 
+            }
+            else
+                return null;
+        }
         
         protected List<SegAplicaciones> GetAplicaciones()
         {
-            return CMenus.GetAplicaciones(_context);
+            var objRol = GetUserRole();
+            if (objRol == null)
+                return CMenus.GetAplicaciones(_context, -1);
+            return CMenus.GetAplicaciones(_context, objRol.Idsro);
         }
                 
         protected List<SegPaginas> GetPages()
         {
-            return CMenus.GetPages(this.HttpContext, _context);            
+            var objRol = GetUserRole();
+            if (objRol == null)
+                return CMenus.GetPages(this.HttpContext, _context,-1);
+            return CMenus.GetPages(this.HttpContext, _context,objRol.Idsro);
         }
         
     }

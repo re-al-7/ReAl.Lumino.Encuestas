@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -65,16 +66,31 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.Name, obj.Login));
-
                 identity.AddClaim(new Claim(ClaimTypes.GivenName, obj.Nombres + " " + obj.Apellidos));
-
-                //Añadimos la aplicacion por defecto
-                var objApp = _context.SegAplicaciones.OrderBy(x => x.Nombre).First();
-                HttpContext.Session.SetString("currentApp", objApp.Sigla);
                 
+                //Para el Rol
+                var objRol = _context.SegUsuarios
+                    .Join(_context.SegUsuariosRestriccion, sus => sus.Idsus, sur => sur.Idsus, (sus, sur) => new {sus, sur})
+                    .Join(_context.SegRoles, sussur => sussur.sur.Idsro, sro => sro.Idsro, (sussur, sro) => new {sussur, sro})
+                    .Where(@t => @t.sussur.sur.Rolactivo == 1)
+                    .Where(@t => string.Equals(@t.sussur.sus.Login, obj.Login, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(@t => @t.sro).SingleOrDefault();
+                if (objRol == null)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, string.Empty));
+                    HttpContext.Session.SetString("currentApp", string.Empty);
+                }
+                else
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, objRol.Idsro.ToString()));
+                    var objApp = CMenus.GetAplicaciones(_context, objRol.Idsro).OrderBy(x => x.Nombre).First();
+
+                    HttpContext.Session.SetString("currentApp", objApp == null? string.Empty : objApp.Sigla);
+                }
+
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
                 
-                /*
+                
                 if (returnUrl == null)
                 {
                     returnUrl = TempData["returnUrl"]?.ToString();
@@ -85,9 +101,8 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 }
                 else
                 {
-                */
-                return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
-                //}
+                    return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
+                }
             }
 
             // If we got this far, something failed, redisplay form

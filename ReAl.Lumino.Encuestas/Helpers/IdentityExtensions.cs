@@ -12,6 +12,14 @@ namespace ReAl.Lumino.Encuestas.Helpers
 
             return (identity as ClaimsIdentity).FirstOrNull(ClaimTypes.GivenName);
         }
+        
+        public static string GetRole(this IIdentity identity)
+        {
+            if (identity == null)
+                return null;
+
+            return (identity as ClaimsIdentity).FirstOrNull(ClaimTypes.Role);
+        }
 
         internal static string FirstOrNull(this ClaimsIdentity identity, string claimType)
         {
