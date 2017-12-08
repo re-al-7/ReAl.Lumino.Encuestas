@@ -38,6 +38,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             if (ModelState.IsValid)
             {
                 const string badUserNameOrPasswordMessage = "Usuario o contraseña incorrectos.";
+                const string badUserCreation = "El Usuario no tiene un Rol activo";
                 if (user == null)
                 {
                     ModelState.AddModelError("", badUserNameOrPasswordMessage);
@@ -74,16 +75,21 @@ namespace ReAl.Lumino.Encuestas.Controllers
                     .Join(_context.SegRoles, sussur => sussur.sur.Idsro, sro => sro.Idsro, (sussur, sro) => new {sussur, sro})
                     .Where(@t => @t.sussur.sur.Rolactivo == 1)
                     .Where(@t => string.Equals(@t.sussur.sus.Login, obj.Login, StringComparison.CurrentCultureIgnoreCase))
-                    .Select(@t => @t.sro).SingleOrDefault();
+                    .Select(arg => arg).SingleOrDefault();
                 if (objRol == null)
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Role, string.Empty));
+                    identity.AddClaim(new Claim(ClaimTypes.GroupSid, string.Empty));
                     HttpContext.Session.SetString("currentApp", string.Empty);
+                    
+                    ModelState.AddModelError("", badUserCreation);
+                    return View();
                 }
                 else
                 {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, objRol.Idsro.ToString()));
-                    var objApp = CMenus.GetAplicaciones(_context, objRol.Idsro).OrderBy(x => x.Nombre).First();
+                    identity.AddClaim(new Claim(ClaimTypes.Role, objRol.sro.Idsro.ToString()));
+                    identity.AddClaim(new Claim(ClaimTypes.GroupSid, objRol.sussur.sur.Idopy.ToString()));
+                    var objApp = CMenus.GetAplicaciones(_context, objRol.sro.Idsro).OrderBy(x => x.Nombre).First();
 
                     HttpContext.Session.SetString("currentApp", objApp == null? string.Empty : objApp.Sigla);
                 }

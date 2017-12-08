@@ -37,13 +37,10 @@ namespace ReAl.Lumino.Encuestas.Models
         public long? Idobr { get; set; }
         [Column("tablet")]
         public string Tablet { get; set; }
-        [Required]
         [Column("apiestado")]
         public string Apiestado { get; set; }
-        [Required]
         [Column("apitransaccion")]
         public string Apitransaccion { get; set; }
-        [Required]
         [Column("usucre")]
         public string Usucre { get; set; }
         [Column("feccre")]

@@ -93,6 +93,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 return null;
         }
         
+        public int GetGroupSid()
+        {
+            if (User.Identity.IsAuthenticated)
+                return int.Parse(User.Identity.GetGroupSid());
+            return -1;
+        }
+        
         protected List<SegAplicaciones> GetAplicaciones()
         {
             var objRol = GetUserRole();
