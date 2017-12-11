@@ -1,5 +1,5 @@
+@using System.Collections
 @model IEnumerable<ReAl.Lumino.Encuestas.Models.OpeUpms>
-
 
 @section Styles
 {
@@ -25,82 +25,19 @@
 <div class="panel panel-default">
 <div class="panel-heading">Index</div>
 <div class="panel-body">
-    <a asp-action="Create" title="Nuevo" class="btn btn-primary">
+	<a asp-action="Create" title="Nuevo" class="btn btn-primary">
 		<i class="fa fa-file-o"></i>
 	</a>
-	<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
-	       data-search="true" data-show-toggle="true" 
-	       data-locale="es-AR" data-advanced-search="true" data-id-table="advancedTable"	       
-		   data-page-size="25" data-pagination-v-align="both" data-show-export="true">
-		<thead>
-			<tr>
-				<th data-sortable="true" data-halign="center" data-field="Codigo">
-					@Html.DisplayNameFor(model => model.Codigo)
-				</th>
-				<th data-sortable="true" data-halign="center" data-field="Nombre">
-					@Html.DisplayNameFor(model => model.Nombre)
-				</th>
-				<th data-sortable="true" data-halign="center" data-field="Fecinicio">
-					@Html.DisplayNameFor(model => model.Fecinicio)
-				</th>
-				<th data-sortable="true" data-halign="center" data-field="Latitud">
-					@Html.DisplayNameFor(model => model.Latitud)
-				</th>
-				<th data-sortable="true" data-halign="center" data-field="Longitud">
-					@Html.DisplayNameFor(model => model.Longitud)
-				</th>
-				<th data-sortable="true" data-halign="center" data-field="IdcdeNavigation">
-					@Html.DisplayNameFor(model => model.IdcdeNavigation)
-				</th>
-				<th data-sortable="true" data-halign="center" data-field="IdopyNavigation">
-					@Html.DisplayNameFor(model => model.IdopyNavigation)
-				</th>
-				<th data-searchable="false" data-halign="center" data-align="center">Acciones</th>
-			</tr>
-		</thead>
-		<tbody>
-	@foreach (var item in Model) {
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.Codigo)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Nombre)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Fecinicio)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Latitud)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Longitud)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.IdcdeNavigation.Apiestado)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.IdopyNavigation.Apiestado)
-				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.Idoup" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
-					<a asp-action="Details" asp-route-id="@item.Idoup" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>
-					<a asp-action="Delete" asp-route-id="@item.Idoup" title="Eliminar" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-					<button type="button" class="btn btn-default" data-container="body"
-					        data-toggle="popover" data-trigger="click" ToolTip="Auditoria del registro"
-					        data-placement="left" data-html="true" title="Auditoria"
-					        data-content='<b>Usuario Creacion:</b> @item.Usucre <br />
-											<b>Fecha Creacion:</b> @item.Feccre <br />
-											<b>Usuario Modificacion:</b> @item.Usumod <br />
-											<b>Fecha Modificacion:</b> @item.Fecmod <br />
-											<b>Estado:</b> @item.Apiestado '>
-						<i class='fa fa-search-plus'></i>
-					</button>
-				</td>
-			</tr>
-	}
-		</tbody>
-	</table>
+	<div class="row">
+		<div class="form-group">
+			<div class="col-md-10">
+				@Html.DropDownList("ddlDepto",  new SelectList((IEnumerable) ViewData["Idcde"], "Idcde", "Nombre"))
+			</div>
+		</div>
+	</div>	
+	<div id = "partialDiv" >  
+		@Html.Partial("_IndexPartial") 
+	</div>
 </div>
 </div>
 </div>
@@ -116,33 +53,56 @@
 	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
 	
 	<script>
-		$(document).ready(function(){
-			$('[data-toggle="popover"]').popover();
-		});
+	    $(document).ready(function(){
+	        $('[data-toggle="popover"]').popover();
+	    });
 	    
-		$(document).on('show.bs.popover',
-			function(e) {
-				if ($(e.target).data('trigger') == 'click') {
-					var timeoutDataName = 'shownBsTooltipTimeout';
-					if ($(e.target).data(timeoutDataName) != null) {
-						clearTimeout($(e.target).data(timeoutDataName));
-					}
-					var timeout = setTimeout(function() {
-							$(e.target).click();
-						},
-						3000);
-					$(e.target).data(timeoutDataName, timeout);
-				}
-			});
-		$(document).on('hide.bs.popover',
-			function(e) {
-				if ($(e.target).data('trigger') == 'click') {
-					var timeoutDataName = 'shownBsTooltipTimeout';
-					if ($(e.target).data(timeoutDataName) != null) {
-						clearTimeout($(e.target).data(timeoutDataName));
-					}
-				}
-			});
+	    $(document).on('show.bs.popover',
+	        function(e) {
+	            if ($(e.target).data('trigger') == 'click') {
+	                var timeoutDataName = 'shownBsTooltipTimeout';
+	                if ($(e.target).data(timeoutDataName) != null) {
+	                    clearTimeout($(e.target).data(timeoutDataName));
+	                }
+	                var timeout = setTimeout(function() {
+	                        $(e.target).click();
+	                    },
+	                    3000);
+	                $(e.target).data(timeoutDataName, timeout);
+	            }
+	        });
+	    $(document).on('hide.bs.popover',
+	        function(e) {
+	            if ($(e.target).data('trigger') == 'click') {
+	                var timeoutDataName = 'shownBsTooltipTimeout';
+	                if ($(e.target).data(timeoutDataName) != null) {
+	                    clearTimeout($(e.target).data(timeoutDataName));
+	                }
+	            }
+	        });
+	</script>
+	
+	<script>
+		$(document).ready(function()  
+		{  
+			$("#ddlDepto").on("change", function() {
+				$.ajax(  
+					{  
+						url: '/OpeUpms/GetUpms?idcde=' + $(this).attr("value"),  
+						type: 'GET',  
+						data: "",  
+						contentType: 'application/json; charset=utf-8',  
+						success: function(data)  
+						{  
+							$("#partialDiv").html(data);  
+						},  
+						error: function()  
+						{  
+							alert("error");  
+						}  
+					});  
+			});  
+		});
 	</script>
 }	
 

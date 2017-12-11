@@ -20,10 +20,19 @@ namespace ReAl.Lumino.Encuestas.Controllers
         // GET: OpeUpms
         public async Task<IActionResult> Index()
         {
-            var db_encuestasContext = _context.OpeUpms.Where(upms => upms.Idopy == GetGroupSid()) .Include(o => o.IdcdeNavigation).Include(o => o.IdopyNavigation);
+            var lstDepto = _context.CatDepartamentos.ToList();
+            ViewData["Idcde"] = lstDepto;
+            var db_encuestasContext = _context.OpeUpms.Where(upms => upms.Idopy == GetGroupSid() && upms.Idcde == lstDepto.First().Idcde) .Include(o => o.IdcdeNavigation).Include(o => o.IdopyNavigation);            
             return View(await db_encuestasContext.ToListAsync());
         }
 
+        public PartialViewResult GetUpms(long? idcde)  
+        {  
+            var db_encuestasContext = _context.OpeUpms.Where(upms => upms.Idopy == GetGroupSid() && upms.Idcde == idcde)
+                .Include(o => o.IdcdeNavigation).Include(o => o.IdopyNavigation);               
+            return PartialView("_IndexPartial",db_encuestasContext.ToList());  
+        }
+        
         // GET: OpeUpms/Details/5
         public async Task<IActionResult> Details(long? id)
         {
