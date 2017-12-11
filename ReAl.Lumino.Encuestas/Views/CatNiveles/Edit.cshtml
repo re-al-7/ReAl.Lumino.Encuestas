@@ -1,4 +1,4 @@
-@model ReAl.Lumino.Encuestas.Models.OpeBrigadas
+@model ReAl.Lumino.Encuestas.Models.CatNiveles
 
 @section Styles
 {
@@ -12,7 +12,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">OpeBrigadas</h1>
+		<h1 class="page-header">CatNiveles</h1>
 	</div>
 </div><!--/.row-->
 
@@ -28,27 +28,16 @@
                 <a title="Guardar cambios" class="btn btn-primary" onclick="Validate(this, event);"><i class="fa fa-save"></i></a>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Idobr" />
+            <input type="hidden" asp-for="Idcnv" />
             <div class="form-group">
-                <label asp-for="Idcde" ></label>
-                <select asp-for="Idcde" class="form-control selectpicker" data-size="5" 
-                        data-live-search="true" data-select-on-tab="true" data-size="5"
-                        data-none-selected-text="No existen elementos"                                                                                              
-                        asp-items="ViewBag.Idcde"></select>
-                <span asp-validation-for="Idcde" class="text-danger"></span>
+                <label asp-for="Nivel"></label>
+                <input asp-for="Nivel" class="form-control" />
+                <span asp-validation-for="Nivel" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Idopy" ></label>
-                <select asp-for="Idopy" class="form-control selectpicker" data-size="5" 
-                        data-live-search="true" data-select-on-tab="true" data-size="5"
-                        data-none-selected-text="No existen elementos"                                                                                              
-                        asp-items="ViewBag.Idopy"></select>
-                <span asp-validation-for="Idopy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Codigo"></label>
-                <input asp-for="Codigo" class="form-control" />
-                <span asp-validation-for="Codigo" class="text-danger"></span>
+                <label asp-for="Descripcion"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
 				<input asp-for="Apiestado" class="form-control" type="hidden" />
 				<input asp-for="Apitransaccion" class="form-control" type="hidden" />

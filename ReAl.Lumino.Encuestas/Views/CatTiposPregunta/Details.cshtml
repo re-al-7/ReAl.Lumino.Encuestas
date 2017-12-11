@@ -1,4 +1,4 @@
-@model ReAl.Lumino.Encuestas.Models.OpeBrigadas
+@model ReAl.Lumino.Encuestas.Models.CatTiposPregunta
 
 @section Styles
 {
@@ -12,7 +12,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">OpeBrigadas</h1>
+		<h1 class="page-header">CatTiposPregunta</h1>
 	</div>
 </div><!--/.row-->
 
@@ -25,16 +25,34 @@
             <div class="form-group">
                 <div class="col-md-10">
                             <a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
-                            <a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Idobr"><i class="fa fa-edit"></i></a>                                
+                            <a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Idctp"><i class="fa fa-edit"></i></a>                                
                 </div>
             </div>    
         </div>
         <dl class="dl-horizontal">
                         <dt>
-                            @Html.DisplayNameFor(model => model.Codigo)
+                            @Html.DisplayNameFor(model => model.TipoPregunta)
                         </dt>
                         <dd>
-                            @Html.DisplayFor(model => model.Codigo)
+                            @Html.DisplayFor(model => model.TipoPregunta)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Descripcion)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.RespuestaValor)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.RespuestaValor)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ExportarCodigo)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.ExportarCodigo)
                         </dd>
                         <dt>
                             @Html.DisplayNameFor(model => model.Apiestado)
@@ -72,18 +90,6 @@
                         <dd>
                             @Html.DisplayFor(model => model.Fecmod)
                         </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IdcdeNavigation)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.IdcdeNavigation.Apiestado)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IdopyNavigation)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.IdopyNavigation.Apiestado)
-                    </dd>
  </dl>
     </div>
 </div>
