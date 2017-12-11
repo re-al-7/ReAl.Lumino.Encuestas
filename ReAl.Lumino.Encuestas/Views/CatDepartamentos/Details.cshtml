@@ -1,4 +1,4 @@
-@model ReAl.Lumino.Encuestas.Models.OpeUpms
+@model ReAl.Lumino.Encuestas.Models.CatDepartamentos
 
 @section Styles
 {
@@ -12,7 +12,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">OpeUpms</h1>
+		<h1 class="page-header">CatDepartamentos</h1>
 	</div>
 </div><!--/.row-->
 
@@ -25,7 +25,7 @@
             <div class="form-group">
                 <div class="col-md-10">
                             <a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
-                            <a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Idoup"><i class="fa fa-edit"></i></a>                                
+                            <a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Idcde"><i class="fa fa-edit"></i></a>                                
                 </div>
             </div>    
         </div>
@@ -43,12 +43,6 @@
                             @Html.DisplayFor(model => model.Nombre)
                         </dd>
                         <dt>
-                            @Html.DisplayNameFor(model => model.Fecinicio)
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.Fecinicio)
-                        </dd>
-                        <dt>
                             @Html.DisplayNameFor(model => model.Latitud)
                         </dt>
                         <dd>
@@ -59,6 +53,12 @@
                         </dt>
                         <dd>
                             @Html.DisplayFor(model => model.Longitud)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Abreviatura)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Abreviatura)
                         </dd>
                         <dt>
                             @Html.DisplayNameFor(model => model.Apiestado)
@@ -96,18 +96,6 @@
                         <dd>
                             @Html.DisplayFor(model => model.Fecmod)
                         </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IdcdeNavigation)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.IdcdeNavigation.Apiestado)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IdopyNavigation)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.IdopyNavigation.Apiestado)
-                    </dd>
  </dl>
     </div>
 </div>

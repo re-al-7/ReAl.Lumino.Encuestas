@@ -22,7 +22,8 @@ namespace ReAl.Lumino.Encuestas.Controllers
         // GET: OpeUpms
         public async Task<IActionResult> Index()
         {
-            ViewData["Idcde"] = this.GetDeptoRestriccion();
+            var lstDepto = this.GetDeptoRestriccion();
+            ViewData["Idcde"] = lstDepto;
             var db_encuestasContext = _context.OpeUpms.Where(upms => upms.Idopy == GetGroupSid() && upms.Idcde == lstDepto.First().Idcde) .Include(o => o.IdcdeNavigation).Include(o => o.IdopyNavigation);            
             return View(await db_encuestasContext.ToListAsync());
         }

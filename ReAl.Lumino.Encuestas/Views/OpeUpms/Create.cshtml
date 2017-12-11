@@ -21,23 +21,19 @@
 <div class="panel panel-default">
 <div class="panel-heading">Create</div>
 <div class="panel-body">                             
-<div class="row">
+
     <div class="col-md-6">
-        <form asp-action="Create" role="form" method="post" id="CreateForm" class="form-horizontal row-border">
+        <form asp-action="Create" role="form" method="post" id="CreateForm">
             <div class="form-group">
-                <div class="col-md-10">
-                    <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
-                    <a title="Guardar" class="btn btn-primary" onclick="Validate(this, event);"><i class="fa fa-save"></i></a>
-                </div>
+				<a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
+				<a title="Guardar" class="btn btn-primary" onclick="Validate(this, event);"><i class="fa fa-save"></i></a>
             </div>                                                                                                           
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Idopy" class="col-md-2 control-label"></label>
-				<div class="col-md-10">
-                    <select asp-for="Idopy" class="form-control selectpicker" asp-items="ViewBag.Idopy"
-                            data-live-search="true" data-select-on-tab="true" 
-                            data-none-selected-text="No existen elementos"></select>
-				</div>
+                <label asp-for="Idopy" ></label>
+				<select asp-for="Idopy" class="form-control selectpicker" asp-items="ViewBag.Idopy"
+						data-live-search="true" data-select-on-tab="true" 
+						data-none-selected-text="No existen elementos"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Idcde" class="col-md-2 control-label"></label>
@@ -86,7 +82,6 @@
     </div>
 </div>
 
-</div>
 </div>
 </div>
 </div><!-- /.row -->
