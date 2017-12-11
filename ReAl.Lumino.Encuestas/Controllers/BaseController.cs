@@ -33,6 +33,12 @@ namespace ReAl.Lumino.Encuestas.Controllers
             ViewBag.Usuario = GetUserName();            
         }
 
+        public IEnumerable<CatDepartamentos> GetDeptoRestriccion()
+        {
+            //TODO: Filtrar la lista segun restriccion
+            return _context.CatDepartamentos.ToList();                   
+        }
+        
         public string GetCurrentApp()
         {
             if (this.HttpContext.Session.Keys.Contains("currentApp"))

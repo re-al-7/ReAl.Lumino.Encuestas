@@ -67,6 +67,7 @@ namespace @Model.ControllerNamespace
     @:@string.Format("[Area(\"{0}\")]", Model.AreaName)
     }
 }
+    [Authorize]
     public class @Model.ControllerName : BaseController
     {
 		public @(Model.ControllerName)(@entitySetVar context, IConfiguration configuration) : base(context, configuration)

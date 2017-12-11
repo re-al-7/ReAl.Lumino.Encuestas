@@ -22,8 +22,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
         // GET: OpeUpms
         public async Task<IActionResult> Index()
         {
-            var lstDepto = _context.CatDepartamentos.ToList();
-            ViewData["Idcde"] = lstDepto;
+            ViewData["Idcde"] = this.GetDeptoRestriccion();
             var db_encuestasContext = _context.OpeUpms.Where(upms => upms.Idopy == GetGroupSid() && upms.Idcde == lstDepto.First().Idcde) .Include(o => o.IdcdeNavigation).Include(o => o.IdopyNavigation);            
             return View(await db_encuestasContext.ToListAsync());
         }
@@ -85,8 +84,8 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         ViewBag.ErrorDb = exp.InnerException.Message;                        
                     else
                         ModelState.AddModelError("", exp.Message);
-        ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado");
-        ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado");
+                    ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, "Idcde", "Apiestado");
+                    ViewData["Idopy"] = new SelectList(_context.OpeProyectos, "Idopy", "Apiestado");
                     return View();
                 }  
             }

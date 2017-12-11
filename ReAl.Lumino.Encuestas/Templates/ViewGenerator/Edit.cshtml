@@ -82,8 +82,8 @@
                 if (property.IsForeignKey)
                 {
             @:<div class="form-group">
-                @:<label asp-for="@property.PropertyName" class="col-md-2 control-label"></label>
-				@:<div class="col-md-10">
+                @:<label asp-for="@property.PropertyName" class="col-md-3 control-label"></label>
+				@:<div class="col-md-9">
                     @:<select asp-for="@property.PropertyName" class="form-control selectpicker" data-live-search="true" asp-items="ViewBag.@property.PropertyName"></select>
                     @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
 				@:</div>                
@@ -105,8 +105,8 @@
                 else if (property.IsEnum && !property.IsEnumFlags)
                 {
             @:<div class="form-group">
-                @:<label asp-for="@property.PropertyName" class="col-md-2 control-label"></label>
-				@:<div class="col-md-10">
+                @:<label asp-for="@property.PropertyName" class="col-md-3 control-label"></label>
+				@:<div class="col-md-9">
                     @:<select asp-for="@property.PropertyName" class="form-control selectpicker" data-live-search="true"></select>
                     @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
 				@:<div>                
@@ -122,8 +122,8 @@
                 else
                 {
             @:<div class="form-group">
-                @:<label asp-for="@property.PropertyName" class="col-md-2 control-label"></label>
-				@:<div class="col-md-10">
+                @:<label asp-for="@property.PropertyName" class="col-md-3 control-label"></label>
+				@:<div class="col-md-9">
                     @:<input asp-for="@property.PropertyName" class="form-control" />
                     @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
 				@:</div>                
