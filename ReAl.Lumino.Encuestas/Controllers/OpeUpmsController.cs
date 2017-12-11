@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using ReAl.Lumino.Encuestas.Models;
 
 namespace ReAl.Lumino.Encuestas.Controllers
 {
+    [Authorize]
     public class OpeUpmsController : BaseController
     {
 		public OpeUpmsController(db_encuestasContext context, IConfiguration configuration) : base(context, configuration)
