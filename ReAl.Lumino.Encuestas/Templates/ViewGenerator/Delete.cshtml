@@ -58,47 +58,46 @@
 <div class="panel-body">
     <div class="col-md-6">
         <div class="form-group">
-            <div class="col-md-10">
-                <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
-                <a title="Eliminar registro" class="btn btn-primary" onclick="Validate(this, event);"><i class="fa fa-trash-o"></i></a>
-            </div>
+            <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
+            <a title="Eliminar registro" class="btn btn-danger" onclick="Validate(this, event);"><i class="fa fa-trash-o"></i></a>
         </div>    
-    </div>
-    <dl class="dl-horizontal">
+        <div class="form-group">
+            <dl class="dl-horizontal">
 @{
     foreach (var property in Model.ModelMetadata.Properties)
     {
         if (property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
         {
-        <dt>
-            @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
-        </dt>
-        <dd>
-            @@Html.DisplayFor(model => model.@GetValueExpression(property))
-        </dd>
+                <dt>
+                    @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+                </dt>
+                <dd>
+                    @@Html.DisplayFor(model => model.@GetValueExpression(property))
+                </dd>
         }
     }
     foreach (var navigation in Model.ModelMetadata.Navigations)
     {
-        <dt>
-            @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
-        </dt>
-        <dd>
-            @@Html.DisplayFor(model => model.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
-        </dd>
+                <dt>
+                    @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+                </dt>
+                <dd>
+                    @@Html.DisplayFor(model => model.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
+                </dd>
     }
-    @:</dl>
+            @:</dl>
     @:
-    @:<form asp-action="@Model.ViewName" role="form" method="post" id="DeleteForm" class="form-horizontal row-border">
-        foreach (var property in Model.ModelMetadata.Properties)
-        {
-            if(property.IsPrimaryKey){
-        @:<input type="hidden" asp-for="@GetValueExpression(property)" />
-            }
-        }        
-    @:</form>
+            @:<form asp-action="@Model.ViewName" role="form" method="post" id="DeleteForm" class="form-horizontal row-border">
+                foreach (var property in Model.ModelMetadata.Properties)
+                {
+                    if(property.IsPrimaryKey){
+                @:<input type="hidden" asp-for="@GetValueExpression(property)" />
+                    }
+                }        
+            @:</form>
+        @:</div>
+    @:</div>
 @:</div>
-
 @:</div>
 @:</div>
 @:</div><!-- /.row -->

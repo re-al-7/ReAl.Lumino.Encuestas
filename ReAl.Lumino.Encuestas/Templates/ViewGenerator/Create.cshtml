@@ -96,9 +96,21 @@
                 @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>				
             @:</div>
                 }
-				else if (property.PropertyName == "Apiestado" || property.PropertyName == "Apitransaccion" || property.PropertyName == "Feccre" || property.PropertyName == "Usucre")
+                else if (property.PropertyName == "Apiestado")
+                {
+            @:<input asp-for="@property.PropertyName" class="form-control" type="hidden" value="ELABORADO" />	    
+                }
+                else if (property.PropertyName == "Apitransaccion")
+                {
+            @:<input asp-for="@property.PropertyName" class="form-control" type="hidden" value="CREAR" />
+                }
+                else if (property.PropertyName == "Feccre")
+                {
+				    
+                }
+				else if (property.PropertyName == "Usucre")
 				{
-				    @:<input asp-for="@property.PropertyName" class="form-control" type="hidden" value="--" />
+            @:<input asp-for="@property.PropertyName" class="form-control" type="hidden" value="--" />            
 				}
 				else if (property.PropertyName == "Fecmod" || property.PropertyName == "Usumod")
 				{

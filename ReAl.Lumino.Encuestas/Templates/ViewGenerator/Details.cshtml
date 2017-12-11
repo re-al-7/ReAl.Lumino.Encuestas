@@ -55,36 +55,34 @@
 <div class="panel-heading">@Model.ViewName</div>
     <div class="panel-body">
         <div class="col-md-6">
-            <div class="form-group">
-                <div class="col-md-10">
-                    @{
-                        string pkName = GetPrimaryKeyName();
-                        if (pkName != null)
-                        {
-                            @:<a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
-                            @:<a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@@Model.@pkName"><i class="fa fa-edit"></i></a>                                
-                        }
-                        else
-                        {
-                            @:<a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
-                            @:@@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |                                
-                        }
-                    }
-                </div>
+            <div class="form-group">                
+        @{
+            string pkName = GetPrimaryKeyName();
+            if (pkName != null)
+            {
+                @:<a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
+                @:<a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@@Model.@pkName"><i class="fa fa-edit"></i></a>                                
+            }
+            else
+            {
+                @:<a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
+                @:@@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |                                
+            }
+        }
             </div>    
-        </div>
-        <dl class="dl-horizontal">
+            <div class="form-group">
+                <dl class="dl-horizontal">
             @{
                 foreach (var property in Model.ModelMetadata.Properties)
                 {
                     if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey)
                     {
-                        <dt>
-                            @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
-                        </dt>
-                        <dd>
-                            @@Html.DisplayFor(model => model.@GetValueExpression(property))
-                        </dd>
+                    <dt>
+                        @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+                    </dt>
+                    <dd>
+                        @@Html.DisplayFor(model => model.@GetValueExpression(property))
+                    </dd>
                     }
                 }
                 foreach (var navigation in Model.ModelMetadata.Navigations)
@@ -96,7 +94,10 @@
                         @@Html.DisplayFor(model => model.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
                     </dd>
                 }
-            } </dl>
+            } 
+                </dl>
+            </div>    
+        </div>        
     </div>
 </div>
 </div>
