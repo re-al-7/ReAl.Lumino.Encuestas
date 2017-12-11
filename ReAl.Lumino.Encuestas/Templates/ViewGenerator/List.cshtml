@@ -82,7 +82,7 @@
 						}
 						else
 						{
-					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(property)">
+					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(property)" data-valign="middle">
 						@@Html.DisplayNameFor(model => model.@GetValueExpression(property))
 					</th>
 						}
@@ -90,11 +90,11 @@
 				}
 				foreach (var navigation in Model.ModelMetadata.Navigations)
 				{
-					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(navigation)">
+					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(navigation)" data-valign="middle">
 						@@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
 					</th>
 				}
-					@:<th data-searchable="false" data-halign="center" data-align="center">Acciones</th>
+					@:<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
 				@:</tr>
 			@:</thead>
 			@:<tbody>

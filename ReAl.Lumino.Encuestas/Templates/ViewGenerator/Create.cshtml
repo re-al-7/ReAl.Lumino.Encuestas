@@ -69,8 +69,8 @@
             @:<div class="form-group">
                 @:<label asp-for="@property.PropertyName"></label>
                 @:<select asp-for="@property.PropertyName" class="form-control selectpicker" asp-items="ViewBag.@property.PropertyName"
-                @:        data-live-search="true" data-select-on-tab="true" 
-                @:        data-none-selected-text="No existen elementos"></select>></select>
+                @:        data-live-search="true" data-select-on-tab="true" data-size="5"
+                @:        data-none-selected-text="No existen elementos"></select>
             @:</div>
                     continue;
                 }
@@ -91,13 +91,18 @@
             @:<div class="form-group">
                 @:<label asp-for="@property.PropertyName"></label>
                 @:<select asp-for="@property.PropertyName" class="form-control selectpicker" 
-                @:        data-live-search="true" data-select-on-tab="true" 
+                @:        data-live-search="true" data-select-on-tab="true" data-size="5"
                 @:        data-none-selected-text="No existen elementos"></select>
                 @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>				
             @:</div>
                 }
-				else if (property.PropertyName == "Apiestado" || property.PropertyName == "Apitransaccion" || property.PropertyName == "Feccre" || property.PropertyName == "Usucre" || property.PropertyName == "Fecmod" || property.PropertyName == "Usumod")
+				else if (property.PropertyName == "Apiestado" || property.PropertyName == "Apitransaccion" || property.PropertyName == "Feccre" || property.PropertyName == "Usucre")
 				{
+				    @:<input asp-for="@property.PropertyName" class="form-control" type="hidden" value="--" />
+				}
+				else if (property.PropertyName == "Fecmod" || property.PropertyName == "Usumod")
+				{
+				    
 				}
 				else if (property.IsPrimaryKey)
 				{

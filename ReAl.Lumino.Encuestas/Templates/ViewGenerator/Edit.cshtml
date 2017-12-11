@@ -80,7 +80,10 @@
                 {
             @:<div class="form-group">
                 @:<label asp-for="@property.PropertyName" ></label>
-                @:<select asp-for="@property.PropertyName" class="form-control selectpicker" data-live-search="true" asp-items="ViewBag.@property.PropertyName"></select>
+                @:<select asp-for="@property.PropertyName" class="form-control selectpicker" data-size="5" 
+                @:        data-live-search="true" data-select-on-tab="true" data-size="5"
+                @:        data-none-selected-text="No existen elementos"                                                                                              
+                @:        asp-items="ViewBag.@property.PropertyName"></select>
                 @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
             @:</div>
                     continue;
@@ -101,7 +104,9 @@
                 {
             @:<div class="form-group">
                 @:<label asp-for="@property.PropertyName"></label>
-                @:<select asp-for="@property.PropertyName" class="form-control selectpicker" data-live-search="true"></select>
+                @:<select asp-for="@property.PropertyName" class="form-control selectpicker" 
+                @:        data-live-search="true" data-select-on-tab="true" data-size="5"
+                @:        data-none-selected-text="No existen elementos"></select>
                 @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
             @:</div>
                 }
