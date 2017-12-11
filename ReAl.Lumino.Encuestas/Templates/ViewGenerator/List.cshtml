@@ -57,97 +57,103 @@
 @:<div class="panel panel-default">
 @:<div class="panel-heading">@Model.ViewName</div>
 @:<div class="panel-body">
-    @:<a asp-action="Create" title="Nuevo" class="btn btn-primary">
-		@:<i class="fa fa-file-o"></i>
-	@:</a>
-	@:<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
-		   @:data-search="true" data-show-toggle="true" 
-		   @:data-locale="es-AR" data-advanced-search="true" data-id-table="advancedTable"
-		   @:data-page-size="25" data-pagination-v-align="both" data-show-export="true">
-		@:<thead>
-			@:<tr>
-
-			var properties = Model.ModelMetadata.Properties;
-			foreach (var property in properties)
-			{
-				if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey)
+	@:<div class="col-md-6">
+		@:<div class="form-group">
+			@:<a asp-action="Create" title="Nuevo" class="btn btn-primary">
+				@:<i class="fa fa-file-o"></i>
+			@:</a>
+		@:</div>
+	@:</div>
+	@:<div class="col-md-12">
+		@:<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
+			   @:data-search="true" data-show-toggle="true" 
+			   @:data-locale="es-AR" data-advanced-search="true" data-id-table="advancedTable"
+			   @:data-page-size="25" data-pagination-v-align="both" data-show-export="true">
+			@:<thead>
+				@:<tr>
+	
+				var properties = Model.ModelMetadata.Properties;
+				foreach (var property in properties)
 				{
-					if (property.PropertyName == "Apiestado" || property.PropertyName == "Apitransaccion" || property.PropertyName == "Feccre" || property.PropertyName == "Usucre" || property.PropertyName == "Fecmod" || property.PropertyName == "Usumod")
+					if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey)
 					{
-					}
-					else
-					{
-				<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(property)">
-					@@Html.DisplayNameFor(model => model.@GetValueExpression(property))
-				</th>
+						if (property.PropertyName == "Apiestado" || property.PropertyName == "Apitransaccion" || property.PropertyName == "Feccre" || property.PropertyName == "Usucre" || property.PropertyName == "Fecmod" || property.PropertyName == "Usumod")
+						{
+						}
+						else
+						{
+					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(property)">
+						@@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+					</th>
+						}
 					}
 				}
-			}
-			foreach (var navigation in Model.ModelMetadata.Navigations)
-			{
-				<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(navigation)">
-					@@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
-				</th>
-			}
-				@:<th data-searchable="false" data-halign="center" data-align="center">Acciones</th>
-			@:</tr>
-		@:</thead>
-		@:<tbody>
-	@:@@foreach (var item in Model) {
-			@:<tr>
-			foreach (PropertyMetadata property in properties)
-			{
-				if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey)
+				foreach (var navigation in Model.ModelMetadata.Navigations)
 				{
-					if (property.PropertyName == "Apiestado" || property.PropertyName == "Apitransaccion" || property.PropertyName == "Feccre" || property.PropertyName == "Usucre" || property.PropertyName == "Fecmod" || property.PropertyName == "Usumod")
+					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(navigation)">
+						@@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+					</th>
+				}
+					@:<th data-searchable="false" data-halign="center" data-align="center">Acciones</th>
+				@:</tr>
+			@:</thead>
+			@:<tbody>
+		@:@@foreach (var item in Model) {
+				@:<tr>
+				foreach (PropertyMetadata property in properties)
+				{
+					if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey)
 					{
-					}
-					else
-					{
-				<td>
-					@@Html.DisplayFor(modelItem => item.@GetValueExpression(property))
-				</td>
+						if (property.PropertyName == "Apiestado" || property.PropertyName == "Apitransaccion" || property.PropertyName == "Feccre" || property.PropertyName == "Usucre" || property.PropertyName == "Fecmod" || property.PropertyName == "Usumod")
+						{
+						}
+						else
+						{
+					<td>
+						@@Html.DisplayFor(modelItem => item.@GetValueExpression(property))
+					</td>
+						}
 					}
 				}
-			}
-			foreach (var navigation in Model.ModelMetadata.Navigations)
-			{
-				<td>
-					@@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
-				</td>
-			}
-			string pkName = GetPrimaryKeyName();
-			if (pkName != null)
-			{
-				@:<td>
-					@:<a asp-action="Edit" asp-route-id="@@item.@pkName" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
-					@:<a asp-action="Details" asp-route-id="@@item.@pkName" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>
-					@:<a asp-action="Delete" asp-route-id="@@item.@pkName" title="Eliminar" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-					@:<button type="button" class="btn btn-default" data-container="body"
-						    @:data-toggle="popover" data-trigger="click" ToolTip="Auditoria del registro"
-						    @:data-placement="left" data-html="true" title="Auditoria"
-							@:data-content='<b>Usuario Creacion:</b> @@item.Usucre <br />
-										  @:<b>Fecha Creacion:</b> @@item.Feccre <br />
-										  @:<b>Usuario Modificacion:</b> @@item.Usumod <br />
-										  @:<b>Fecha Modificacion:</b> @@item.Fecmod <br />
-										  @:<b>Estado:</b> @@item.Apiestado '>
-						@:<i class='fa fa-search-plus'></i>
-					@:</button>
-				@:</td>
-			}
-			else
-			{
-				<td>
-					@@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-					@@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-					@@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-				</td>
-			}
-			@:</tr>
-	@:}
-		@:</tbody>
-
-	@:</table>
+				foreach (var navigation in Model.ModelMetadata.Navigations)
+				{
+					<td>
+						@@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
+					</td>
+				}
+				string pkName = GetPrimaryKeyName();
+				if (pkName != null)
+				{
+					@:<td>
+						@:<a asp-action="Edit" asp-route-id="@@item.@pkName" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
+						@:<a asp-action="Details" asp-route-id="@@item.@pkName" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>
+						@:<a asp-action="Delete" asp-route-id="@@item.@pkName" title="Eliminar" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+						@:<button type="button" class="btn btn-default" data-container="body"
+								@:data-toggle="popover" data-trigger="click" ToolTip="Auditoria del registro"
+								@:data-placement="left" data-html="true" title="Auditoria"
+								@:data-content='<b>Usuario Creacion:</b> @@item.Usucre <br />
+											  @:<b>Fecha Creacion:</b> @@item.Feccre <br />
+											  @:<b>Usuario Modificacion:</b> @@item.Usumod <br />
+											  @:<b>Fecha Modificacion:</b> @@item.Fecmod <br />
+											  @:<b>Estado:</b> @@item.Apiestado '>
+							@:<i class='fa fa-search-plus'></i>
+						@:</button>
+					@:</td>
+				}
+				else
+				{
+					<td>
+						@@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+						@@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+						@@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+					</td>
+				}
+				@:</tr>
+		@:}
+			@:</tbody>
+	
+		@:</table>
+	@:</div>
 @:</div>
 @:</div>
 @:</div>
