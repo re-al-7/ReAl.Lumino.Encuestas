@@ -30,6 +30,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             return View(await db_encuestasContext.ToListAsync());
         }
 
+        // GET
         public PartialViewResult GetUpms(long? idcde)  
         {  
             var db_encuestasContext = _context.OpeUpms

@@ -1,0 +1,113 @@
+@model ReAl.Lumino.Encuestas.Models.EncSecciones
+
+@section Styles
+{
+	<!-- Bootstrap-Table CSS -->
+	<link href="~/lib/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+}	
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">EncSecciones</h1>
+	</div>
+</div><!--/.row-->
+
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">Details</div>
+    <div class="panel-body">
+        <div class="col-md-6">
+            <div class="form-group">
+
+                    <a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
+                    <a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Idese"><i class="fa fa-edit"></i></a>                                
+            </div>
+        
+            <div class="form-group">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Codigo)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Codigo)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Seccion)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Seccion)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Abierta)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Abierta)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Apiestado)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Apiestado)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Apitransaccion)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Apitransaccion)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Usucre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Usucre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Feccre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Feccre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Usumod)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Usumod)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Fecmod)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Fecmod)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IdcnvNavigation)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.IdcnvNavigation.Apiestado)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IdopyNavigation)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.IdopyNavigation.Apiestado)
+                    </dd>
+                </dl>
+            </div>    
+        </div>        
+    </div>
+</div>
+</div>
+</div><!-- /.row -->
+
+
+@section Scripts
+{
+	<!-- Sweetalert JavaScript -->
+	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+}	
+

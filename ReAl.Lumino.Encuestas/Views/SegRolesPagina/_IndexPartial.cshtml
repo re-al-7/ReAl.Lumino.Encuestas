@@ -1,0 +1,45 @@
+@model IEnumerable<ReAl.Lumino.Encuestas.Models.SegRolesPagina>
+
+<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
+			   data-search="true" data-show-toggle="true" 
+			   data-locale="es-AR" data-advanced-search="true" data-id-table="advancedTable"
+			   data-page-size="25" data-pagination-v-align="both" data-show-export="true">
+			<thead>
+				<tr>
+					<th data-sortable="true" data-halign="center" data-field="IdspgNavigation" data-valign="middle">
+						@Html.DisplayNameFor(model => model.IdspgNavigation)
+					</th>
+					<th data-sortable="true" data-halign="center" data-field="IdsroNavigation" data-valign="middle">
+						@Html.DisplayNameFor(model => model.IdsroNavigation)
+					</th>
+					<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+		@foreach (var item in Model) {
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdspgNavigation.Apiestado)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdsroNavigation.Apiestado)
+					</td>
+					<td>
+						<a asp-action="Edit" asp-route-id="@item.Idsrp" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
+						<a asp-action="Details" asp-route-id="@item.Idsrp" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>
+						<a asp-action="Delete" asp-route-id="@item.Idsrp" title="Eliminar" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+						<button type="button" class="btn btn-default" data-container="body"
+								data-toggle="popover" data-trigger="click" ToolTip="Auditoria del registro"
+								data-placement="left" data-html="true" title="Auditoria"
+								data-content='<b>Usuario Creacion:</b> @item.Usucre <br />
+											  <b>Fecha Creacion:</b> @item.Feccre <br />
+											  <b>Usuario Modificacion:</b> @item.Usumod <br />
+											  <b>Fecha Modificacion:</b> @item.Fecmod <br />
+											  <b>Estado:</b> @item.Apiestado '>
+							<i class='fa fa-search-plus'></i>
+						</button>
+					</td>
+				</tr>
+		}
+			</tbody>
+		</table>

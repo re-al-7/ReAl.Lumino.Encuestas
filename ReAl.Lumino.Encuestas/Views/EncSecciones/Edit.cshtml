@@ -1,0 +1,105 @@
+@model ReAl.Lumino.Encuestas.Models.EncSecciones
+
+@section Styles
+{
+	<!-- Sweetalert CSS -->
+	<link href="~/lib/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+}	
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">EncSecciones</h1>
+	</div>
+</div><!--/.row-->
+
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">Edit</div>
+<div class="panel-body">	
+    <div class="col-md-6">
+        <form asp-action="Edit" role="form" method="post" id="EditForm">
+            <div class="form-group">
+                <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
+                <a title="Guardar cambios" class="btn btn-primary" onclick="Validate(this, event);"><i class="fa fa-save"></i></a>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Idese" />
+            <div class="form-group">
+                <label asp-for="Idopy" ></label>
+                <select asp-for="Idopy" class="form-control selectpicker" data-size="5" 
+                        data-live-search="true" data-select-on-tab="true" data-size="5"
+                        data-none-selected-text="No existen elementos"                                                                                              
+                        asp-items="ViewBag.Idopy"></select>
+                <span asp-validation-for="Idopy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Idcnv" ></label>
+                <select asp-for="Idcnv" class="form-control selectpicker" data-size="5" 
+                        data-live-search="true" data-select-on-tab="true" data-size="5"
+                        data-none-selected-text="No existen elementos"                                                                                              
+                        asp-items="ViewBag.Idcnv"></select>
+                <span asp-validation-for="Idcnv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Codigo"></label>
+                <input asp-for="Codigo" class="form-control" />
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seccion"></label>
+                <input asp-for="Seccion" class="form-control" />
+                <span asp-validation-for="Seccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Abierta"></label>
+                <input asp-for="Abierta" class="form-control" />
+                <span asp-validation-for="Abierta" class="text-danger"></span>
+            </div>
+				<input asp-for="Apiestado" class="form-control" type="hidden" />
+				<input asp-for="Apitransaccion" class="form-control" type="hidden" />
+				<input asp-for="Usucre" class="form-control" type="hidden" />
+				<input asp-for="Feccre" class="form-control" type="hidden" />
+				<input asp-for="Usumod" class="form-control" type="hidden" />
+				<input asp-for="Fecmod" class="form-control" type="hidden" />
+        </form>
+    </div>
+</div>
+
+</div>
+</div>
+</div><!-- /.row -->
+
+
+@section Scripts
+{
+	<!-- Sweetalert JavaScript -->
+	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+	
+	<script>
+		function Validate(ctl, event)
+		{
+			event.preventDefault();
+			swal({
+				title: "¿Seguro que desea guardar los cambios del registro?",
+				text: "Verifique la información antes de aceptar!",
+				type: "question",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Actualizar",
+				cancelButtonText: "Cancelar"
+			}).then(function(isConfirm) {
+				if (isConfirm.value) {
+					$("#EditForm").submit();
+				} else {
+					swal("Cancelled", "Se ha cancelado la accion", "error");
+				}
+			});
+		}
+	</script>
+}	
+

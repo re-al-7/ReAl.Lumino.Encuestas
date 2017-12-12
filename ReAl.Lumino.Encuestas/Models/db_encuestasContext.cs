@@ -1389,7 +1389,9 @@ namespace ReAl.Lumino.Encuestas.Models
 
                 entity.Property(e => e.Fecmod).ForNpgsqlHasComment("Fecha en la que se realizó la última modificación del registro");
 
-                entity.Property(e => e.Idopy).ForNpgsqlHasComment("Identificador primario de del proyecto");
+                entity.Property(e => e.Idcde).ForNpgsqlHasComment("Identificador primario del departamento");
+
+                entity.Property(e => e.Idopy).ForNpgsqlHasComment("Identificador primario del proyecto");
 
                 entity.Property(e => e.Idsro).ForNpgsqlHasComment("Identificador primario de rol de operación que se asigna al usuario");
 
@@ -1406,6 +1408,12 @@ namespace ReAl.Lumino.Encuestas.Models
                 entity.Property(e => e.Vigente)
                     .HasDefaultValueSql("1")
                     .ForNpgsqlHasComment("Indica si el rol de operación está vigente. Este valor tiene mayor eso específico que la fecha de vigencia, si este campo indica 0 (No vigente) no importa si la fecha de vigencia si lo está, el rol no está vigente. 1: Vigente; 0 No vigente");
+
+                entity.HasOne(d => d.IdcdeNavigation)
+                    .WithMany(p => p.SegUsuariosRestriccion)
+                    .HasForeignKey(d => d.Idcde)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sur_cde");
 
                 entity.HasOne(d => d.IdopyNavigation)
                     .WithMany(p => p.SegUsuariosRestriccion)

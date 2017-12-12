@@ -13,6 +13,7 @@ namespace ReAl.Lumino.Encuestas.Models
             OpeBrigadas = new HashSet<OpeBrigadas>();
             OpeUpms = new HashSet<OpeUpms>();
             SegUsuarios = new HashSet<SegUsuarios>();
+            SegUsuariosRestriccion = new HashSet<SegUsuariosRestriccion>();
         }
 
         [Key]
@@ -50,5 +51,7 @@ namespace ReAl.Lumino.Encuestas.Models
         public ICollection<OpeUpms> OpeUpms { get; set; }
         [InverseProperty("IdcdeNavigation")]
         public ICollection<SegUsuarios> SegUsuarios { get; set; }
+        [InverseProperty("IdcdeNavigation")]
+        public ICollection<SegUsuariosRestriccion> SegUsuariosRestriccion { get; set; }
     }
 }

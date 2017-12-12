@@ -1,0 +1,141 @@
+@model ReAl.Lumino.Encuestas.Models.SegPaginas
+
+@section Styles
+{
+	<!-- Bootstrap-Table CSS -->
+	<link href="~/lib/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+}	
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">SegPaginas</h1>
+	</div>
+</div><!--/.row-->
+
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">Details</div>
+    <div class="panel-body">
+        <div class="col-md-6">
+            <div class="form-group">                
+                <a title="Volver al listado" class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-left"></i></a>
+                <a title="Editar registro" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Idspg"><i class="fa fa-edit"></i></a>                                
+            </div>    
+            <div class="form-group">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Paginapadre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Paginapadre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Nombremenu)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Nombremenu)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Sigla)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Sigla)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Nivel)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Nivel)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Icono)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Icono)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Metodo)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Metodo)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Accion)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Accion)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Descripcion)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Prioridad)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Prioridad)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Apiestado)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Apiestado)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Apitransaccion)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Apitransaccion)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Usucre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Usucre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Feccre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Feccre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Usumod)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Usumod)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Fecmod)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Fecmod)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IdsapNavigation)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.IdsapNavigation.Apiestado)
+                    </dd>
+                </dl>
+            </div>    
+        </div>        
+    </div>
+</div>
+</div>
+</div><!-- /.row -->
+
+
+@section Scripts
+{
+	<!-- Sweetalert JavaScript -->
+	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+}	
+
