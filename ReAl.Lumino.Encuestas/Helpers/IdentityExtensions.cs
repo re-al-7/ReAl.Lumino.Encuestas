@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
 
 namespace ReAl.Lumino.Encuestas.Helpers
 {
@@ -12,6 +13,7 @@ namespace ReAl.Lumino.Encuestas.Helpers
 
             return (identity as ClaimsIdentity).FirstOrNull(ClaimTypes.GivenName);
         }
+
         
         public static string GetRole(this IIdentity identity)
         {

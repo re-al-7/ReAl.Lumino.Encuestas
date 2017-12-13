@@ -40,7 +40,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 .Include(s => s.IdsroNavigation);               
             return PartialView("_IndexPartial",db_encuestasContext.ToList());  
         }
-
+        
         // GET: SegRolesPagina/Details/5
         public async Task<IActionResult> Details(long? id)
         {

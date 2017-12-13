@@ -1,0 +1,133 @@
+@model IEnumerable<ReAl.Lumino.Encuestas.Models.SegUsuariosRestriccion>
+
+
+@section Styles
+{
+	<!-- Bootstrap-Table CSS -->
+	<link href="~/lib/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+	<!-- Sweetalert CSS -->
+	<link href="~/lib/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+}	
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">SegUsuariosRestriccion</h1>
+	</div>
+</div><!--/.row-->
+
+
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">Index</div>
+<div class="panel-body">
+	<div class="col-md-12">
+		<form method="post">
+		<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
+		       data-search="true" data-show-toggle="true"
+		       data-locale="es-AR" data-advanced-search="true" data-id-table="advancedTable"
+		       data-page-size="25" data-pagination-v-align="both" data-show-export="true">
+			<thead>
+			<tr>
+				<th data-sortable="true" data-halign="center" data-field="IdcdeNavigation" data-valign="middle">
+					@Html.DisplayNameFor(model => model.IdcdeNavigation)
+				</th>
+				<th data-sortable="true" data-halign="center" data-field="IdopyNavigation" data-valign="middle">
+					@Html.DisplayNameFor(model => model.IdopyNavigation)
+				</th>
+				<th data-sortable="true" data-halign="center" data-field="IdsroNavigation" data-valign="middle">
+					@Html.DisplayNameFor(model => model.IdsroNavigation)
+				</th>
+				<th data-sortable="true" data-halign="center" data-field="IdsusNavigation" data-valign="middle">
+					@Html.DisplayNameFor(model => model.IdsusNavigation)
+				</th>
+				<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
+			</tr>
+			</thead>
+			<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdcdeNavigation.Nombre)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdopyNavigation.Codigo)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdsroNavigation.Sigla)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdsusNavigation.Login)
+					</td>
+					<td>						
+						@if (item.Rolactivo == 0)
+						{
+							<button type="submit" tooltip="Cambiar Rol Actual"
+							        formaction="/SegUsuariosRestriccion/CambiarRolActual/@item.Idsur"
+							        class="btn btn-warning" title="Activar Rol">
+								<i class="fa fa-square-o"></i>
+							</button>
+						}
+						else
+						{
+							<button class="btn btn-success" title="Rol Activo">
+								<i class='fa fa-check-square-o'></i>
+							</button>
+						}
+					</td>
+				</tr>
+			}
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>
+</div>
+</div>
+</div><!-- /.row -->
+
+@section Scripts
+{
+	<!-- Bootstrap-Table -->
+	<script src="~/lib/bootstrap-table/dist/bootstrap-table.min.js"></script>
+	<script src="~/lib/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
+	<script src="~/lib/bootstrap-table/dist/locale/bootstrap-table-es-AR.min.js"></script>
+	<!-- Sweetalert JavaScript -->
+	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('[data-toggle="popover"]').popover();
+		});
+	    
+		$(document).on('show.bs.popover',
+			function(e) {
+					if ($(e.target).data('trigger') == 'click') {
+						var timeoutDataName = 'shownBsTooltipTimeout';
+						if ($(e.target).data(timeoutDataName) != null) {
+							clearTimeout($(e.target).data(timeoutDataName));
+						}
+						var timeout = setTimeout(function() {
+								$(e.target).click();
+							},
+							3000);
+						$(e.target).data(timeoutDataName, timeout);
+					}
+				});
+			$(document).on('hide.bs.popover',
+				function(e) {
+					if ($(e.target).data('trigger') == 'click') {
+						var timeoutDataName = 'shownBsTooltipTimeout';
+						if ($(e.target).data(timeoutDataName) != null) {
+							clearTimeout($(e.target).data(timeoutDataName));
+						}
+					}
+				});
+	</script>
+}	
+
+

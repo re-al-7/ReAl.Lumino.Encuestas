@@ -81,7 +81,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());                
+                var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login.Equals(User.Identity.Name));                
                 return obj;
             }
             else
