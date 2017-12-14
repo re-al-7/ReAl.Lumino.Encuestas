@@ -1,7 +1,5 @@
 # LuminoAdmin para Encuestas
 
-[![Build status](https://ci.appveyor.com/api/projects/status/6x4u9stx309uk0ey?svg=true)](https://ci.appveyor.com/project/re_al_/real-template-lumino-postgresql)
-
 ---------------------------------------
 
 Proyecto desarrollado en [.NET Core 2](https://www.microsoft.com/net/) para el uso del template [Lumino](https://medialoot.com/preview/lumino-premium/index.html) y con Conexion a PostgresSql via EntityFramework para la administracion de un sistema de Encuestas
