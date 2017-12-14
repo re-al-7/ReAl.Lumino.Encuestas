@@ -33,66 +33,60 @@
 				data-page-size="25" data-pagination-v-align="both" data-show-export="true">
 		<thead>
 			<tr>
-						<th>
-							@Html.DisplayNameFor(model => model.Login)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Password)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Nombres)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Apellidos)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Correo)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Vigente)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Tablet)
-						</th>
 				<th>
 					@Html.DisplayNameFor(model => model.IdcdeNavigation)
 				</th>
 				<th>
 					@Html.DisplayNameFor(model => model.IdobrNavigation)
 				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Login)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Nombres)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Apellidos)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Correo)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Vigente)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Tablet)
+				</th>				
 				<th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
 	@foreach (var item in Model) {
 			<tr>
-					<td>
-						@Html.DisplayFor(modelItem => item.Login)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Password)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Nombres)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Apellidos)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Correo)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Vigente)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Tablet)
-					</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.IdcdeNavigation.Nombre)
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.IdobrNavigation.Codigo)
 				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Login)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Nombres)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Apellidos)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Correo)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Vigente)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Tablet)
+				</td>				
 				<td>
 					<a asp-action="Edit" asp-route-id="@item.Idsus" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
 					<a asp-action="Details" asp-route-id="@item.Idsus" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>

@@ -39,8 +39,8 @@
 			   data-page-size="25" data-pagination-v-align="both" data-show-export="true">
 			<thead>
 				<tr>
-					<th data-sortable="true" data-halign="center" data-field="Paginapadre" data-valign="middle">
-						@Html.DisplayNameFor(model => model.Paginapadre)
+					<th data-sortable="true" data-halign="center" data-field="IdsapNavigation" data-valign="middle">
+						@Html.DisplayNameFor(model => model.IdsapNavigation)
 					</th>
 					<th data-sortable="true" data-halign="center" data-field="Nombremenu" data-valign="middle">
 						@Html.DisplayNameFor(model => model.Nombremenu)
@@ -65,9 +65,9 @@
 					</th>
 					<th data-sortable="true" data-halign="center" data-field="Prioridad" data-valign="middle">
 						@Html.DisplayNameFor(model => model.Prioridad)
-					</th>
-					<th data-sortable="true" data-halign="center" data-field="IdsapNavigation" data-valign="middle">
-						@Html.DisplayNameFor(model => model.IdsapNavigation)
+					</th>					
+					<th data-sortable="true" data-halign="center" data-field="Paginapadre" data-valign="middle">
+						@Html.DisplayNameFor(model => model.Paginapadre)
 					</th>
 					<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
 				</tr>
@@ -76,7 +76,7 @@
 		@foreach (var item in Model) {
 				<tr>
 					<td>
-						@Html.DisplayFor(modelItem => item.Paginapadre)
+						@Html.DisplayFor(modelItem => item.IdsapNavigation.Sigla)
 					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.Nombremenu)
@@ -103,7 +103,7 @@
 						@Html.DisplayFor(modelItem => item.Prioridad)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.IdsapNavigation.Apiestado)
+						@Html.DisplayFor(modelItem => item.Paginapadre)
 					</td>
 					<td>
 						<a asp-action="Edit" asp-route-id="@item.Idspg" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 

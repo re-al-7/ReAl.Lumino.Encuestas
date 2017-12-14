@@ -39,6 +39,9 @@
 			   data-page-size="25" data-pagination-v-align="both" data-show-export="true">
 			<thead>
 				<tr>
+					<th data-sortable="true" data-halign="center" data-field="IdopyNavigation" data-valign="middle">
+						@Html.DisplayNameFor(model => model.IdopyNavigation)
+					</th>
 					<th data-sortable="true" data-halign="center" data-field="Codigo" data-valign="middle">
 						@Html.DisplayNameFor(model => model.Codigo)
 					</th>
@@ -51,15 +54,15 @@
 					<th data-sortable="true" data-halign="center" data-field="IdcnvNavigation" data-valign="middle">
 						@Html.DisplayNameFor(model => model.IdcnvNavigation)
 					</th>
-					<th data-sortable="true" data-halign="center" data-field="IdopyNavigation" data-valign="middle">
-						@Html.DisplayNameFor(model => model.IdopyNavigation)
-					</th>
 					<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
 				</tr>
 			</thead>
 			<tbody>
 		@foreach (var item in Model) {
 				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdopyNavigation.Codigo)
+					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.Codigo)
 					</td>
@@ -70,11 +73,9 @@
 						@Html.DisplayFor(modelItem => item.Abierta)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.IdcnvNavigation.Apiestado)
+						@Html.DisplayFor(modelItem => item.IdcnvNavigation.Nivel)
 					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.IdopyNavigation.Apiestado)
-					</td>
+					
 					<td>
 						<a asp-action="Edit" asp-route-id="@item.Idese" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
 						<a asp-action="Details" asp-route-id="@item.Idese" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>

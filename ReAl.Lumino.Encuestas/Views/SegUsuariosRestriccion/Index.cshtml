@@ -39,12 +39,6 @@
 			   data-page-size="25" data-pagination-v-align="both" data-show-export="true">
 			<thead>
 				<tr>
-					<th data-sortable="true" data-halign="center" data-field="Rolactivo" data-valign="middle">
-						@Html.DisplayNameFor(model => model.Rolactivo)
-					</th>
-					<th data-sortable="true" data-halign="center" data-field="Vigente" data-valign="middle">
-						@Html.DisplayNameFor(model => model.Vigente)
-					</th>
 					<th data-sortable="true" data-halign="center" data-field="IdcdeNavigation" data-valign="middle">
 						@Html.DisplayNameFor(model => model.IdcdeNavigation)
 					</th>
@@ -57,6 +51,12 @@
 					<th data-sortable="true" data-halign="center" data-field="IdsusNavigation" data-valign="middle">
 						@Html.DisplayNameFor(model => model.IdsusNavigation)
 					</th>
+					<th data-sortable="true" data-halign="center" data-field="Rolactivo" data-valign="middle">
+						@Html.DisplayNameFor(model => model.Rolactivo)
+					</th>
+					<th data-sortable="true" data-halign="center" data-field="Vigente" data-valign="middle">
+						@Html.DisplayNameFor(model => model.Vigente)
+					</th>					
 					<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
 				</tr>
 			</thead>
@@ -64,23 +64,23 @@
 		@foreach (var item in Model) {
 				<tr>
 					<td>
-						@Html.DisplayFor(modelItem => item.Rolactivo)
+						@Html.DisplayFor(modelItem => item.IdcdeNavigation.Abreviatura)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Vigente)
+						@Html.DisplayFor(modelItem => item.IdopyNavigation.Codigo)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.IdcdeNavigation.Apiestado)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.IdopyNavigation.Apiestado)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.IdsroNavigation.Apiestado)
+						@Html.DisplayFor(modelItem => item.IdsroNavigation.Sigla)
 					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.IdsusNavigation.Login)
 					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Rolactivo)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Vigente)
+					</td>					
 					<td>
 						<a asp-action="Edit" asp-route-id="@item.Idsur" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
 						<a asp-action="Details" asp-route-id="@item.Idsur" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>
