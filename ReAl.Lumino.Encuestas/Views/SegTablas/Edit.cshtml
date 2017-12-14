@@ -1,0 +1,117 @@
+@model ReAl.Lumino.Encuestas.Models.SegTablas
+
+@section Styles
+{
+	<!-- Sweetalert CSS -->
+	<link href="~/lib/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+}	
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">SegTablas</h1>
+	</div>
+</div><!--/.row-->
+
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">Edit</div>
+<div class="panel-body">	
+    <div class="col-md-6">
+        <form asp-action="Edit" role="form" method="post" id="EditForm">
+            <div class="form-group">
+                <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
+                <a title="Guardar cambios" class="btn btn-primary" onclick="Validate(this, event);"><i class="fa fa-save"></i></a>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Idsta" />
+            <div class="form-group">
+                <label asp-for="Idsap" ></label>
+                <select asp-for="Idsap" class="form-control selectpicker" data-size="5" 
+                        data-live-search="true" data-select-on-tab="true" data-size="5"
+                        data-none-selected-text="No existen elementos"                                                                                              
+                        asp-items="ViewBag.Idsap"></select>
+                <span asp-validation-for="Idsap" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombretabla"></label>
+                <input asp-for="Nombretabla" class="form-control" />
+                <span asp-validation-for="Nombretabla" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Alias"></label>
+                <input asp-for="Alias" class="form-control" />
+                <span asp-validation-for="Alias" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descripcion"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Beforestatement"></label>
+                <input asp-for="Beforestatement" class="form-control" />
+                <span asp-validation-for="Beforestatement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Beforerow"></label>
+                <input asp-for="Beforerow" class="form-control" />
+                <span asp-validation-for="Beforerow" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Afterstatement"></label>
+                <input asp-for="Afterstatement" class="form-control" />
+                <span asp-validation-for="Afterstatement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Afterrow"></label>
+                <input asp-for="Afterrow" class="form-control" />
+                <span asp-validation-for="Afterrow" class="text-danger"></span>
+            </div>
+            <input asp-for="Apiestado" class="form-control" type="hidden" />
+            <input asp-for="Apitransaccion" class="form-control" type="hidden" />
+            <input asp-for="Usucre" class="form-control" type="hidden" />
+            <input asp-for="Feccre" class="form-control" type="hidden" />
+            <input asp-for="Usumod" class="form-control" type="hidden" />
+            <input asp-for="Fecmod" class="form-control" type="hidden" />
+        </form>
+    </div>
+</div>
+
+</div>
+</div>
+</div><!-- /.row -->
+
+
+@section Scripts
+{
+	<!-- Sweetalert JavaScript -->
+	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+	
+	<script>
+		function Validate(ctl, event)
+		{
+			event.preventDefault();
+			swal({
+				title: "¿Seguro que desea guardar los cambios del registro?",
+				text: "Verifique la información antes de aceptar!",
+				type: "question",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Actualizar",
+				cancelButtonText: "Cancelar"
+			}).then(function(isConfirm) {
+				if (isConfirm.value) {
+					$("#EditForm").submit();
+				} else {
+					swal("Cancelled", "Se ha cancelado la accion", "error");
+				}
+			});
+		}
+	</script>
+}	
+
