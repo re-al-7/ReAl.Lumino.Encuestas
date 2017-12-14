@@ -73,6 +73,12 @@
 				@:<tr>
 	
 				var properties = Model.ModelMetadata.Properties;
+				foreach (var navigation in Model.ModelMetadata.Navigations)
+				{
+					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(navigation)" data-valign="middle">
+						@@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+					</th>
+				}
 				foreach (var property in properties)
 				{
 					if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey)
@@ -82,18 +88,21 @@
 						}
 						else
 						{
-					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(property)" data-valign="middle">
+							if (property.TypeName.Equals("System.String"))
+							{
+					<th data-sortable="true" data-halign="center" data-align="left" data-field="@GetValueExpression(property)" data-valign="middle">
 						@@Html.DisplayNameFor(model => model.@GetValueExpression(property))
 					</th>
+							}
+							else
+							{
+					<th data-sortable="true" data-halign="center" data-align="right" data-field="@GetValueExpression(property)" data-valign="middle">
+						@@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+					</th>
+							}
 						}
 					}
-				}
-				foreach (var navigation in Model.ModelMetadata.Navigations)
-				{
-					<th data-sortable="true" data-halign="center" data-field="@GetValueExpression(navigation)" data-valign="middle">
-						@@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
-					</th>
-				}
+				}				
 					@:<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
 				@:</tr>
 			@:</thead>
