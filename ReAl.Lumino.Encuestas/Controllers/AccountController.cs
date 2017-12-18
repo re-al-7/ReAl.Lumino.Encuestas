@@ -73,30 +73,25 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 var objRol = _context.SegUsuarios
                     .Join(_context.SegUsuariosRestriccion, sus => sus.Idsus, sur => sur.Idsus, (sus, sur) => new {sus, sur})
                     .Join(_context.SegRoles, sussur => sussur.sur.Idsro, sro => sro.Idsro, (sussur, sro) => new {sussur, sro})
-                    .Where(@t => @t.sussur.sur.Rolactivo == 1)
-                    .Where(@t => string.Equals(@t.sussur.sus.Login, obj.Login, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(t => t.sussur.sur.Rolactivo == 1)
+                    .Where(t => string.Equals(t.sussur.sus.Login, obj.Login, StringComparison.CurrentCultureIgnoreCase))
                     .Select(arg => arg).SingleOrDefault();
                 if (objRol == null)
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Role, string.Empty));
                     identity.AddClaim(new Claim(ClaimTypes.GroupSid, string.Empty));
-                    HttpContext.Session.SetString("currentApp", string.Empty);
-                    
+                    HttpContext.Session.SetString("currentApp", string.Empty);                    
                     ModelState.AddModelError("", badUserCreation);
                     return View();
                 }
-                else
-                {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, objRol.sro.Idsro.ToString()));
-                    identity.AddClaim(new Claim(ClaimTypes.GroupSid, objRol.sussur.sur.Idopy.ToString()));
-                    //identity.AddClaim(new Claim(ClaimTypes.PrimarySid, objRol.sussur.sur.Idcde.ToString()));
-                    var objApp = CMenus.GetAplicaciones(_context, objRol.sro.Idsro).OrderBy(x => x.Nombre).First();
+                identity.AddClaim(new Claim(ClaimTypes.Role, objRol.sro.Idsro.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.GroupSid, objRol.sussur.sur.Idopy.ToString()));
+                //identity.AddClaim(new Claim(ClaimTypes.PrimarySid, objRol.sussur.sur.Idcde.ToString()));
+                var objApp = CMenus.GetAplicaciones(_context, objRol.sro.Idsro).OrderBy(x => x.Nombre).First();
 
-                    HttpContext.Session.SetString("currentApp", objApp == null? string.Empty : objApp.Sigla);
-                }
+                HttpContext.Session.SetString("currentApp", objApp == null? string.Empty : objApp.Sigla);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-                
                 
                 if (returnUrl == null)
                 {
@@ -106,10 +101,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 {
                     return Redirect(returnUrl);
                 }
-                else
-                {
-                    return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
-                }
+                return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
             }
 
             // If we got this far, something failed, redisplay form

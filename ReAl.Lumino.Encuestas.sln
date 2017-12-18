@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReAl.Lumino.Encuestas", "Re
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B2AE0CA8-B954-4BF2-BCEE-DB2AF4AC5718}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReAl.Lumino.Encuestas.Test", "ReAl.Lumino.Encuestas.Test\ReAl.Lumino.Encuestas.Test.csproj", "{56A44B76-91F0-4E65-98B4-7FF605FEA1BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B2AE0CA8-B954-4BF2-BCEE-DB2AF4AC5718}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2AE0CA8-B954-4BF2-BCEE-DB2AF4AC5718}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2AE0CA8-B954-4BF2-BCEE-DB2AF4AC5718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56A44B76-91F0-4E65-98B4-7FF605FEA1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56A44B76-91F0-4E65-98B4-7FF605FEA1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56A44B76-91F0-4E65-98B4-7FF605FEA1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56A44B76-91F0-4E65-98B4-7FF605FEA1BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

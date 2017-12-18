@@ -15,6 +15,10 @@ namespace ReAl.Lumino.Encuestas.Helpers
 {
     public static class CMenus
     {
+        public static bool EsPar(int numero)
+        {
+            return numero % 2 == 0;
+        }
         
         public static List<SegAplicaciones> GetAplicaciones(db_encuestasContext context, long idRol)
         {
