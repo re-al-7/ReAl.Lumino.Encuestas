@@ -30,6 +30,14 @@ namespace ReAl.Lumino.Encuestas.Helpers
 
             return (identity as ClaimsIdentity).FirstOrNull(ClaimTypes.GroupSid);
         }
+        
+        public static string GetPrimarySid(this IIdentity identity)
+        {
+            if (identity == null)
+                return null;
+
+            return (identity as ClaimsIdentity).FirstOrNull(ClaimTypes.PrimarySid);
+        }
 
         internal static string FirstOrNull(this ClaimsIdentity identity, string claimType)
         {
