@@ -97,14 +97,15 @@ namespace ReAl.Lumino.Encuestas.Controllers
                     .Select(arg => arg).SingleOrDefault();
                 if (objRol == null)
                 {
-
                     identity.AddClaim(new Claim(ClaimTypes.Role, string.Empty));
                     identity.AddClaim(new Claim(ClaimTypes.GroupSid, string.Empty));
+                    identity.AddClaim(new Claim(ClaimTypes.PrimarySid, string.Empty));
                 }
                 else
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Role, objRol.sro.Idsro.ToString()));
                     identity.AddClaim(new Claim(ClaimTypes.GroupSid, objRol.sussur.sur.Idopy.ToString()));
+                    identity.AddClaim(new Claim(ClaimTypes.PrimarySid, objRol.sussur.sur.Idcde.ToString()));
                 }
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,

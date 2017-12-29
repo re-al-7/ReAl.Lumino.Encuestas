@@ -2,39 +2,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 using ReAl.Lumino.Encuestas.Models;
 
 namespace ReAl.Lumino.Encuestas.Controllers
 {
+    [Authorize]
     public class SegAplicacionesController : BaseController
     {
-		public SegAplicacionesController(db_encuestasContext context) : base(context)
+		public SegAplicacionesController(db_encuestasContext context, IConfiguration configuration) : base(context, configuration)
         {
         }
 
         // GET: SegAplicaciones
         public async Task<IActionResult> Index()
         {
-			/*
-			ViewBag.ListApp = GetAplicaciones();
-            ViewBag.ListPages = GetPages();
-            ViewData["Usuario"] = getUserName();
-			*/
             return View(await _context.SegAplicaciones.ToListAsync());
         }
 
         // GET: SegAplicaciones/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-			/*
-			ViewBag.ListApp = GetAplicaciones();
-            ViewBag.ListPages = GetPages();
-            ViewData["Usuario"] = getUserName();
-			*/
 			
             if (id == null)
             {
@@ -53,13 +46,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
 
         // GET: SegAplicaciones/Create
         public IActionResult Create()
-        {
-			/*
-			ViewBag.ListApp = GetAplicaciones();
-            ViewBag.ListPages = GetPages();
-            ViewData["Usuario"] = getUserName();
-			*/
-			
+        {			
             return View();
         }
 
@@ -74,6 +61,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             {
 				try
 				{
+                    segAplicaciones.Usucre = this.GetLogin();
 					_context.Add(segAplicaciones);
 					await _context.SaveChangesAsync();
                 	return RedirectToAction(nameof(Index));
@@ -84,12 +72,6 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         ViewBag.ErrorDb = exp.InnerException.Message;                        
                     else
                         ModelState.AddModelError("", exp.Message);
-               
-					/*
-                    ViewBag.ListApp = GetAplicaciones();
-                    ViewBag.ListPages = GetPages();
-                    ViewData["Usuario"] = getUserName();
-					*/
                     return View();
                 }  
             }
@@ -99,12 +81,6 @@ namespace ReAl.Lumino.Encuestas.Controllers
         // GET: SegAplicaciones/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-			/*
-			ViewBag.ListApp = GetAplicaciones();
-            ViewBag.ListPages = GetPages();
-            ViewData["Usuario"] = getUserName();			
-			*/
-
             if (id == null)
             {
                 return NotFound();
@@ -134,7 +110,8 @@ namespace ReAl.Lumino.Encuestas.Controllers
             {
                 try
                 {
-					(segAplicaciones).Apitransaccion = "MODIFICAR";
+                    segAplicaciones.Usumod = this.GetLogin();
+                    segAplicaciones.Apitransaccion = "MODIFICAR";
                     _context.Update(segAplicaciones);
                     await _context.SaveChangesAsync();
                 }
@@ -155,12 +132,6 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         ViewBag.ErrorDb = exp.InnerException.Message;                        
                     else
                         ModelState.AddModelError("", exp.Message);
-               
-					/*
-                    ViewBag.ListApp = GetAplicaciones();
-                    ViewBag.ListPages = GetPages();
-                    ViewData["Usuario"] = getUserName();
-					*/
                     return View(segAplicaciones);
                 }
                 return RedirectToAction(nameof(Index));
@@ -171,12 +142,6 @@ namespace ReAl.Lumino.Encuestas.Controllers
         // GET: SegAplicaciones/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-			/*
-			ViewBag.ListApp = GetAplicaciones();
-            ViewBag.ListPages = GetPages();
-            ViewData["Usuario"] = getUserName();
-			*/
-			
             if (id == null)
             {
                 return NotFound();
@@ -210,12 +175,6 @@ namespace ReAl.Lumino.Encuestas.Controllers
                     ViewBag.ErrorDb = exp.InnerException.Message;                        
                 else
                     ModelState.AddModelError("", exp.Message);
-            
-				/*
-                ViewBag.ListApp = GetAplicaciones();
-                ViewBag.ListPages = GetPages();
-                ViewData["Usuario"] = getUserName();
-				*/
                 return View();
             }     
         }

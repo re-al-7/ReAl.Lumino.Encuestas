@@ -34,9 +34,10 @@ namespace ReAl.Lumino.Encuestas.Controllers
         }
 
         public IEnumerable<CatDepartamentos> GetDeptoRestriccion()
-        {
-            //TODO: Filtrar la lista segun restriccion
-            return _context.CatDepartamentos.ToList();                   
+        {            
+            return _context.CatDepartamentos
+                .Where(cde => cde.Idcde == this.GetDepartamentoId())
+                .ToList();                   
         }
         
         public string GetCurrentApp()
@@ -99,10 +100,17 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 return null;
         }
         
-        public int GetGroupSid()
+        public int GetProyectoId()
         {
             if (User.Identity.IsAuthenticated)
                 return int.Parse(User.Identity.GetGroupSid());
+            return -1;
+        }
+        
+        public int GetDepartamentoId()
+        {
+            if (User.Identity.IsAuthenticated)
+                return int.Parse(User.Identity.GetPrimarySid());
             return -1;
         }
         

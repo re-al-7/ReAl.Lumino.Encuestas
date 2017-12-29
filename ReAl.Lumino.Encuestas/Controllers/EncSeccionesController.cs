@@ -23,7 +23,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
         public async Task<IActionResult> Index()
         {
             var db_encuestasContext = _context.EncSecciones
-                .Where(sec => sec.Idopy == this.GetGroupSid())
+                .Where(sec => sec.Idopy == this.GetProyectoId())
                 .Include(e => e.IdcnvNavigation)
                 .Include(e => e.IdopyNavigation);
             return View(await db_encuestasContext.ToListAsync());
@@ -56,7 +56,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
         ViewData["Idcnv"] = new SelectList(_context.CatNiveles, 
             CatNiveles.Fields.Idcnv.ToString(), 
             CatNiveles.Fields.Descripcion.ToString());
-        ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetGroupSid()), 
+        ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()), 
             OpeProyectos.Fields.Idopy.ToString(), 
             OpeProyectos.Fields.Nombre.ToString());
             return View();
@@ -89,7 +89,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         CatNiveles.Fields.Idcnv.ToString(), 
                         CatNiveles.Fields.Descripcion.ToString());
                     ViewData["Idopy"] = 
-                        new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetGroupSid()), 
+                        new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()), 
                         OpeProyectos.Fields.Idopy.ToString(), 
                         OpeProyectos.Fields.Nombre.ToString());
                     return View();
@@ -123,7 +123,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 CatNiveles.Fields.Idcnv.ToString(), 
                 CatNiveles.Fields.Descripcion.ToString(), 
                 encSecciones.Idcnv);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetGroupSid()),
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()),
                 OpeProyectos.Fields.Idopy.ToString(), 
                 OpeProyectos.Fields.Nombre.ToString(), 
                 encSecciones.Idopy);
@@ -173,7 +173,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         CatNiveles.Fields.Idcnv.ToString(), 
                         CatNiveles.Fields.Descripcion.ToString());
                     ViewData["Idopy"] = 
-                        new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetGroupSid()),
+                        new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()),
                         OpeProyectos.Fields.Idopy.ToString(), 
                         OpeProyectos.Fields.Nombre.ToString());
                     return View(encSecciones);
@@ -184,7 +184,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 CatNiveles.Fields.Idcnv.ToString(), 
                 CatNiveles.Fields.Descripcion.ToString(), 
                 encSecciones.Idcnv);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetGroupSid()),
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()),
                 OpeProyectos.Fields.Idopy.ToString(), 
                 OpeProyectos.Fields.Nombre.ToString(), 
                 encSecciones.Idopy);
@@ -232,7 +232,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 ViewData["Idcnv"] = new SelectList(_context.CatNiveles, 
                     CatNiveles.Fields.Idcnv.ToString(), 
                     CatNiveles.Fields.Descripcion.ToString());
-                ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetGroupSid()), 
+                ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()), 
                     OpeProyectos.Fields.Idopy.ToString(), 
                     OpeProyectos.Fields.Nombre.ToString());
                 return View();

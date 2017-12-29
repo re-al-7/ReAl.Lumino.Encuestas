@@ -86,7 +86,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 }
                 identity.AddClaim(new Claim(ClaimTypes.Role, objRol.sro.Idsro.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.GroupSid, objRol.sussur.sur.Idopy.ToString()));
-                //identity.AddClaim(new Claim(ClaimTypes.PrimarySid, objRol.sussur.sur.Idcde.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.PrimarySid, objRol.sussur.sur.Idcde.ToString()));
                 var objApp = CMenus.GetAplicaciones(_context, objRol.sro.Idsro).OrderBy(x => x.Nombre).First();
 
                 HttpContext.Session.SetString("currentApp", objApp == null? string.Empty : objApp.Sigla);

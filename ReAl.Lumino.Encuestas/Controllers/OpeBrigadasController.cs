@@ -25,7 +25,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             var lstDepto = this.GetDeptoRestriccion();
             ViewData["Idcde"] = lstDepto;
             var db_encuestasContext = _context.OpeBrigadas
-                .Where(bri => bri.Idopy == GetGroupSid() && bri.Idcde == lstDepto.First().Idcde)
+                .Where(bri => bri.Idopy == GetProyectoId() && bri.Idcde == lstDepto.First().Idcde)
                 .Include(o => o.IdcdeNavigation).Include(o => o.IdopyNavigation);
             return View(await db_encuestasContext.ToListAsync());
         }
@@ -33,7 +33,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
         public PartialViewResult GetBrigadas(long? idcde)  
         {  
             var db_encuestasContext = _context.OpeBrigadas
-                .Where(bri => bri.Idopy == GetGroupSid() && bri.Idcde == idcde)
+                .Where(bri => bri.Idopy == GetProyectoId() && bri.Idcde == idcde)
                 .Include(o => o.IdcdeNavigation).Include(o => o.IdopyNavigation);               
             return PartialView("_IndexPartial",db_encuestasContext.ToList());  
         }
@@ -65,7 +65,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                 CatDepartamentos.Fields.Idcde.ToString(), 
                 CatDepartamentos.Fields.Nombre.ToString());
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetGroupSid()), 
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetProyectoId()), 
                 OpeProyectos.Fields.Idopy.ToString(), 
                 OpeProyectos.Fields.Nombre.ToString());
             return View();
@@ -97,7 +97,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                         CatDepartamentos.Fields.Idcde.ToString(), 
                         CatDepartamentos.Fields.Nombre.ToString());
                     ViewData["Idopy"] =
-                        new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetGroupSid()),
+                        new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetProyectoId()),
                             OpeProyectos.Fields.Idopy.ToString(), 
                             OpeProyectos.Fields.Nombre.ToString());
                     return View();
@@ -106,7 +106,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                 CatDepartamentos.Fields.Idcde.ToString(), 
                 CatDepartamentos.Fields.Nombre.ToString(), opeBrigadas.Idcde);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetGroupSid()),
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetProyectoId()),
                 OpeProyectos.Fields.Idopy.ToString(), 
                 OpeProyectos.Fields.Nombre.ToString(), opeBrigadas.Idopy);
             return View(opeBrigadas);
@@ -128,7 +128,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                 CatDepartamentos.Fields.Idcde.ToString(), 
                 CatDepartamentos.Fields.Nombre.ToString(), opeBrigadas.Idcde);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetGroupSid()), 
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetProyectoId()), 
                 OpeProyectos.Fields.Idopy.ToString(), 
                 OpeProyectos.Fields.Apiestado.ToString(), opeBrigadas.Idopy);
             return View(opeBrigadas);
@@ -175,7 +175,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                     ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                         CatDepartamentos.Fields.Idcde.ToString(), 
                         CatDepartamentos.Fields.Nombre.ToString());
-                    ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetGroupSid()),
+                    ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetProyectoId()),
                         OpeProyectos.Fields.Idopy.ToString(), 
                         OpeProyectos.Fields.Nombre.ToString());
                     return View(opeBrigadas);
@@ -185,7 +185,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
             ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                 CatDepartamentos.Fields.Idcde.ToString(), 
                 CatDepartamentos.Fields.Nombre.ToString(), opeBrigadas.Idcde);
-            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetGroupSid()), 
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetProyectoId()), 
                 OpeProyectos.Fields.Idopy.ToString(), 
                 OpeProyectos.Fields.Nombre.ToString(), opeBrigadas.Idopy);
             return View(opeBrigadas);
@@ -232,7 +232,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                     CatDepartamentos.Fields.Idcde.ToString(), 
                     CatDepartamentos.Fields.Apiestado.ToString());
-                ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetGroupSid()), 
+                ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == this.GetProyectoId()), 
                     OpeProyectos.Fields.Idopy.ToString(), 
                     OpeProyectos.Fields.Nombre.ToString());
                 return View();
