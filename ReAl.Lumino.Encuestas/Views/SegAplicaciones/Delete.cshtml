@@ -23,68 +23,74 @@
 <div class="panel panel-default">
 <div class="panel-heading">¿Est&aacute; seguro que desea ELIMINAR &eacute;ste registro?</div>
 <div class="panel-body">
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Sigla)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Sigla)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Apiestado)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Apiestado)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Apitransaccion)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Apitransaccion)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Usucre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Usucre)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Feccre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Feccre)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Usumod)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Usumod)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Fecmod)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Fecmod)
-        </dd>
-    </dl>
+    <div class="col-md-6">
+        <div class="form-group">
+            <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
+            <a title="Eliminar registro" class="btn btn-danger" onclick="Validate(this, event);"><i class="fa fa-trash-o"></i></a>
+        </div>    
+        <div class="form-group">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Sigla)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Sigla)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Descripcion)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Apiestado)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Apiestado)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Apitransaccion)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Apitransaccion)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Usucre)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Usucre)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Feccre)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Feccre)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Usumod)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Usumod)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Fecmod)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Fecmod)
+                </dd>
+            </dl>
     
-    <form asp-action="Delete" role="form" method="post" id="DeleteForm" class="form-horizontal row-border">
-        <input type="hidden" asp-for="Idsap" />
-        <input type="submit" value="Eliminar" class="btn btn-default" onclick="Validate(this, event);"/> |
-        <a asp-action="Index">Volver</a>
-    </form>
+            <form asp-action="Delete" role="form" method="post" id="DeleteForm" class="form-horizontal row-border">
+                <input type="hidden" asp-for="Idsap" />
+            </form>
+        </div>
+    </div>
 </div>
 </div>
 </div>

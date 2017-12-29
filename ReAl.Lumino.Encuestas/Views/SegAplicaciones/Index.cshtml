@@ -25,29 +25,35 @@
 <div class="panel panel-default">
 <div class="panel-heading">Index</div>
 <div class="panel-body">
-    <a asp-action="Create" title="Nuevo" class="btn btn-primary">
-		<i class="fa fa-file-o"></i>
-	</a>
-	<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
-				data-search="true" data-show-toggle="true" data-sortable="true"
-				data-page-size="25" data-pagination-v-align="both" data-show-export="true">
-		<thead>
-			<tr>
-						<th>
-							@Html.DisplayNameFor(model => model.Sigla)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Nombre)
-						</th>
-						<th>
-							@Html.DisplayNameFor(model => model.Descripcion)
-						</th>
-				<th>Acciones</th>
-			</tr>
-		</thead>
-		<tbody>
-	@foreach (var item in Model) {
-			<tr>
+	<div class="col-md-6">
+		<div class="form-group">
+			<a asp-action="Create" title="Nuevo" class="btn btn-primary">
+				<i class="fa fa-file-o"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
+			   data-search="true" data-show-toggle="true" 
+			   data-locale="es-AR" data-advanced-search="true" data-id-table="advancedTable"
+			   data-page-size="25" data-pagination-v-align="both" data-show-export="true">
+			<thead>
+				<tr>
+					<th data-sortable="true" data-halign="center" data-align="left" data-field="Sigla" data-valign="middle">
+						@Html.DisplayNameFor(model => model.Sigla)
+					</th>
+					<th data-sortable="true" data-halign="center" data-align="left" data-field="Nombre" data-valign="middle">
+						@Html.DisplayNameFor(model => model.Nombre)
+					</th>
+					<th data-sortable="true" data-halign="center" data-align="left" data-field="Descripcion" data-valign="middle">
+						@Html.DisplayNameFor(model => model.Descripcion)
+					</th>
+					<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+		@foreach (var item in Model) {
+				<tr>
 					<td>
 						@Html.DisplayFor(modelItem => item.Sigla)
 					</td>
@@ -57,15 +63,26 @@
 					<td>
 						@Html.DisplayFor(modelItem => item.Descripcion)
 					</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.Idsap" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
-					<a asp-action="Details" asp-route-id="@item.Idsap" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>
-					<a asp-action="Delete" asp-route-id="@item.Idsap" title="Eliminar" class="btn btn-danger"><i class="fa fa-eraser"></i></a>
-				</td>
-			</tr>
-	}
-		</tbody>
-	</table>
+					<td>
+						<a asp-action="Edit" asp-route-id="@item.Idsap" title="Editar" class="btn btn-primary"><i class="fa fa-edit"></i></a> 
+						<a asp-action="Details" asp-route-id="@item.Idsap" title="Ver detalles" class="btn btn-warning"><i class="fa fa-indent"></i></a>
+						<a asp-action="Delete" asp-route-id="@item.Idsap" title="Eliminar" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+						<button type="button" class="btn btn-default" data-container="body"
+								data-toggle="popover" data-trigger="click" ToolTip="Auditoria del registro"
+								data-placement="left" data-html="true" title="Auditoria"
+								data-content='<b>Usuario Creacion:</b> @item.Usucre <br />
+											  <b>Fecha Creacion:</b> @item.Feccre <br />
+											  <b>Usuario Modificacion:</b> @item.Usumod <br />
+											  <b>Fecha Modificacion:</b> @item.Fecmod <br />
+											  <b>Estado:</b> @item.Apiestado '>
+							<i class='fa fa-search-plus'></i>
+						</button>
+					</td>
+				</tr>
+		}
+			</tbody>
+		</table>
+	</div>
 </div>
 </div>
 </div>
@@ -75,10 +92,39 @@
 {
 	<!-- Bootstrap-Table -->
 	<script src="~/lib/bootstrap-table/dist/bootstrap-table.min.js"></script>
+	<script src="~/lib/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
+	<script src="~/lib/bootstrap-table/dist/locale/bootstrap-table-es-AR.min.js"></script>
 	<!-- Sweetalert JavaScript -->
 	<script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
-	<!-- DataTable -->
-	$('#miTabla').bootstrapTable();
+	<script>
+		$(document).ready(function(){
+			$('[data-toggle="popover"]').popover();
+		});
+	    
+		$(document).on('show.bs.popover',
+			function(e) {
+					if ($(e.target).data('trigger') == 'click') {
+						var timeoutDataName = 'shownBsTooltipTimeout';
+						if ($(e.target).data(timeoutDataName) != null) {
+							clearTimeout($(e.target).data(timeoutDataName));
+						}
+						var timeout = setTimeout(function() {
+								$(e.target).click();
+							},
+							3000);
+						$(e.target).data(timeoutDataName, timeout);
+					}
+				});
+			$(document).on('hide.bs.popover',
+				function(e) {
+					if ($(e.target).data('trigger') == 'click') {
+						var timeoutDataName = 'shownBsTooltipTimeout';
+						if ($(e.target).data(timeoutDataName) != null) {
+							clearTimeout($(e.target).data(timeoutDataName));
+						}
+					}
+				});
+	</script>
 }	
 
 

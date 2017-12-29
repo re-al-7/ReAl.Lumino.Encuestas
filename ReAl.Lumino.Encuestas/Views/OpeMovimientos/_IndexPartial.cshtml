@@ -1,0 +1,50 @@
+@model IEnumerable<ReAl.Lumino.Encuestas.Models.OpeMovimientos>
+
+<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
+	   data-search="true" data-show-toggle="true" 
+	   data-locale="es-AR" data-advanced-search="true" data-id-table="advancedTable"
+	   data-page-size="25" data-pagination-v-align="both" data-show-export="true">
+	<thead>
+		<tr>
+			<th data-sortable="true" data-halign="center" data-field="IdobrNavigation" data-valign="middle">
+				Brigada
+			</th>
+			<th data-sortable="true" data-halign="center" data-field="IdoupNavigation" data-valign="middle">
+				@Html.DisplayNameFor(model => model.IdoupNavigation)
+			</th>
+			<th data-sortable="true" data-halign="center" data-field="IdsusNavigation" data-valign="middle">
+				@Html.DisplayNameFor(model => model.IdsusNavigation)
+			</th>
+			<th data-searchable="false" data-halign="center" data-align="center" data-valign="middle">Acciones</th>
+		</tr>
+	</thead>
+	<tbody>
+@foreach (var item in Model) {
+	<tr>
+		<td>
+			@Html.DisplayFor(modelItem => item.IdsusNavigation.IdobrNavigation.Codigo)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.IdsusNavigation.Login)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.IdoupNavigation.Codigo) - 
+			@Html.DisplayFor(modelItem => item.IdoupNavigation.Nombre)
+		</td>
+		<td>
+			<a asp-action="Delete" asp-route-id="@item.Idomv" title="Eliminar" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+			<button type="button" class="btn btn-default" data-container="body"
+			        data-toggle="popover" data-trigger="click" ToolTip="Auditoria del registro"
+			        data-placement="left" data-html="true" title="Auditoria"
+			        data-content='<b>Usuario Creacion:</b> @item.Usucre <br />
+									  <b>Fecha Creacion:</b> @item.Feccre <br />
+									  <b>Usuario Modificacion:</b> @item.Usumod <br />
+									  <b>Fecha Modificacion:</b> @item.Fecmod <br />
+									  <b>Estado:</b> @item.Apiestado '>
+				<i class='fa fa-search-plus'></i>
+			</button>
+		</td>
+	</tr>
+}
+	</tbody>
+</table>
