@@ -314,7 +314,7 @@ namespace ReAl.Lumino.Encuestas.Models
 		public ICollection<OpeMovimientos> OpeMovimientos { get; set; }
 		[InverseProperty("IdsusNavigation")]
 		public ICollection<SegUsuariosRestriccion> SegUsuariosRestriccion { get; set; }
-		
+
 	}
 }
 

@@ -1,6 +1,6 @@
 #region 
 /***********************************************************************************************************
-	NOMBRE:       SegUsuariosrestriccion
+	NOMBRE:       SegUsuariosRestriccion
 	DESCRIPCION:
 		Clase que define un objeto para la Tabla seg_usuarios_restriccion
 

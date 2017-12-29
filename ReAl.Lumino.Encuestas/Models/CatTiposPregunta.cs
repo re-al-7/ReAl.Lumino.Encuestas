@@ -1,6 +1,6 @@
 #region 
 /***********************************************************************************************************
-	NOMBRE:       CatTipospregunta
+	NOMBRE:       CatTiposPregunta
 	DESCRIPCION:
 		Clase que define un objeto para la Tabla cat_tipos_pregunta
 
@@ -130,7 +130,7 @@ namespace ReAl.Lumino.Encuestas.Models
 		public string RespuestaValor { get; set; }
 
 		/// <summary>
-		/// 	 Propiedad publica de tipo int que representa a la columna Exportar_codigo de la Tabla cat_tipos_pregunta
+		/// 	 Propiedad publica de tipo int que representa a la columna ExportarCodigo de la Tabla cat_tipos_pregunta
 		/// 	 Permite Null: No
 		/// 	 Es Calculada: No
 		/// 	 Es RowGui: No
@@ -138,8 +138,8 @@ namespace ReAl.Lumino.Encuestas.Models
 		/// 	 Es ForeignKey: No
 		/// </summary>
 		[Column("exportar_codigo")]
-		[Display(Name = "ExportarCodigo", Description = " Propiedad publica de tipo int que representa a la columna Exportar_codigo de la Tabla cat_tipos_pregunta")]
-		[Required(ErrorMessage = "Exportar_codigo es un campo requerido.")]
+		[Display(Name = "ExportarCodigo", Description = " Propiedad publica de tipo int que representa a la columna ExportarCodigo de la Tabla cat_tipos_pregunta")]
+		[Required(ErrorMessage = "ExportarCodigo es un campo requerido.")]
 		public int ExportarCodigo { get; set; }
 
 		/// <summary>
