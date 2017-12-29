@@ -17,9 +17,9 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <summary>
         ///     Constructor, que además abre la conexion y la transaccion
         /// </summary>
-        public CTrans()
+        public CTrans(string strConn)
         {
-            CConn tempConnWebService = new CConn();
+            CConn tempConnWebService = new CConn(strConn);
             MyConn = tempConnWebService.conexionBD;
             MyConn.Open();
             MyTrans = MyConn.BeginTransaction();

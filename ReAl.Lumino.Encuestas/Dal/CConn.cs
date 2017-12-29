@@ -26,9 +26,9 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <summary>
         ///   Constructor de la Clase que se encarga de configurar la Cadena de Conexion
         /// </summary>
-        public CConn()
+        public CConn(string strConn)
         {
-            conexionBD.ConnectionString = "User ID=postgres;Password=Desa2016;Host=localhost;Port=5432;Database=db_encuestas;Pooling=true;";            
+            conexionBD.ConnectionString = strConn;            
         }
 
 

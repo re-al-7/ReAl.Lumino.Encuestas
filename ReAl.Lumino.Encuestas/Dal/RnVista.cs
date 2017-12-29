@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Data;
 using System.Data.Common;
+using ReAl.Lumino.Encuestas.Helpers;
 
 #region
 
@@ -11,6 +11,18 @@ namespace ReAl.Lumino.Encuestas.Dal
 {
     public class RnVista
     {
+        private readonly string _strConn;
+        
+        public RnVista(string strConn)
+        {
+            _strConn = strConn;            
+        }
+
+        public RnVista(ConnectionStringsSettings strConn)
+        {
+            _strConn = strConn.DataAccessPostgreSqlProvider;
+        }
+
         /// <summary>
         /// Funcion que carga el resultado de una consulta SELECT de un DataTable
         /// </summary>
@@ -23,7 +35,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
             var arrColumnas = new ArrayList {"*"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere);
 
             return table;
@@ -40,7 +52,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrColumnasWhere = new ArrayList {"'1'"};
             var arrValoresWhere = new ArrayList {"'1'"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere);
 
             return table;
@@ -58,7 +70,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrColumnasWhere = new ArrayList {"'1'"};
             var arrValoresWhere = new ArrayList {"'1'"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere, strParametrosAdicionales);
 
             return table;
@@ -75,7 +87,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var arrColumnas = new ArrayList {"*"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere);
 
             return table;            
@@ -109,7 +121,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DataTable ObtenerDatos(string vista, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                       ArrayList arrValoresWhere, string strParametrosAdicionales)
         {            
-            var local = new CConn();
+            var local = new CConn(_strConn);
 
             var table = local.cargarDataTableAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere,
                 strParametrosAdicionales);
@@ -119,7 +131,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
         public DataTable ObtenerDatosLike(string vista, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string strParametrosAdicionales)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
 
             var table = local.cargarDataTableLike(vista, arrColumnas, arrColumnasWhere, arrValoresWhere,
                 strParametrosAdicionales);
@@ -138,7 +150,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DataTable ObtenerDatos(string vista, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                       ArrayList arrValoresWhere)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere);
             return table;
         }
@@ -157,7 +169,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var arrColumnas = new ArrayList {"*"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere,
                 strParametrosAdicionales);
             
@@ -169,7 +181,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var arrColumnas = new ArrayList {"*"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataReaderAnd(vista, arrColumnas, arrColumnasWhere, arrValoresWhere,
                 strParametrosAdicionales);
             return table;
@@ -188,7 +200,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrColumnasWhere = new ArrayList {"'1'"};
             var arrValoresWhere = new ArrayList {"'1'"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableOr(vista, arrColumnas, arrColumnasWhere, arrValoresWhere,
                 " AND (" + condicionesWhere + ")");
 
@@ -206,7 +218,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var arrColumnas = new ArrayList {"*"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableOr(vista, arrColumnas, arrColumnasWhere, arrValoresWhere);
 
             return table;
@@ -224,7 +236,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DataTable ObtenerDatosOr(string vista, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                         ArrayList arrValoresWhere, string strParametrosAdicionales)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
 
             var table = local.cargarDataTableOr(vista, arrColumnas, arrColumnasWhere, arrValoresWhere,
                 strParametrosAdicionales);
@@ -245,7 +257,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var arrColumnas = new ArrayList {"*"};
 
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.cargarDataTableOr(vista, arrColumnas, arrColumnasWhere, arrValoresWhere,
                 strParametrosAdicionales);
 
@@ -260,7 +272,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DataTable ObtenerDatosProcAlm(string nombreProcAlm, ArrayList arrParametros)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.execStoreProcedureToDataTable(nombreProcAlm, arrParametros);
 
             return table;
@@ -273,7 +285,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DataTable ObtenerDatosProcAlm(string nombreProcAlm)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.execStoreProcedureToDataTable(nombreProcAlm);
 
             return table;
@@ -288,7 +300,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DataTable ObtenerDatosProcAlm(string nombreProcAlm, ArrayList arrNombreParametros, ArrayList arrParametros)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.execStoreProcedureToDataTable(nombreProcAlm, arrNombreParametros, arrParametros);
 
             return table;
@@ -303,7 +315,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DataTable ObtenerDatosProcAlm(string nombreProcAlm, ArrayList arrNombreParametros, ArrayList arrParametros, ref CTrans myTrans)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var table = local.execStoreProcedureToDataTable(nombreProcAlm, arrNombreParametros, arrParametros, ref myTrans);
 
             return table;
@@ -316,7 +328,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public int EjecutarProcAlm(string nombreProcAlm)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var iTotal = local.execStoreProcedure(nombreProcAlm) ? 1 : 0;
             return iTotal;
         }
@@ -329,7 +341,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public int EjecutarProcAlm(string nombreProcAlm, ArrayList arrParametros)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var iTotal = local.execStoreProcedure(nombreProcAlm, arrParametros) ? 1 : 0;
             return iTotal;
         }
@@ -343,7 +355,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public int EjecutarProcAlm(string nombreProcAlm, ArrayList arrNombreParametros, ArrayList arrParametros)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var iTotal = local.execStoreProcedure(nombreProcAlm, arrNombreParametros, arrParametros);
             return iTotal;
         }
@@ -357,7 +369,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public int EjecutarProcAlm(string nombreProcAlm, ArrayList arrNombreParametros, ArrayList arrParametros, ref CTrans myTrans)
         {
-            var local = new CConn();
+            var local = new CConn(_strConn);
             var iTotal = local.execStoreProcedure(nombreProcAlm, arrNombreParametros, arrParametros, ref myTrans);
             return iTotal;
         }

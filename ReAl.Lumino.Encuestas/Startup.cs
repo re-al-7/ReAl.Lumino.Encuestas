@@ -67,6 +67,10 @@ namespace ReAl.Lumino.Encuestas
             services.AddDistributedMemoryCache();
             services.AddSession();
             
+            //Cadena de Conexion
+            services.Configure<ConnectionStringsSettings>(Configuration.GetSection("ConnectionStrings"));
+   
+            
             //Compression
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Optimal);
             services.AddResponseCompression(options =>

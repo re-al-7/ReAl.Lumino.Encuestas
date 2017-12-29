@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using ReAl.Lumino.Encuestas.Helpers;
 using ReAl.Lumino.Encuestas.Models;
 
@@ -13,6 +14,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
     {
         protected readonly db_encuestasContext _context;
         protected IConfiguration _iconfiguration;  
+        protected readonly IOptions<ConnectionStringsSettings> _connectionStringsSettings; 
         
         public BaseController(db_encuestasContext context)
         {
@@ -23,6 +25,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
         {
             _context = context;
             _iconfiguration = iconfiguration;
+        }       
+        
+        public BaseController(db_encuestasContext context, IConfiguration iconfiguration, IOptions<ConnectionStringsSettings> connstring)
+        {
+            _context = context;
+            _iconfiguration = iconfiguration;
+            _connectionStringsSettings = connstring;
         }
         
         public override void OnActionExecuted(ActionExecutedContext context)
