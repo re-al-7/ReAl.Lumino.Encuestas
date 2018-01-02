@@ -7,7 +7,7 @@
 }	
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Profile";
 }
 
 <div class="row">
@@ -19,10 +19,10 @@
 <div class="row">
 <div class="col-lg-12">
 <div class="panel panel-default">
-<div class="panel-heading">Edit</div>
+<div class="panel-heading">Profile</div>
 <div class="panel-body">	
     <div class="col-md-6">
-        <form asp-action="Edit" role="form" method="post" id="EditForm">
+        <form asp-action="Profile" role="form" method="post" id="ProfileForm">
             <div class="form-group">
                 <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
                 <a title="Guardar cambios" class="btn btn-primary" onclick="Validate(this, event);"><i class="fa fa-save"></i></a>
@@ -31,13 +31,8 @@
             <input type="hidden" asp-for="Idsus" />
             <div class="form-group">
                 <label asp-for="Login"></label>
-                <input asp-for="Login" class="form-control" />
+                <input asp-for="Login" class="form-control" readonly="readonly" />
                 <span asp-validation-for="Login" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Nombres"></label>
@@ -54,32 +49,13 @@
                 <input asp-for="Correo" class="form-control" />
                 <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Vigente"></label>
-                <input asp-for="Vigente" class="form-control" />
-                <span asp-validation-for="Vigente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Idcde" ></label>
-                <select asp-for="Idcde" class="form-control selectpicker" data-size="5" 
-                        data-live-search="true" data-select-on-tab="true" data-size="5"
-                        data-none-selected-text="No existen elementos"                                                                                              
-                        asp-items="ViewBag.Idcde"></select>
-                <span asp-validation-for="Idcde" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Idobr" ></label>
-                <select asp-for="Idobr" class="form-control selectpicker" data-size="5" 
-                        data-live-search="true" data-select-on-tab="true" data-size="5"
-                        data-none-selected-text="No existen elementos"                                                                                              
-                        asp-items="ViewBag.Idobr"></select>
-                <span asp-validation-for="Idobr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Tablet"></label>
-                <input asp-for="Tablet" class="form-control" />
-                <span asp-validation-for="Tablet" class="text-danger"></span>
-            </div>
+            
+	        <div class="form-group">
+		        <label asp-for="Tablet"></label>
+		        <input asp-for="Tablet" class="form-control" />
+		        <span asp-validation-for="Tablet" class="text-danger"></span>
+	        </div>
+	        <input asp-for="Password" class="form-control" type="hidden" />
             <input asp-for="Apiestado" class="form-control" type="hidden" />
             <input asp-for="Apitransaccion" class="form-control" type="hidden" />
             <input asp-for="Usucre" class="form-control" type="hidden" />
@@ -114,7 +90,7 @@
 				cancelButtonText: "Cancelar"
 			}).then(function(isConfirm) {
 				if (isConfirm.value) {
-					$("#EditForm").submit();
+					$("#ProfileForm").submit();
 				} else {
 					swal("Cancelled", "Se ha cancelado la accion", "error");
 				}

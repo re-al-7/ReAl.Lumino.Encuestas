@@ -23,104 +23,110 @@
 <div class="panel panel-default">
 <div class="panel-heading">¿Est&aacute; seguro que desea ELIMINAR &eacute;ste registro?</div>
 <div class="panel-body">
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Login)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Login)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombres)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Nombres)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Apellidos)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Apellidos)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Correo)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Correo)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Vigente)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Vigente)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Tablet)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Tablet)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Apiestado)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Apiestado)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Apitransaccion)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Apitransaccion)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Usucre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Usucre)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Feccre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Feccre)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Usumod)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Usumod)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Fecmod)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Fecmod)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IdcdeNavigation)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IdcdeNavigation.Apiestado)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IdobrNavigation)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IdobrNavigation.Apiestado)
-        </dd>
-    </dl>
+    <div class="col-md-6">
+        <div class="form-group">
+            <a title="Volver al listado" class="btn btn-primary" asp-action="Index" ><i class="fa fa-arrow-left"></i></a>
+            <a title="Eliminar registro" class="btn btn-danger" onclick="Validate(this, event);"><i class="fa fa-trash-o"></i></a>
+        </div>    
+        <div class="form-group">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Login)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Login)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Password)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Password)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Nombres)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Nombres)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Apellidos)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Apellidos)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Correo)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Correo)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Vigente)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Vigente)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Tablet)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Tablet)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Apiestado)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Apiestado)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Apitransaccion)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Apitransaccion)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Usucre)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Usucre)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Feccre)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Feccre)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Usumod)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Usumod)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Fecmod)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Fecmod)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IdcdeNavigation)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.IdcdeNavigation.Idcde)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IdobrNavigation)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.IdobrNavigation.Codigo)
+                </dd>
+            </dl>
     
-    <form asp-action="Delete" role="form" method="post" id="DeleteForm" class="form-horizontal row-border">
-        <input type="hidden" asp-for="Idsus" />
-        <input type="submit" value="Eliminar" class="btn btn-default" onclick="Validate(this, event);"/> |
-        <a asp-action="Index">Volver</a>
-    </form>
+            <form asp-action="Delete" role="form" method="post" id="DeleteForm" class="form-horizontal row-border">
+                <input type="hidden" asp-for="Idsus" />
+            </form>
+        </div>
+    </div>
 </div>
 </div>
 </div>
