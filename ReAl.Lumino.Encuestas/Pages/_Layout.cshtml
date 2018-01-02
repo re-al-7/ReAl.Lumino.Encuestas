@@ -80,6 +80,35 @@
                 <a asp-controller="Dashboard" asp-action="Index" class="navbar-brand" >
                     <span>Lumi</span>no
                 </a>                
+                <ul class="nav navbar-top-links navbar-right">                    
+                    <li class="dropdown">                        
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <em class="fa fa-user"></em>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li class="divider"></li>
+                            <li>
+                                <a asp-area="" asp-controller="SegUsuarios" asp-action="Profile">
+                                    <em class="fa fa-user"></em> Mi Perfil
+                                    <span class="pull-right text-muted small">&nbsp;</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-area="" asp-controller="SegUsuariosRestriccion" asp-action="CambiarRolActual">
+                                    <em class="fa fa-users"></em> Rol Actual
+                                    <span class="pull-right text-muted small">&nbsp;</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="javascript:{}" onclick="document.getElementById('Logout').submit();return false;">
+                                    <em class="fa fa-close"></em> Cerrar Sesi&oacute;n
+                                    <span class="pull-right text-muted small">&nbsp;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
                 <ul class="navbar-right theme-switcher">
                     <li><span>Choose Theme:</span></li>
                     <li><a href="#" title="Default" data-theme="default" class="theme-btn theme-btn-default">Default</a></li>

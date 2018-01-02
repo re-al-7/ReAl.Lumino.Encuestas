@@ -70,7 +70,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
                 if (obj == null)
                 {
-                    if (User.Identity.GetGivenName().Length > 30)
+                    if (User.Identity.GetGivenName().Length > 20)
                         return User.Identity.GetGivenName().Split(' ')[0];
                     else
                         return User.Identity.GetGivenName();
@@ -78,7 +78,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 else
                 {
                     
-                    if ((obj.Nombres + " " + obj.Apellidos).ToString().Length > 30)
+                    if ((obj.Nombres + " " + obj.Apellidos).ToString().Length > 20)
                         return obj.Nombres;
                     else
                         return obj.Nombres + " " + obj.Apellidos;                    
