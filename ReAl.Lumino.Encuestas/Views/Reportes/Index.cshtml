@@ -26,10 +26,16 @@
 <div class="panel panel-default">
 <div class="panel-heading">Index</div>
 <div class="panel-body">
-	<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
-				data-search="true" data-show-toggle="true" data-sortable="true"
-				data-page-size="25" data-pagination-v-align="both" data-show-export="true">
-		<thead>
+	<div class="form-group">
+		<a asp-action="Download" title="Descargar" class="btn btn-primary">
+			<i class="fa fa-print"></i>
+		</a>
+	</div>
+	<div class="col-md-12">
+		<table id="miTabla" data-toggle="table" data-show-columns="true" data-pagination="true"
+		       data-search="true" data-show-toggle="true" data-sortable="true"
+		       data-page-size="25" data-pagination-v-align="both" data-show-export="true">
+			<thead>
 			<tr>
 				<th>
 					Origen
@@ -44,26 +50,28 @@
 					Regla
 				</th>
 			</tr>
-		</thead>
-		<tbody>
-	@foreach(DataRow fila in ((DataTable) ViewData["datos"]).Rows) {
-			<tr>
-				<td>
-					@fila["origen"]
-				</td>
-				<td>
-					@fila["destino"]
-				</td>
-				<td>
-					@fila["orden"]
-				</td>
-				<td>
-					@fila["regla"]
-				</td>
-			</tr>
-	}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+			@foreach (DataRow fila in ((DataTable) ViewData["datos"]).Rows)
+			{
+				<tr>
+					<td>
+						@fila["origen"]
+					</td>
+					<td>
+						@fila["destino"]
+					</td>
+					<td>
+						@fila["orden"]
+					</td>
+					<td>
+						@fila["regla"]
+					</td>
+				</tr>
+			}
+			</tbody>
+		</table>
+	</div>
 </div>
 </div>
 </div>
