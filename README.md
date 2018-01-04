@@ -1,5 +1,9 @@
 # LuminoAdmin para Encuestas
 
+[![Build status](https://ci.appveyor.com/api/projects/status/rtwos9dek63gh0hu?svg=true)](https://ci.appveyor.com/project/re_al_/real-lumino-encuestas)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9ae9d5a6d92548ec941db5b04befaad3)](https://www.codacy.com/app/re_al_/real.lumino.encuestas?utm_source=re_al_@bitbucket.org&amp;utm_medium=referral&amp;utm_content=re_al_/real.lumino.encuestas&amp;utm_campaign=Badge_Grade)
+
 ---------------------------------------
 
 Proyecto desarrollado en [.NET Core 2](https://www.microsoft.com/net/) para el uso del template [Lumino](https://medialoot.com/preview/lumino-premium/index.html) y con Conexion a PostgresSql via EntityFramework para la administracion de un sistema de Encuestas
