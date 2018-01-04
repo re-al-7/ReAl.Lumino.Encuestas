@@ -34,6 +34,7 @@ namespace ReAl.Lumino.Encuestas.Test
             _context = new db_encuestasContext(optionsBuilder.Options);
         }
 
+        /*
         [Fact]
         public async Task ReturnHelloWorld()
         {
@@ -50,6 +51,7 @@ namespace ReAl.Lumino.Encuestas.Test
             Assert.Equal("Hello World!",
                 responseString);
         }
+        */
         
         [Fact]
         public void Login()
