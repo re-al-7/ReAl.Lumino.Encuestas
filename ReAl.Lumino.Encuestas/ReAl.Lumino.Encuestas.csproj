@@ -23,5 +23,6 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+	<Content Remove="Templates\**"></Content>
   </ItemGroup>
 </Project>
