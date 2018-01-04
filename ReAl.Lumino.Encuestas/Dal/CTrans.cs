@@ -11,8 +11,8 @@ namespace ReAl.Lumino.Encuestas.Dal
 {
     public class CTrans
     {
-        public NpgsqlTransaction MyTrans;
-        public NpgsqlConnection MyConn;
+        internal NpgsqlTransaction MyTrans;
+        internal NpgsqlConnection MyConn;
 
         /// <summary>
         ///     Constructor, que además abre la conexion y la transaccion

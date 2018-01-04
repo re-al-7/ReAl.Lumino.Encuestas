@@ -14,7 +14,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 {
     public class CConn
     {
-        public NpgsqlConnection conexionBD = new NpgsqlConnection();
+        internal NpgsqlConnection conexionBD = new NpgsqlConnection();
 
         private enumTipoConexion _TipoConexion = enumTipoConexion.useDataReader;
         private enum enumTipoConexion
@@ -5676,7 +5676,6 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 command.Connection = myTrans.MyConn;
                 command.Transaction = myTrans.MyTrans;
-
 
                 NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
 
