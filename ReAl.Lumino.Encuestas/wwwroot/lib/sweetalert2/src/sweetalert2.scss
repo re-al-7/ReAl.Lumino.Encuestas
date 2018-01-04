@@ -1,19 +1,23 @@
 // SweetAlert2
 // github.com/limonte/sweetalert2
 
-@import 'colors';
+@import 'variables';
 @import 'mixins';
 
+html,
 body {
   &.swal2-shown {
-    &:not(.swal2-no-backdrop) {
+    @include not(
+      '.swal2-no-backdrop',
+      '.swal2-toast-shown'
+    ) {
       overflow-y: hidden;
     }
   }
+}
 
+body {
   &.swal2-toast-shown {
-    overflow-y: auto;
-
     &.swal2-has-input  > .swal2-container {
       & > .swal2-toast {
         flex-direction: column;
@@ -56,6 +60,7 @@ body {
         transform: translateX(-50%);
       }
 
+      &.swal2-top-end,
       &.swal2-top-right {
         top: 0;
         left: auto;
@@ -63,6 +68,7 @@ body {
         right: 0;
       }
 
+      &.swal2-top-start,
       &.swal2-top-left {
         top: 0;
         left: 0;
@@ -70,6 +76,7 @@ body {
         right: auto;
       }
 
+      &.swal2-center-start,
       &.swal2-center-left {
         top: 50%;
         left: 0;
@@ -86,6 +93,7 @@ body {
         transform: translate(-50%, -50%);
       }
 
+      &.swal2-center-end,
       &.swal2-center-right {
         top: 50%;
         left: auto;
@@ -94,6 +102,7 @@ body {
         transform: translateY(-50%);
       }
 
+      &.swal2-bottom-start,
       &.swal2-bottom-left {
         top: auto;
         left: 0;
@@ -109,6 +118,7 @@ body {
         transform: translateX(-50%);
       }
 
+      &.swal2-bottom-end,
       &.swal2-bottom-right {
         top: auto;
         left: auto;
@@ -143,11 +153,13 @@ body {
         transform: translateX(-50%);
       }
 
+      &.swal2-top-start,
       &.swal2-top-left {
         top: 0;
         left: 0;
       }
 
+      &.swal2-top-end,
       &.swal2-top-right {
         top: 0;
         right: 0;
@@ -159,12 +171,14 @@ body {
         transform: translate(-50%, -50%);
       }
 
+      &.swal2-center-start,
       &.swal2-center-left {
         top: 50%;
         left: 0;
         transform: translateY(-50%);
       }
 
+      &.swal2-center-end,
       &.swal2-center-right {
         top: 50%;
         right: 0;
@@ -177,11 +191,13 @@ body {
         transform: translateX(-50%);
       }
 
+      &.swal2-bottom-start,
       &.swal2-bottom-left {
         bottom: 0;
         left: 0;
       }
 
+      &.swal2-bottom-end,
       &.swal2-bottom-right {
         bottom: 0;
         right: 0;
@@ -212,11 +228,13 @@ body {
     align-items: flex-start;
   }
 
+  &.swal2-top-start,
   &.swal2-top-left {
     align-items: flex-start;
     justify-content: flex-start;
   }
 
+  &.swal2-top-end,
   &.swal2-top-right {
     align-items: flex-start;
     justify-content: flex-end;
@@ -226,11 +244,13 @@ body {
     align-items: center;
   }
 
+  &.swal2-center-start,
   &.swal2-center-left {
     align-items: center;
     justify-content: flex-start;
   }
 
+  &.swal2-center-end,
   &.swal2-center-right {
     align-items: center;
     justify-content: flex-end;
@@ -240,11 +260,13 @@ body {
     align-items: flex-end;
   }
 
+  &.swal2-bottom-start,
   &.swal2-bottom-left {
     align-items: flex-end;
     justify-content: flex-start;
   }
 
+  &.swal2-bottom-end,
   &.swal2-bottom-right {
     align-items: flex-end;
     justify-content: flex-end;
@@ -274,12 +296,18 @@ body {
       align-items: center;
     }
 
+    &.swal2-top-start,
+    &.swal2-center-start,
+    &.swal2-bottom-start,
     &.swal2-top-left,
     &.swal2-center-left,
     &.swal2-bottom-left {
       align-items: flex-start;
     }
 
+    &.swal2-top-end,
+    &.swal2-center-end,
+    &.swal2-bottom-end,
     &.swal2-top-right,
     &.swal2-center-right,
     &.swal2-bottom-right {
@@ -296,11 +324,17 @@ body {
 
   @include not(
     '.swal2-top',
+    '.swal2-top-start',
+    '.swal2-top-end',
     '.swal2-top-left',
     '.swal2-top-right',
+    '.swal2-center-start',
+    '.swal2-center-end',
     '.swal2-center-left',
     '.swal2-center-right',
     '.swal2-bottom',
+    '.swal2-bottom-start',
+    '.swal2-bottom-end',
     '.swal2-bottom-left',
     '.swal2-bottom-right') {
     & > .swal2-modal {
@@ -327,7 +361,7 @@ body {
 .swal2-popup {
   flex-direction: column;
   background-color: $swal2-white;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: $swal2-font;
   border-radius: 5px;
   box-sizing: border-box;
   text-align: center;
@@ -358,6 +392,7 @@ body {
 
     .swal2-icon {
       width: 32px;
+      min-width: 32px;
       height: 32px;
       margin: 0 15px 0 0;
 
@@ -827,7 +862,7 @@ body {
   }
 
   &.swal2-warning {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: $swal2-font;
     color: $swal2-warning;
     border-color: lighten($swal2-warning, 7);
     font-size: 60px;
@@ -836,7 +871,7 @@ body {
   }
 
   &.swal2-info {
-    font-family: 'Open Sans', sans-serif;
+    font-family: $swal2-font;
     color: $swal2-info;
     border-color: lighten($swal2-info, 20);
     font-size: 60px;
@@ -845,7 +880,7 @@ body {
   }
 
   &.swal2-question {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: $swal2-font;
     color: $swal2-question;
     border-color: lighten($swal2-question, 20);
     font-size: 60px;
@@ -1088,6 +1123,14 @@ body {
   }
 }
 
+
+// Right-to-left support
+[dir='rtl'] {
+  .swal2-close {
+    left: 8px;
+    right: auto;
+  }
+}
 
 
 // Success icon animation

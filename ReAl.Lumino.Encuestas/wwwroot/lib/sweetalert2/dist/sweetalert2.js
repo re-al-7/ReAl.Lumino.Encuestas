@@ -1,5 +1,5 @@
 /*!
- * sweetalert2 v7.0.3
+ * sweetalert2 v7.3.2
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -81,7 +81,7 @@ var prefix = function prefix(items) {
   return result;
 };
 
-var swalClasses = prefix(['container', 'shown', 'iosfix', 'popup', 'modal', 'no-backdrop', 'toast', 'toast-shown', 'overlay', 'fade', 'show', 'hide', 'noanimation', 'close', 'title', 'content', 'contentwrapper', 'buttonswrapper', 'confirm', 'cancel', 'icon', 'image', 'input', 'has-input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea', 'inputerror', 'validationerror', 'progresssteps', 'activeprogressstep', 'progresscircle', 'progressline', 'loading', 'styled', 'top', 'top-left', 'top-right', 'center', 'center-left', 'center-right', 'bottom', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen']);
+var swalClasses = prefix(['container', 'shown', 'iosfix', 'popup', 'modal', 'no-backdrop', 'toast', 'toast-shown', 'overlay', 'fade', 'show', 'hide', 'noanimation', 'close', 'title', 'content', 'contentwrapper', 'buttonswrapper', 'confirm', 'cancel', 'icon', 'image', 'input', 'has-input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea', 'inputerror', 'validationerror', 'progresssteps', 'activeprogressstep', 'progresscircle', 'progressline', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen']);
 
 var iconTypes = prefix(['success', 'warning', 'info', 'question', 'error']);
 
@@ -109,6 +109,10 @@ var colorLuminance = function colorLuminance(hex, lum) {
   return rgb;
 };
 
+/**
+ * Filter the unique values into a new array
+ * @param arr
+ */
 var uniqueArray = function uniqueArray(arr) {
   var result = [];
   for (var i in arr) {
@@ -158,20 +162,23 @@ var states = {
   previousActiveElement: null,
   previousBodyPadding: null
 
-  /*
-   * Add modal + overlay to DOM
-   */
-};var init = function init(params) {
+  // Detect Node env
+};var isNodeEnv = function isNodeEnv() {
+  return typeof window === 'undefined' || typeof document === 'undefined';
+};
+
+/*
+ * Add modal + overlay to DOM
+ */
+var init = function init(params) {
   // Clean up the old popup if it exists
   var c = getContainer();
   if (c) {
     c.parentNode.removeChild(c);
-    removeClass(document.body, swalClasses['no-backdrop']);
-    removeClass(document.body, swalClasses['has-input']);
-    removeClass(document.body, swalClasses['toast-shown']);
+    removeClass([document.documentElement, document.body], [swalClasses['no-backdrop'], swalClasses['has-input'], swalClasses['toast-shown']]);
   }
 
-  if (typeof document === 'undefined') {
+  if (isNodeEnv()) {
     error('SweetAlert2 requires document to initialize');
     return;
   }
@@ -191,6 +198,9 @@ var states = {
   var select = getChildByClass(popup, swalClasses.select);
   var checkbox = popup.querySelector('.' + swalClasses.checkbox + ' input');
   var textarea = getChildByClass(popup, swalClasses.textarea);
+
+  // a11y
+  popup.setAttribute('aria-live', params.toast ? 'polite' : 'assertive');
 
   var resetValidationError = function resetValidationError() {
     sweetAlert.isVisible() && sweetAlert.resetValidationError();
@@ -275,7 +285,7 @@ var getCloseButton = function getCloseButton() {
 };
 
 var getFocusableElements = function getFocusableElements() {
-  var focusableElementsWithTabindex = Array.from(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])'))
+  var focusableElementsWithTabindex = Array.prototype.slice.call(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])'))
   // sort according to tabindex
   .sort(function (a, b) {
     a = parseInt(a.getAttribute('tabindex'));
@@ -301,6 +311,10 @@ var isToast = function isToast() {
   return document.body.classList.contains(swalClasses['toast-shown']);
 };
 
+var isLoading = function isLoading() {
+  return getPopup().hasAttribute('data-loading');
+};
+
 var hasClass = function hasClass(elem, className) {
   if (elem.classList) {
     return elem.classList.contains(className);
@@ -320,24 +334,30 @@ var focusInput = function focusInput(input) {
   }
 };
 
-var addClass = function addClass(elem, className) {
-  if (!elem || !className) {
+var addOrRemoveClass = function addOrRemoveClass(target, classList, add) {
+  if (!target || !classList) {
     return;
   }
-  var classes = className.split(/\s+/).filter(Boolean);
-  classes.forEach(function (className) {
-    elem.classList.add(className);
+  if (typeof classList === 'string') {
+    classList = classList.split(/\s+/).filter(Boolean);
+  }
+  classList.forEach(function (className) {
+    if (target.forEach) {
+      target.forEach(function (elem) {
+        add ? elem.classList.add(className) : elem.classList.remove(className);
+      });
+    } else {
+      add ? target.classList.add(className) : target.classList.remove(className);
+    }
   });
 };
 
-var removeClass = function removeClass(elem, className) {
-  if (!elem || !className) {
-    return;
-  }
-  var classes = className.split(/\s+/).filter(Boolean);
-  classes.forEach(function (className) {
-    elem.classList.remove(className);
-  });
+var addClass = function addClass(target, classList) {
+  addOrRemoveClass(target, classList, true);
+};
+
+var removeClass = function removeClass(target, classList) {
+  addOrRemoveClass(target, classList, false);
 };
 
 var getChildByClass = function getChildByClass(elem, className) {
@@ -369,7 +389,7 @@ var empty = function empty(elem) {
 
 // borrowed from jquery $(elem).is(':visible') implementation
 var isVisible = function isVisible(elem) {
-  return elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length;
+  return elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
 };
 
 var removeStyleProperty = function removeStyleProperty(elem, property) {
@@ -381,6 +401,11 @@ var removeStyleProperty = function removeStyleProperty(elem, property) {
 };
 
 var animationEndEvent = function () {
+  // Prevent run in Node env
+  if (isNodeEnv()) {
+    return false;
+  }
+
   var testEl = document.createElement('div');
   var transEndEventNames = {
     'WebkitAnimation': 'webkitAnimationEnd',
@@ -388,7 +413,7 @@ var animationEndEvent = function () {
     'animation': 'animationend'
   };
   for (var i in transEndEventNames) {
-    if (transEndEventNames.hasOwnProperty(i) && testEl.style[i] !== undefined) {
+    if (transEndEventNames.hasOwnProperty(i) && typeof testEl.style[i] !== 'undefined') {
       return transEndEventNames[i];
     }
   }
@@ -402,8 +427,8 @@ var resetPrevState = function resetPrevState() {
     var x = window.scrollX;
     var y = window.scrollY;
     states.previousActiveElement.focus();
-    if (x && y) {
-      // IE has no scrollX/scrollY support
+    if (typeof x !== 'undefined' && typeof y !== 'undefined') {
+      // IE doesn't have scrollX/scrollY support
       window.scrollTo(x, y);
     }
   }
@@ -553,7 +578,7 @@ var setParameters = function setParameters(params) {
   }
 
   if (!params.backdrop) {
-    addClass(document.body, swalClasses['no-backdrop']);
+    addClass([document.documentElement, document.body], swalClasses['no-backdrop']);
   }
 
   // Content
@@ -601,7 +626,7 @@ var setParameters = function setParameters(params) {
   // Default Class
   popup.className = swalClasses.popup;
   if (params.toast) {
-    addClass(document.body, swalClasses['toast-shown']);
+    addClass([document.documentElement, document.body], swalClasses['toast-shown']);
     addClass(popup, swalClasses.toast);
   } else {
     addClass(popup, swalClasses.modal);
@@ -748,11 +773,9 @@ var setParameters = function setParameters(params) {
 
   // Buttons styling
   if (params.buttonsStyling) {
-    addClass(confirmButton, swalClasses.styled);
-    addClass(cancelButton, swalClasses.styled);
+    addClass([confirmButton, cancelButton], swalClasses.styled);
   } else {
-    removeClass(confirmButton, swalClasses.styled);
-    removeClass(cancelButton, swalClasses.styled);
+    removeClass([confirmButton, cancelButton], swalClasses.styled);
 
     confirmButton.style.backgroundColor = confirmButton.style.borderLeftColor = confirmButton.style.borderRightColor = '';
     cancelButton.style.backgroundColor = cancelButton.style.borderLeftColor = cancelButton.style.borderRightColor = '';
@@ -806,9 +829,7 @@ var openPopup = function openPopup(animation, onBeforeOpen, onComplete) {
     container.style.overflowY = 'auto';
   }
 
-  addClass(document.documentElement, swalClasses.shown);
-  addClass(document.body, swalClasses.shown);
-  addClass(container, swalClasses.shown);
+  addClass([document.documentElement, document.body, container], swalClasses.shown);
   if (isModal()) {
     fixScrollbar();
     iOSfix();
@@ -866,7 +887,12 @@ var sweetAlert = function sweetAlert() {
     args[_key] = arguments[_key];
   }
 
-  if (args[0] === undefined) {
+  // Prevent run in Node env
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  if (typeof args[0] === 'undefined') {
     error('SweetAlert2 expects at least 1 attribute!');
     return false;
   }
@@ -1012,6 +1038,7 @@ var sweetAlert = function sweetAlert() {
       }
 
       if (params.preConfirm) {
+        sweetAlert.resetValidationError();
         var preConfirmPromise = Promise.resolve().then(function () {
           return params.preConfirm(value, params.extraParams);
         });
@@ -1157,12 +1184,48 @@ var sweetAlert = function sweetAlert() {
         }
       };
     } else {
+      var ignoreOutsideClick = false;
+
+      // Ignore click events that had mousedown on the popup but mouseup on the container
+      // This can happen when the user drags a slider
+      popup.onmousedown = function () {
+        container.onmouseup = function (e) {
+          container.onmouseup = undefined;
+          // We only check if the mouseup target is the container because usually it doesn't
+          // have any other direct children aside of the popup
+          if (e.target === container) {
+            ignoreOutsideClick = true;
+          }
+        };
+      };
+
+      // Ignore click events that had mousedown on the container but mouseup on the popup
+      container.onmousedown = function () {
+        popup.onmouseup = function (e) {
+          popup.onmouseup = undefined;
+          // We also need to check if the mouseup target is a child of the popup
+          if (e.target === popup || popup.contains(e.target)) {
+            ignoreOutsideClick = true;
+          }
+        };
+      };
+
       container.onclick = function (e) {
+        if (ignoreOutsideClick) {
+          ignoreOutsideClick = false;
+          return;
+        }
         if (e.target !== container) {
           return;
         }
         if (params.allowOutsideClick) {
-          dismissWith('overlay');
+          if (typeof params.allowOutsideClick === 'function') {
+            if (params.allowOutsideClick()) {
+              dismissWith('overlay');
+            }
+          } else {
+            dismissWith('overlay');
+          }
         }
       };
     }
@@ -1257,7 +1320,12 @@ var sweetAlert = function sweetAlert() {
       }
     };
 
-    if (!windowOnkeydownOverridden) {
+    if (params.toast && windowOnkeydownOverridden) {
+      window.onkeydown = previousWindowKeyDown;
+      windowOnkeydownOverridden = false;
+    }
+
+    if (!params.toast && !windowOnkeydownOverridden) {
       previousWindowKeyDown = window.onkeydown;
       windowOnkeydownOverridden = true;
       window.onkeydown = handleKeyDown;
@@ -1279,9 +1347,9 @@ var sweetAlert = function sweetAlert() {
           hide(getButtonsWrapper());
         }
       }
-      removeClass(buttonsWrapper, swalClasses.loading);
-      removeClass(popup, swalClasses.loading);
+      removeClass([popup, buttonsWrapper], swalClasses.loading);
       popup.removeAttribute('aria-busy');
+      popup.removeAttribute('data-loading');
       confirmButton.disabled = false;
       cancelButton.disabled = false;
     };
@@ -1306,6 +1374,9 @@ var sweetAlert = function sweetAlert() {
     };
     sweetAlert.getCancelButton = function () {
       return getCancelButton();
+    };
+    sweetAlert.isLoading = function () {
+      return isLoading();
     };
 
     sweetAlert.enableButtons = function () {
@@ -1611,7 +1682,7 @@ sweetAlert.queue = function (steps) {
         document.body.setAttribute('data-swal2-queue-step', i);
 
         sweetAlert(queue[i]).then(function (result) {
-          if (result.value !== undefined) {
+          if (typeof result.value !== 'undefined') {
             queueResult.push(result.value);
             step(i + 1, callback);
           } else {
@@ -1676,11 +1747,7 @@ sweetAlert.close = sweetAlert.closePopup = sweetAlert.closeModal = sweetAlert.cl
     if (container.parentNode) {
       container.parentNode.removeChild(container);
     }
-    removeClass(document.documentElement, swalClasses.shown);
-    removeClass(document.body, swalClasses.shown);
-    removeClass(document.body, swalClasses['no-backdrop']);
-    removeClass(document.body, swalClasses['has-input']);
-    removeClass(document.body, swalClasses['toast-shown']);
+    removeClass([document.documentElement, document.body], [swalClasses.shown, swalClasses['no-backdrop'], swalClasses['has-input'], swalClasses['toast-shown']]);
 
     if (isModal()) {
       undoScrollbar();
@@ -1736,11 +1803,11 @@ sweetAlert.showLoading = sweetAlert.enableLoading = function () {
 
   show(buttonsWrapper);
   show(confirmButton, 'inline-block');
-  addClass(buttonsWrapper, swalClasses.loading);
-  addClass(popup, swalClasses.loading);
+  addClass([popup, buttonsWrapper], swalClasses.loading);
   confirmButton.disabled = true;
   cancelButton.disabled = true;
 
+  popup.setAttribute('data-loading', true);
   popup.setAttribute('aria-busy', true);
   popup.focus();
 };
@@ -1802,11 +1869,18 @@ sweetAlert.adaptInputValidator = function (legacyValidator) {
 
 sweetAlert.noop = function () {};
 
-sweetAlert.version = '7.0.3';
+sweetAlert.version = '7.3.2';
 
 sweetAlert.default = sweetAlert;
+
+/**
+ * Set default params if `window._swalDefaults` is an object
+ */
+if (typeof window !== 'undefined' && _typeof(window._swalDefaults) === 'object') {
+  sweetAlert.setDefaults(window._swalDefaults);
+}
 
 return sweetAlert;
 
 })));
-if (window.Sweetalert2) window.sweetAlert = window.swal = window.Sweetalert2;
+if (typeof window !== 'undefined' && window.Sweetalert2) window.sweetAlert = window.swal = window.Sweetalert2;

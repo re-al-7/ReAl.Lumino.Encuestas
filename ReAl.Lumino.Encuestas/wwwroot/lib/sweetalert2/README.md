@@ -9,6 +9,7 @@
 <p align="center">
   <a href="https://travis-ci.org/limonte/sweetalert2"><img alt="Build Status" src="https://travis-ci.org/limonte/sweetalert2.svg?branch=master"></a>
   <a href="https://www.npmjs.com/package/sweetalert2"><img alt="Version" src="https://img.shields.io/npm/v/sweetalert2.svg"></a>
+  <a href="https://checkgzipcompression.com/?url=https%3A%2F%2Fraw.githubusercontent.com%2Flimonte%2Fsweetalert2%2Fmaster%2Fdist%2Fsweetalert2.all.min.js"><img alt="gzip size" src="http://img.badgesize.io/limonte/sweetalert2/master/dist/sweetalert2.all.min.js.svg?compression=gzip"></a>
   <a href="http://isitmaintained.com/project/limonte/sweetalert2"><img alt="Average time to resolve an issue" src="http://isitmaintained.com/badge/resolution/limonte/sweetalert2.svg"></a>
   <a href="https://gitter.im/sweetalert2/Lobby"><img alt="Gitter" src="https://badges.gitter.im/Join%20Chat.svg"></a>
   <a href="https://www.patreon.com/limonte"><img alt="Support me on Patreon" src="http://ionicabizau.github.io/badges/patreon.svg"></a>
@@ -19,30 +20,20 @@
   A beautiful, responsive, customizable, accessible (WAI-ARIA) replacement for JavaScript's popup boxes. Zero dependencies.
 </p>
 
-:point_right: **Upgrading from v6.x to v7.x?** [Read the release notes!](https://github.com/limonte/sweetalert2/releases/tag/v7.0.0)
-
---------
-
-What's the difference between SweetAlert and SweetAlert2?
----------------------------------------------------------
-
- - [Reason of creating this fork is inactivity of original SweetAlert plugin](http://stackoverflow.com/a/27842854/1331425)
- - [SweetAlert 1.x to SweetAlert2 migration guide](https://github.com/limonte/sweetalert2/wiki/Migration-from-SweetAlert-to-SweetAlert2)
-
-SweetAlert2 is already more popular than original SweetAlert:
-
-| SweetAlert | SweetAlert2 |
-|------------|-------------|
-| [![](https://img.shields.io/npm/dm/sweetalert.svg)](https://npm-stat.com/charts.html?package=sweetalert) | [![](https://img.shields.io/npm/dm/sweetalert2.svg)](https://npm-stat.com/charts.html?package=sweetalert2) |
-
-You'll get much better support and developer experience (DX) by using SweetAlert2.
+<p align="center">
+  <a href="https://limonte.github.io/sweetalert2/">
+    <img src="https://raw.github.com/limonte/sweetalert2/master/assets/sweetalert2.gif" width="515"><br>
+    See SweetAlert2 in action ↗
+  </a>
+</p>
 
 ---
 
-[See SweetAlert2 in action!](https://limonte.github.io/sweetalert2/)
+:point_right: **Upgrading from v6.x to v7.x?** [Read the release notes!](https://github.com/limonte/sweetalert2/releases/tag/v7.0.0)
 
-<img src="https://raw.github.com/limonte/sweetalert2/master/assets/sweetalert2.gif" width="686">
+:point_right: **Migrating from [SweetAlert](https://github.com/t4t5/sweetalert)?** [SweetAlert 1.x to SweetAlert2 migration guide](https://github.com/limonte/sweetalert2/wiki/Migration-from-SweetAlert-to-SweetAlert2)
 
+---
 
 Installation
 ------------
@@ -57,7 +48,7 @@ Or:
 bower install --save sweetalert2
 ```
 
-Or download from CDN: [cdnjs.com/limonte-sweetalert2](https://cdnjs.com/libraries/limonte-sweetalert2)
+Or download from CDN: [unpkg.com/sweetalert2](https://unpkg.com/sweetalert2)
 
 
 Usage
@@ -115,7 +106,7 @@ swal({
   showCancelButton: true,
   confirmButtonText: 'Yes, delete it!',
   cancelButtonText: 'No, keep it'
-}).then(function(result) {
+}).then((result) => {
   if (result.value) {
     swal(
       'Deleted!',
@@ -175,12 +166,12 @@ Configuration
 | `width`                  | `'500px'`             | Modal window width, including paddings (`box-sizing: border-box`). Can be in `px` or `%`. |
 | `padding`                | `20`                  | Modal window padding. |
 | `background`             | `'#fff'`              | Modal window background (CSS `background` property). |
-| `position`               | `'center'`            | Modal window position, can be `'top'`, `'top-left'`, `'top-right'`, `'center'`, `'center-left'`, `'center-right'`, `'bottom'`, `'bottom-left'`, or `'bottom-right'`.  |
+| `position`               | `'center'`            | Modal window position, can be `'top'`, `'top-start'`, `'top-end'`, `'center'`, `'center-start'`, `'center-end'`, `'bottom'`, `'bottom-start'`, or `'bottom-end'`. |
 | `grow`                   | `false`               | Paired with window position, sets the direction the modal should grow in, can be set to `'row'`, `'column'`, `'fullscreen'`, or `false`. |
 | `customClass`            | `null`                | A custom CSS class for the modal. |
 | `timer`                  | `null`                | Auto close timer of the modal. Set in ms (milliseconds). |
 | `animation`              | `true`                | If set to `false`, modal CSS animation will be disabled. |
-| `allowOutsideClick`      | `true`                | If set to `false`, the user can't dismiss the modal by clicking outside it. |
+| `allowOutsideClick`      | `true`                | If set to `false`, the user can't dismiss the modal by clicking outside it. You can also pass a custom function returning a boolean value, e.g. if you want to disable outside clicks for the loading state of a modal. |
 | `allowEscapeKey`         | `true`                | If set to `false`, the user can't dismiss the modal by pressing the <kbd>Esc</kbd> key. |
 | `allowEnterKey`          | `true`                | If set to `false`, the user can't confirm the modal by pressing the <kbd>Enter</kbd> or <kbd>Space</kbd> keys, unless they manually focus the confirm button. |
 | `showConfirmButton`      | `true`                | If set to `false`, a "Confirm"-button will not be shown. It can be useful when you're using `html` parameter for custom HTML description. |
@@ -224,6 +215,7 @@ Configuration
 
 You can redefine default params by using `swal.setDefaults(customParams)` where `customParams` is an object.
 
+Note that if there is a global `window._swalDefaults` object then `swal.setDefaults` will be invoked with this object upon the library being loaded.
 
 Methods
 -------
@@ -244,8 +236,9 @@ Methods
 | `swal.disableButtons()`                         | Disable "Confirm" and "Cancel" buttons. |
 | `swal.enableConfirmButton()`                    | Enable the "Confirm"-button only. |
 | `swal.disableConfirmButton()`                   | Disable the "Confirm"-button only. |
-| `swal.enableLoading()` or `swal.showLoading()`  | Disable buttons and show loader. This is useful with AJAX requests. |
-| `swal.disableLoading()` or `swal.hideLoading()` | Enable buttons and hide loader. |
+| `swal.showLoading()` or `swal.enableLoading()`  | Disable buttons and show loader. This is useful with AJAX requests. |
+| `swal.hideLoading()` or `swal.disableLoading()` | Enable buttons and hide loader. |
+| `swal.isLoading()`                              | Determine if modal is in the loading state. Related methods: `swal.showLoading()` and `swal.hideLoading()`. |
 | `swal.clickConfirm()`                           | Click the "Confirm"-button programmatically. |
 | `swal.clickCancel()`                            | Click the "Cancel"-button programmatically. |
 | `swal.showValidationError(error)`               | Show validation error message. |
@@ -309,7 +302,9 @@ Related projects
 
 - [toverux/ngx-sweetalert2](https://github.com/toverux/ngx-sweetalert2) - Angular 4+ integration
 - [lishengzxc/vue-sweetalert](https://github.com/lishengzxc/vue-sweetalert) - Vue.js plugin
+- [softon/sweetalert](https://github.com/softon/sweetalert) - Laravel 5 Package
 - [limonte/sweetalert2-polymer](https://github.com/limonte/sweetalert2-polymer) - Polymer wrapper
+- [limonte/sweetalert2-adonisjs-nuxtjs](https://github.com/limonte/sweetalert2-adonisjs-nuxtjs) - AdonisJS + Nuxt.js
 - [limonte/sweetalert2-webpack-demo](https://github.com/limonte/sweetalert2-webpack-demo) - webpack demo
 
 
