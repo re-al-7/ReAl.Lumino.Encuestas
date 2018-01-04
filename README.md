@@ -1,6 +1,6 @@
 # LuminoAdmin para Encuestas
 
-[![Build status](https://ci.appveyor.com/api/projects/status/rtwos9dek63gh0hu?svg=true)](https://ci.appveyor.com/project/re_al_/real-lumino-encuestas) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9ae9d5a6d92548ec941db5b04befaad3)](https://www.codacy.com/app/re_al_/real.lumino.encuestas?utm_source=re_al_@bitbucket.org&amp;utm_medium=referral&amp;utm_content=re_al_/real.lumino.encuestas&amp;utm_campaign=Badge_Grade)
+[![Build status](https://ci.appveyor.com/api/projects/status/rtwos9dek63gh0hu?svg=true)](https://ci.appveyor.com/project/re_al_/real-lumino-encuestas) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9ae9d5a6d92548ec941db5b04befaad3)](https://www.codacy.com/app/re_al_/real.lumino.encuestas?utm_source=re_al_@bitbucket.org&amp;utm_medium=referral&amp;utm_content=re_al_/real.lumino.encuestas&amp;utm_campaign=Badge_Grade) [![codecov](https://codecov.io/bb/re_al_/real.lumino.encuestas/branch/master/graph/badge.svg)](https://codecov.io/bb/re_al_/real.lumino.encuestas)
 
 ---------------------------------------
 
