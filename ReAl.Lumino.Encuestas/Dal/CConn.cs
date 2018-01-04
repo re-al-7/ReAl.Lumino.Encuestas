@@ -2214,7 +2214,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();
                     }
                     else
                     {
@@ -2235,7 +2235,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();;
                     }
                     else
                     {
@@ -2334,7 +2334,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();
                     }
                     else
                     {
@@ -2355,7 +2355,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();;
                     }
                     else
                     {
@@ -2452,7 +2452,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();;
                     }
                     else
                     {
@@ -2473,7 +2473,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();;
                     }
                     else
                     {
@@ -2574,7 +2574,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();;
                     }
                     else
                     {
@@ -2595,7 +2595,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        Console.WriteLine(intContador);
+                        throw new ArgumentException();;
                     }
                     else
                     {
