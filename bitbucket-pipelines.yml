@@ -12,5 +12,7 @@ pipelines:
           - dotnetcore
         script: # Modify the commands below to build your repository.
           - export PROJECT_NAME=real_lumino_encuestas
+          - export TEST_NAME=real_lumino_encuestas.Test
           - dotnet restore ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
           - dotnet build ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
+          - dotnet test ReAl.Lumino.Encuestas.Test

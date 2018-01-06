@@ -22,39 +22,23 @@ namespace ReAl.Lumino.Encuestas.Models
         
         public string GetCurrentApp()
         {
-            if (this.HttpContext.Session.Keys.Contains("currentApp"))
-                return this.HttpContext.Session.GetString("currentApp").ToString();
-            return null;
+            return this.HttpContext.Session.Keys.Contains("currentApp") ? this.HttpContext.Session.GetString("currentApp").ToString() : null;
         }
         
         public string GetLogin()
         {
-            if (User.Identity.IsAuthenticated)
-                return User.Identity.Name;
-            return null;
+            return User.Identity.IsAuthenticated ? User.Identity.Name : null;
         }
 
         public string GetUserName()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
-                if (obj == null)
-                {
-                    if (User.Identity.GetGivenName().Length > 30)
-                        return User.Identity.GetGivenName().Split(' ')[0];
-                    else
-                        return User.Identity.GetGivenName();
-                }
-                else
-                {
-                    if ((obj.Nombres + " " + obj.Apellidos).ToString().Length > 30)
-                        return obj.Nombres;
-                    else
-                        return obj.Nombres + " " + obj.Apellidos;   
-                }
-            }
-            return null;
+            if (!User.Identity.IsAuthenticated) return null;
+            var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
+            if (obj == null) return User.Identity.GetGivenName().Length > 30 ? User.Identity.GetGivenName().Split(' ')[0] : User.Identity.GetGivenName();
+                
+            if ((obj.Nombres + " " + obj.Apellidos).ToString().Length > 30) return obj.Nombres;
+                
+            return obj.Nombres + " " + obj.Apellidos;
         }
 
         public SegUsuarios GetUser()
@@ -82,17 +66,13 @@ namespace ReAl.Lumino.Encuestas.Models
         protected List<SegAplicaciones> GetAplicaciones()
         {
             var objRol = GetUserRole();
-            if (objRol == null)
-                return CMenus.GetAplicaciones(_context, -1);
-            return CMenus.GetAplicaciones(_context, objRol.Idsro);
+            return objRol == null ? CMenus.GetAplicaciones(_context, -1) : CMenus.GetAplicaciones(_context, objRol.Idsro);
         }
                 
         protected List<SegPaginas> GetPages()
         {
             var objRol = GetUserRole();
-            if (objRol == null)
-                return CMenus.GetPages(this.HttpContext, _context,-1);
-            return CMenus.GetPages(this.HttpContext, _context,objRol.Idsro);
+            return objRol == null ? CMenus.GetPages(this.HttpContext, _context,-1) : CMenus.GetPages(this.HttpContext, _context,objRol.Idsro);
         }
         
     }

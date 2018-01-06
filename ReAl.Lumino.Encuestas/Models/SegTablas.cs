@@ -60,10 +60,10 @@ namespace ReAl.Lumino.Encuestas.Models
 			Nombretabla = null;
 			Alias = null;
 			Descripcion = null;
-			//Beforestatement = false;
-			//Beforerow = false;
-			//Afterstatement = false;
-			//Afterrow = false;
+			Beforestatement = false;
+			Beforerow = false;
+			Afterstatement = false;
+			Afterrow = false;
 			Apiestado = null;
 			Apitransaccion = null;
 			Usucre = null;

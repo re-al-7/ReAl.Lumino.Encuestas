@@ -27,12 +27,10 @@ namespace ReAl.Lumino.Encuestas.Controllers
             return View();
         }
         
-        //
-        // POST: /Account/Login
         [HttpPost, ActionName("Login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(SegUsuarios user, string returnUrl = null)
+        public async Task<IActionResult> Login(SegUsuarios user, string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
