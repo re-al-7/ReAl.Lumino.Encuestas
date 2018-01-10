@@ -8,8 +8,11 @@ pipelines:
     - step:
         caches:
           - dotnetcore
+          - postgres
         image: microsoft/dotnet:2.0-sdk
         script: # Modify the commands below to build your repository.
+          - psql -c 'drop database if exists db_encuestas;' -U postgres
+          - psql -c 'create database db_encuestas;' -U postgres
           - export PROJECT_NAME=real_lumino_encuestas
           - export TEST_NAME=real_lumino_encuestas.Test
           - dotnet restore ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
@@ -24,6 +27,5 @@ definitions:
     postgres: 
       image: postgres 
       environment: 
-        POSTGRES_DB: 'pipelines' 
-        POSTGRES_USER: 'test_user'
-        POSTGRES_PASSWORD: 'test_user_password'          
+        POSTGRES_DB: 'db_encuestas' 
+        POSTGRES_USER: 'postgres'        
