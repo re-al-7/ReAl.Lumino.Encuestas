@@ -68,10 +68,9 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				}
 				catch (Exception exp)
                 {
-                    if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
-                    else
-                        ModelState.AddModelError("", exp.Message);
+                    if (exp.InnerException is NpgsqlException) ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    else ModelState.AddModelError("", exp.Message);
+                    
                     return View();
                 }  
             }

@@ -54,8 +54,11 @@ namespace ReAl.Lumino.Encuestas.Controllers
             var dtReporte = rn.ObtenerDatos("vw_enc_flujo", arrColWhere, arrValWhere);
 
             foreach (DataColumn column in dtReporte.Columns)
+            {
                 column.ColumnName = column.ColumnName.ToPascalCase();
+            }
             
+
             using (var package = new ExcelPackage())
             {
                 ExcelWorksheet ws = package.Workbook.Worksheets.Add("Reporte");

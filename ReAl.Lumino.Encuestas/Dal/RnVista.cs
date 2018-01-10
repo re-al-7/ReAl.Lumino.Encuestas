@@ -93,8 +93,12 @@ namespace ReAl.Lumino.Encuestas.Dal
             return table;            
         }
 
-
-        public DataTable ObtenerDatos(string vista, Hashtable htbFiltro, string strParametrosAdicionales = "")
+        public DataTable ObtenerDatos(string vista, Hashtable htbFiltro)
+        {
+            return ObtenerDatos(vista, htbFiltro, "");
+        }
+        
+        public DataTable ObtenerDatos(string vista, Hashtable htbFiltro, string strParametrosAdicionales)
         {
             var arrColumnasWhere = new ArrayList();
             var arrValoresWhere =new ArrayList();

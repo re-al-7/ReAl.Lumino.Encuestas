@@ -20,7 +20,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         public CTrans(string strConn)
         {
             CConn tempConnWebService = new CConn(strConn);
-            MyConn = tempConnWebService.conexionBD;
+            MyConn = tempConnWebService.ConexionBd;
             MyConn.Open();
             MyTrans = MyConn.BeginTransaction();
         }
