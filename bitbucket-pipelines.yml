@@ -3,7 +3,7 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: microsoft/dotnet:2.0-sdk
+
         
 definitions: 
   services: 
@@ -12,23 +12,29 @@ definitions:
       environment: 
         POSTGRES_DB: postgres
         POSTGRES_USER: postgres
-        DATABASE_URL: postgres://postgres@127.0.0.1:5432/testdb
+        DATABASE_URL: postgres://postgres@127.0.0.1:5432/testdb      
 
 pipelines:
   default:
     - step:
+        name: Database
+        script:
+          - echo "Hola"
+        
+    - step:
+        name: Build and restore Project
+        image: microsoft/dotnet:2.0-sdk
         caches:
           - dotnetcore
-          - postgres
         script: # Modify the commands below to build your repository.
-          - psql -c 'drop database if exists db_encuestas;' -U postgres
-          - psql -c 'create database db_encuestas;' -U postgres
           - export PROJECT_NAME=real_lumino_encuestas
           - export TEST_NAME=real_lumino_encuestas.Test
           - dotnet restore ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
           - dotnet build ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
           - dotnet test ReAl.Lumino.Encuestas.Test
           - dotnet publish ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
+        artifacts:
+          - ReAl.Lumino.Encuestas/bin/Debug/netcoreapp2.0/publish/**
         services:
           - postgres
 
