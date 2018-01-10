@@ -16,8 +16,8 @@ namespace ReAl.Lumino.Encuestas.Dal
     {
         internal NpgsqlConnection ConexionBd = new NpgsqlConnection();
 
-        private static readonly enumTipoConexion TipoConexion = enumTipoConexion.UseDataReader;
-        private enum enumTipoConexion
+        private static readonly EnumTipoConexion TipoConexion = EnumTipoConexion.UseDataReader;
+        private enum EnumTipoConexion
         {
             UseDataAdapter,
             UseDataReader
@@ -42,7 +42,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        private DataTable cargarDataTable(string query)
+        private DataTable CargarDataTable(string query)
         {
             var dt = new DataTable();
 
@@ -51,7 +51,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 var command = new NpgsqlCommand(query, ConexionBd);
 
-                if (TipoConexion == enumTipoConexion.UseDataReader)
+                if (TipoConexion == EnumTipoConexion.UseDataReader)
                 {
                     if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
                     DbDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
@@ -70,7 +70,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query: ", query);
-                throw ex;
+                throw;
             }
             return dt;
         }
@@ -83,7 +83,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Consulta a la Base de Datos
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -91,19 +91,19 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        private DataTable cargarDataTable(string query, ref CTrans Trans)
+        private DataTable CargarDataTable(string query, ref CTrans trans)
         {
             var dt = new DataTable();
             dt.Clear();
             try
             {
-                var command = new NpgsqlCommand(query, Trans.MyConn);
-                command.Transaction = Trans.MyTrans;
+                var command = new NpgsqlCommand(query, trans.MyConn);
+                command.Transaction = trans.MyTrans;
 
-                if (TipoConexion == enumTipoConexion.UseDataReader)
+                if (TipoConexion == EnumTipoConexion.UseDataReader)
                 {
                     if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
-                    NpgsqlDataReader dr = (NpgsqlDataReader)command.ExecuteReader(CommandBehavior.Default);
+                    var dr = (NpgsqlDataReader)command.ExecuteReader(CommandBehavior.Default);
                     dt.Load(dr);
                     dr.Close();
                 }
@@ -118,7 +118,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en cargarDataTable", query);
-                throw ex;
+                throw;
             }
             return dt;
         }
@@ -134,7 +134,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DbDataReader con el resultado de la ejecución del Query
         /// </returns>
-        private DbDataReader cargarDataReader(string query)
+        private DbDataReader CargarDataReader(string query)
         {
             DbDataReader dr = null;
             try
@@ -150,7 +150,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("cargarDataReader: ", query);
-                throw ex;
+                throw;
             }
             return dr;
         }
@@ -163,7 +163,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Consulta a la Base de Datos
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -171,13 +171,13 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        private DbDataReader cargarDataReader(string query, ref CTrans Trans)
+        private DbDataReader CargarDataReader(string query, ref CTrans trans)
         {
             DbDataReader dr = null;
             try
             {
-                var command = new NpgsqlCommand(query, Trans.MyConn);
-                command.Transaction = Trans.MyTrans;
+                var command = new NpgsqlCommand(query, trans.MyConn);
+                command.Transaction = trans.MyTrans;
 
                 if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
                 dr = (NpgsqlDataReader)command.ExecuteReader(CommandBehavior.Default);
@@ -188,7 +188,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en cargarDataReader", query);
-                throw ex;
+                throw;
             }
             return dr;
         }
@@ -212,8 +212,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     ConexionBd.Open();
                 }
+                
                 var command = new NpgsqlCommand(query, ConexionBd);
-                int numReg = command.ExecuteNonQuery();
+                var numReg = command.ExecuteNonQuery();
                 ConexionBd.Close();
                 command.Connection.Close();
                 command.Dispose();
@@ -222,7 +223,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en Ejecutar", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -234,7 +235,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Query para ejecutarse
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -242,13 +243,13 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Registros afectados por la ejecución del query [SQL]
         /// </returns>
-        private int Ejecutar(string query, ref CTrans Trans)
+        private int Ejecutar(string query, ref CTrans trans)
         {
             try
             {
-                var command = new NpgsqlCommand(query, Trans.MyConn);
-                command.Transaction = Trans.MyTrans;
-                int numReg = command.ExecuteNonQuery();
+                var command = new NpgsqlCommand(query, trans.MyConn);
+                command.Transaction = trans.MyTrans;
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return numReg;
@@ -256,14 +257,14 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en Ejecutar", query);
-                throw ex;
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -271,10 +272,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve TRUE o FALSE dependiendo del éxito de la Operacion
         /// </returns>
-        public bool execStoreProcedure(string nombreSP)
+        public bool ExecStoreProcedure(string nombreSp)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -287,15 +288,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -308,10 +309,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve TRUE o FALSE dependiendo del éxito de la Operacion
         /// </returns>
-        public bool execStoreProcedure(string nombreSP, ref CTrans myTrans)
+        public bool ExecStoreProcedure(string nombreSp, ref CTrans myTrans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -323,27 +324,13 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
 
         #region CargarDataTables
-
-        public DataTable cargarDataTableFromQuery(string strQuery)
-        {
-            try
-            {
-                return cargarDataTable(strQuery);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTableFromQuery", strQuery);
-                throw ex;
-            }
-        }
-
         /// <summary>
         ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
         /// </summary>
@@ -360,31 +347,12 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTable(string tabla, ArrayList arrColumnas)
+        internal DataTable CargarDataTable(string tabla, ArrayList arrColumnas)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla;
+            var arrColWhere = new ArrayList();
+            arrColWhere.Add("1");
 
-            try
-            {
-                return cargarDataTable(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTable", query);
-                throw ex;
-            }
+            return CargarDataTableAnd(tabla, arrColumnas, arrColWhere, arrColWhere, "");
         }
 
         /// <summary>
@@ -400,7 +368,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -408,31 +376,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTable(string tabla, ArrayList arrColumnas, ref CTrans Trans)
+        internal DataTable CargarDataTable(string tabla, ArrayList arrColumnas, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla;
-
-            try
-            {
-                return cargarDataTable(query, ref Trans);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTable", query);
-                throw ex;
-            }
+            var arrColWhere = new ArrayList {"1"};
+            return CargarDataTableAnd(tabla, arrColumnas, arrColWhere, arrColWhere, "", ref trans);
         }
 
         /// <summary>
@@ -461,46 +408,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+        internal DataTable CargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                             ArrayList arrValoresWhere)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-
-            try
-            {
-                return cargarDataTable(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTableAnd", query);
-                throw ex;
-            }
+            return CargarDataTableAnd(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "");            
         }
 
 		/// <summary>
@@ -509,33 +420,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="tabla">Nombre de la tabla</param>
         /// <param name="arrColumnas">Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]</param>
         /// <returns>DataTabl con las columnas especificadas</returns>
-        public DataTable cargarDataTableAnd(string tabla, ArrayList arrColumnas)
+        internal DataTable CargarDataTableAnd(string tabla, ArrayList arrColumnas)
         {
-
-
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla;
-
-            try
-            {
-                return cargarDataTable(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTableAnd", query);
-                throw ex;
-            }
+            var arrColWhere = new ArrayList {"1"};
+            return CargarDataTableAnd(tabla, arrColumnas, arrColWhere, arrColWhere, "");
         }
 
         /// <summary>
@@ -561,7 +449,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -569,45 +457,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
-                                            ArrayList arrValoresWhere, ref CTrans Trans)
+        internal DataTable CargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                            ArrayList arrValoresWhere, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-            try
-            {
-                return cargarDataTable(query, ref Trans);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTableAnd", query);
-                throw ex;
-            }
+            return CargarDataTableAnd(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "", ref trans);            
         }
 
         /// <summary>
@@ -641,11 +494,11 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+        internal DataTable CargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                             ArrayList arrValoresWhere, string sParametrosAdicionales)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            var query = "SELECT ";
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
@@ -658,8 +511,8 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             query = query + " FROM " + tabla + " WHERE ";
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
@@ -675,162 +528,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
             try
             {
-                return cargarDataTable(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTableAnd", query);
-                throw ex;
-            }
-        }
-
-		/// <summary>
-        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL] con encadenadores LIKE
-        /// </summary>
-        /// <param name="tabla" type="string">
-        ///   <para>
-        ///     Nombre de la Tabla
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnas" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="strParamAdicionales" type="string">
-        ///   <para>
-        ///     Parametros Adicionales
-        ///   </para>
-        /// </param>        
-        /// <returns>
-        ///   DataTable con el resultado de la ejecución del Query
-        /// </returns>
-        public DataTable cargarDataTableLike(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
-                                             ArrayList arrValoresWhere, string sParametrosAdicionales)
-		{
-		    var query = new StringBuilder();
-            query.Append("SELECT ");
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query.AppendLine(columna);
-                    primerReg = false;
-                }
-                else
-                    query.AppendLine(", " + columna);
-            }
-            query.AppendLine(" FROM " + tabla + " WHERE ");
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " LIKE " + arrValoresWhere[intContador]);
-                }
-                else
-                {
-                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
-                    boolBandera = true;
-                }
-            }
-            query.AppendLine(sParametrosAdicionales);
-
-            try
-            {
-                return cargarDataTable(query.ToString());
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTableAnd", query);
-                throw ex;
-            }
-        }
-
-        /// <summary>
-        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
-        /// </summary>
-        /// <param name="tabla" type="string">
-        ///   <para>
-        ///     Nombre de la Tabla
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnas" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="sParametrosAdicionales" type="string">
-        ///   <para>
-        ///     Parametros Adicionales
-        ///   </para>
-        /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
-        ///   <para>
-        ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
-        ///   </para>
-        /// </param>
-        /// <returns>
-        ///   DataTable con el resultado de la ejecución del Query
-        /// </returns>
-        public DataTable cargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
-                                            ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans Trans)
-        {
-            var query = new StringBuilder();
-            query.AppendLine("SELECT ");
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query.AppendLine(columna);
-                    primerReg = false;
-                }
-                else
-                    query.AppendLine(", " + columna);
-            }
-            query.AppendLine(" FROM " + tabla + " WHERE ");
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
-                }
-                else
-                {
-                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
-                    boolBandera = true;
-                }
-            }
-            query.AppendLine(sParametrosAdicionales);
-
-            try
-            {
-                return cargarDataTable(query.ToString(), ref Trans);
+                return CargarDataTable(query);
             }
             catch (Exception ex)
             {
@@ -862,49 +560,170 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
         ///   </para>
         /// </param>
+        /// <param name="sParametrosAdicionales" type="string">
+        ///   <para>
+        ///     Parametros Adicionales
+        ///   </para>
+        /// </param>
+        /// <param name="trans" type="Conexion.cTrans">
+        ///   <para>
+        ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
+        ///   </para>
+        /// </param>
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
-                                           ArrayList arrValoresWhere)
+        internal DataTable CargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                            ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
+            query.AppendLine(sParametrosAdicionales);
 
             try
             {
-                return cargarDataTable(query);
+                return CargarDataTable(query.ToString(), ref trans);
             }
             catch (Exception ex)
             {
-                ex.Data.Add("Query en cargarDataTableOr", query);
-                throw ex;
+                ex.Data.Add("Query en cargarDataTableAnd", query);
+                throw;
             }
+        }
+        
+		/// <summary>
+        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL] con encadenadores LIKE
+        /// </summary>
+        /// <param name="tabla" type="string">
+        ///   <para>
+        ///     Nombre de la Tabla
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnas" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="strParamAdicionales" type="string">
+        ///   <para>
+        ///     Parametros Adicionales
+        ///   </para>
+        /// </param>        
+        /// <returns>
+        ///   DataTable con el resultado de la ejecución del Query
+        /// </returns>
+        internal DataTable CargarDataTableLike(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                             ArrayList arrValoresWhere, string strParamAdicionales)
+		{
+		    var query = new StringBuilder();
+            query.Append("SELECT ");
+            var primerReg = true;
+            foreach (string columna in arrColumnas)
+            {
+                if (primerReg)
+                {
+                    query.AppendLine(columna);
+                    primerReg = false;
+                }
+                else
+                    query.AppendLine(", " + columna);
+            }
+            query.AppendLine(" FROM " + tabla + " WHERE ");
+
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            {
+                if (boolBandera)
+                {
+                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " LIKE " + arrValoresWhere[intContador]);
+                }
+                else
+                {
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
+                    boolBandera = true;
+                }
+            }
+            query.AppendLine(strParamAdicionales);
+
+            try
+            {
+                return CargarDataTable(query.ToString());
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("Query en cargarDataTableAnd", query);
+                throw;
+            }
+        }
+
+        
+
+        /// <summary>
+        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
+        /// </summary>
+        /// <param name="tabla" type="string">
+        ///   <para>
+        ///     Nombre de la Tabla
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnas" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <returns>
+        ///   DataTable con el resultado de la ejecución del Query
+        /// </returns>
+        internal DataTable CargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                           ArrayList arrValoresWhere)
+        {
+            return CargarDataTableOr(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "");            
         }
 
         /// <summary>
@@ -930,7 +749,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -938,45 +757,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
-                                           ArrayList arrValoresWhere, ref CTrans Trans)
+        internal DataTable CargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                           ArrayList arrValoresWhere, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-            try
-            {
-                return cargarDataTable(query, ref Trans);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTableOr", query);
-                throw ex;
-            }
+            return CargarDataTableOr(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "", ref trans);            
         }
 
         /// <summary>
@@ -1010,46 +794,47 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+        internal DataTable CargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                            ArrayList arrValoresWhere, string sParametrosAdicionales)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
-            query = query + sParametrosAdicionales;
+            query.AppendLine(sParametrosAdicionales);
 
             try
             {
-                return cargarDataTable(query);
+                return CargarDataTable(query.ToString());
             }
             catch (Exception ex)
             {
                 ex.Data.Add("Query en cargarDataTableOr", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -1081,7 +866,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Parametros Adicionales
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -1089,53 +874,53 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DataTable cargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
-                                           ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans Trans)
+        internal DataTable CargarDataTableOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                           ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
-            query = query + sParametrosAdicionales;
+            query.AppendLine(sParametrosAdicionales);
 
             try
             {
-                return cargarDataTable(query, ref Trans);
+                return CargarDataTable(query.ToString(), ref trans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("Query en cargarDataTableOr", query);
-                throw ex;
+                throw;
             }
         }
 
         #endregion
 
         #region Cargar DataReaders
-
         /// <summary>
         ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
         /// </summary>
@@ -1152,31 +937,12 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DbDataReader cargarDataReader(string tabla, ArrayList arrColumnas)
+        internal DbDataReader CargarDataReader(string tabla, ArrayList arrColumnas)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla;
+            var arrColWhere = new ArrayList();
+            arrColWhere.Add("1");
 
-            try
-            {
-                return cargarDataReader(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTable", query);
-                throw ex;
-            }
+            return CargarDataReaderAnd(tabla, arrColumnas, arrColWhere, arrColWhere, "");
         }
 
         /// <summary>
@@ -1192,7 +958,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -1200,31 +966,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DbDataReader cargarDataReader(string tabla, ArrayList arrColumnas, ref CTrans Trans)
+        internal DbDataReader CargarDataReader(string tabla, ArrayList arrColumnas, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla;
-
-            try
-            {
-                return cargarDataReader(query, ref Trans);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataTable", query);
-                throw ex;
-            }
+            var arrColWhere = new ArrayList {"1"};
+            return CargarDataReaderAnd(tabla, arrColumnas, arrColWhere, arrColWhere, "", ref trans);
         }
 
         /// <summary>
@@ -1253,10 +998,97 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DbDataReader cargarDataReader(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere)
+        internal DbDataReader CargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                            ArrayList arrValoresWhere)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            return CargarDataReaderAnd(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "");            
+        }
+
+		/// <summary>
+        /// Funcion que devuelve un DataTable a partir del nombre de una tabla y las columnas
+        /// </summary>
+        /// <param name="tabla">Nombre de la tabla</param>
+        /// <param name="arrColumnas">Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]</param>
+        /// <returns>DataTabl con las columnas especificadas</returns>
+        internal DbDataReader CargarDataReaderAnd(string tabla, ArrayList arrColumnas)
+        {
+            var arrColWhere = new ArrayList {"1"};
+            return CargarDataReaderAnd(tabla, arrColumnas, arrColWhere, arrColWhere, "");
+        }
+
+        /// <summary>
+        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
+        /// </summary>
+        /// <param name="tabla" type="string">
+        ///   <para>
+        ///     Nombre de la Tabla
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnas" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="trans" type="Conexion.cTrans">
+        ///   <para>
+        ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
+        ///   </para>
+        /// </param>
+        /// <returns>
+        ///   DataTable con el resultado de la ejecución del Query
+        /// </returns>
+        internal DbDataReader CargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                            ArrayList arrValoresWhere, ref CTrans trans)
+        {
+            return CargarDataReaderAnd(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "", ref trans);            
+        }
+
+        /// <summary>
+        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
+        /// </summary>
+        /// <param name="tabla" type="string">
+        ///   <para>
+        ///     Nombre de la Tabla
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnas" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="sParametrosAdicionales" type="string">
+        ///   <para>
+        ///     Parametros adicionales de la Consulta
+        ///   </para>
+        /// </param>
+        /// <returns>
+        ///   DataTable con el resultado de la ejecución del Query
+        /// </returns>
+        internal DbDataReader CargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                            ArrayList arrValoresWhere, string sParametrosAdicionales)
+        {
+            var query = "SELECT ";
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
@@ -1269,12 +1101,12 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             query = query + " FROM " + tabla + " WHERE ";
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query = query + " AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
                 }
                 else
                 {
@@ -1282,44 +1114,16 @@ namespace ReAl.Lumino.Encuestas.Dal
                     boolBandera = true;
                 }
             }
+            query = query + sParametrosAdicionales;
 
             try
             {
-                return cargarDataReader(query);
+                return CargarDataReader(query);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("Query en cargarDataTableAnd", query);
-                throw ex;
-            }
-        }
-
-        public DbDataReader cargarDataReaderAnd(string tabla, ArrayList arrColumnas)
-        {
-
-
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla;
-
-            try
-            {
-                return cargarDataReader(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataRewaderAnd", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -1346,7 +1150,12 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="sParametrosAdicionales" type="string">
+        ///   <para>
+        ///     Parametros Adicionales
+        ///   </para>
+        /// </param>
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -1354,45 +1163,126 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DbDataReader cargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, ref CTrans Trans)
+        internal DbDataReader CargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                            ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
+            query.AppendLine(sParametrosAdicionales);
+
             try
             {
-                return cargarDataReader(query, ref Trans);
+                return CargarDataReader(query.ToString(), ref trans);
             }
             catch (Exception ex)
             {
-                ex.Data.Add("Query en cargarDataReaderAnd", query);
-                throw ex;
+                ex.Data.Add("Query en cargarDataTableAnd", query);
+                throw;
             }
         }
+        
+		/// <summary>
+        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL] con encadenadores LIKE
+        /// </summary>
+        /// <param name="tabla" type="string">
+        ///   <para>
+        ///     Nombre de la Tabla
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnas" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="strParamAdicionales" type="string">
+        ///   <para>
+        ///     Parametros Adicionales
+        ///   </para>
+        /// </param>        
+        /// <returns>
+        ///   DataTable con el resultado de la ejecución del Query
+        /// </returns>
+        internal DbDataReader CargarDataReaderLike(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                             ArrayList arrValoresWhere, string strParamAdicionales)
+		{
+		    var query = new StringBuilder();
+            query.Append("SELECT ");
+            var primerReg = true;
+            foreach (string columna in arrColumnas)
+            {
+                if (primerReg)
+                {
+                    query.AppendLine(columna);
+                    primerReg = false;
+                }
+                else
+                    query.AppendLine(", " + columna);
+            }
+            query.AppendLine(" FROM " + tabla + " WHERE ");
+
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            {
+                if (boolBandera)
+                {
+                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " LIKE " + arrValoresWhere[intContador]);
+                }
+                else
+                {
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
+                    boolBandera = true;
+                }
+            }
+            query.AppendLine(strParamAdicionales);
+
+            try
+            {
+                return CargarDataReader(query.ToString());
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("Query en cargarDataTableAnd", query);
+                throw;
+            }
+        }
+
+        
 
         /// <summary>
         ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
@@ -1420,44 +1310,47 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DbDataReader cargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere)
+        internal DbDataReader CargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                           ArrayList arrValoresWhere)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
+            return CargarDataReaderOr(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "");            
+        }
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-            try
-            {
-                return cargarDataReader(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataReaderAnd", query);
-                throw ex;
-            }
+        /// <summary>
+        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
+        /// </summary>
+        /// <param name="tabla" type="string">
+        ///   <para>
+        ///     Nombre de la Tabla
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnas" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
+        ///   <para>
+        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
+        ///   </para>
+        /// </param>
+        /// <param name="trans" type="Conexion.cTrans">
+        ///   <para>
+        ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
+        ///   </para>
+        /// </param>
+        /// <returns>
+        ///   DataTable con el resultado de la ejecución del Query
+        /// </returns>
+        internal DbDataReader CargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                           ArrayList arrValoresWhere, ref CTrans trans)
+        {
+            return CargarDataReaderOr(tabla, arrColumnas, arrColumnasWhere, arrValoresWhere, "", ref trans);            
         }
 
         /// <summary>
@@ -1491,87 +1384,47 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DbDataReader cargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string sParametrosAdicionales)
+        internal DbDataReader CargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                           ArrayList arrValoresWhere, string sParametrosAdicionales)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
-            query = query + sParametrosAdicionales;
+            query.AppendLine(sParametrosAdicionales);
 
             try
             {
-                return cargarDataReader(query);
+                return CargarDataReader(query.ToString());
             }
             catch (Exception ex)
             {
-                ex.Data.Add("Query en cargarDataReaderAnd", query);
-                throw ex;
-            }
-        }
-
-        public DbDataReader cargarDataReaderLike(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string sParametrosAdicionales)
-        {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " AND " + arrColumnasWhere[intContador] + " LIKE " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-            query = query + sParametrosAdicionales;
-
-            try
-            {
-                return cargarDataReader(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataReaderLike", query);
-                throw ex;
+                ex.Data.Add("Query en cargarDataTableOr", query);
+                throw;
             }
         }
 
@@ -1603,7 +1456,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Parametros Adicionales
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -1611,334 +1464,47 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   DataTable con el resultado de la ejecución del Query
         /// </returns>
-        public DbDataReader cargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans Trans)
+        internal DbDataReader CargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
+                                           ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans trans)
         {
-            string query = "SELECT ";
-            bool primerReg = true;
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
+            var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+            var boolBandera = false;
+            for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
-            query = query + sParametrosAdicionales;
+            query.AppendLine(sParametrosAdicionales);
 
             try
             {
-                return cargarDataReader(query, ref Trans);
+                return CargarDataReader(query.ToString(), ref trans);
             }
             catch (Exception ex)
             {
-                ex.Data.Add("Query en cargarDataReaderAnd", query);
-                throw ex;
-            }
-        }
-
-        /// <summary>
-        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
-        /// </summary>
-        /// <param name="tabla" type="string">
-        ///   <para>
-        ///     Nombre de la Tabla
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnas" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <returns>
-        ///   DataTable con el resultado de la ejecución del Query
-        /// </returns>
-        public DbDataReader cargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere)
-        {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-
-            try
-            {
-                return cargarDataReader(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataReaderOr", query);
-                throw ex;
-            }
-        }
-
-        /// <summary>
-        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
-        /// </summary>
-        /// <param name="tabla" type="string">
-        ///   <para>
-        ///     Nombre de la Tabla
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnas" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
-        ///   <para>
-        ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
-        ///   </para>
-        /// </param>
-        /// <returns>
-        ///   DataTable con el resultado de la ejecución del Query
-        /// </returns>
-        public DbDataReader cargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, ref CTrans Trans)
-        {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-            try
-            {
-                return cargarDataReader(query, ref Trans);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataReaderOr", query);
-                throw ex;
-            }
-        }
-
-        /// <summary>
-        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
-        /// </summary>
-        /// <param name="tabla" type="string">
-        ///   <para>
-        ///     Nombre de la Tabla
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnas" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="sParametrosAdicionales" type="string">
-        ///   <para>
-        ///     Parametros adicionales de la Consulta
-        ///   </para>
-        /// </param>
-        /// <returns>
-        ///   DataTable con el resultado de la ejecución del Query
-        /// </returns>
-        public DbDataReader cargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string sParametrosAdicionales)
-        {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-            query = query + sParametrosAdicionales;
-
-            try
-            {
-                return cargarDataReader(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataReaderOr", query);
-                throw ex;
-            }
-        }
-
-        /// <summary>
-        ///   Función que devuelve un DataTable a partir de la ejecución de una consulta [SQL]
-        /// </summary>
-        /// <param name="tabla" type="string">
-        ///   <para>
-        ///     Nombre de la Tabla
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnas" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrColumnasWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="arrValoresWhere" type="System.Collections.ArrayList">
-        ///   <para>
-        ///     Coleccion de objetos referidas a los valores de las columnas where [SQL]
-        ///   </para>
-        /// </param>
-        /// <param name="sParametrosAdicionales" type="string">
-        ///   <para>
-        ///     Parametros Adicionales
-        ///   </para>
-        /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
-        ///   <para>
-        ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
-        ///   </para>
-        /// </param>
-        /// <returns>
-        ///   DataTable con el resultado de la ejecución del Query
-        /// </returns>
-        public DbDataReader cargarDataReaderOr(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string sParametrosAdicionales, ref CTrans Trans)
-        {
-            string query = "SELECT ";
-            bool primerReg = true;
-            foreach (string columna in arrColumnas)
-            {
-                if (primerReg)
-                {
-                    query = query + columna;
-                    primerReg = false;
-                }
-                else
-                    query = query + ", " + columna;
-            }
-            query = query + " FROM " + tabla + " WHERE ";
-
-            bool boolBandera = false;
-            for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-            {
-                if (boolBandera)
-                {
-                    query = query + " OR " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                }
-                else
-                {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    boolBandera = true;
-                }
-            }
-            query = query + sParametrosAdicionales;
-
-            try
-            {
-                return cargarDataReader(query, ref Trans);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en cargarDataReaderOr", query);
-                throw ex;
+                ex.Data.Add("Query en cargarDataTableOr", query);
+                throw;
             }
         }
 
@@ -1967,14 +1533,14 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   El numero de filas afectadas al realizar la consulta
         /// </returns>
-        public int deleteBD(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere)
+        public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere)
         {
-            string query = "";
+            var query = "";
             try
             {
                 query = "DELETE FROM " + nomTabla + " WHERE ";
-                bool boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                var boolBandera = false;
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -1992,7 +1558,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en deleteBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2014,7 +1580,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los valores de las columnas where [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="cTrans">
+        /// <param name="trans" type="cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -2022,14 +1588,14 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Cantidad de registros afectados
         /// </returns>
-        public int deleteBD(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, ref CTrans Trans)
+        public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, ref CTrans trans)
         {
-            string query = "";
+            var query = "";
             try
             {
                 query = "DELETE FROM " + nomTabla + " WHERE ";
-                bool boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                var boolBandera = false;
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -2042,12 +1608,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                 }
 
-                return Ejecutar(query, ref Trans);
+                return Ejecutar(query, ref trans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("Query en deleteBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2077,15 +1643,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Cantidad de registros afectados
         /// </returns>
-        public int deleteBD(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere,
+        public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere,
                             string strParametrosAdicionales)
         {
-            string query = "";
+            var query = "";
             try
             {
                 query = "DELETE FROM " + nomTabla + " WHERE ";
-                bool boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                var boolBandera = false;
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -2103,7 +1669,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en deleteBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2130,7 +1696,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Parametros adicionales
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -2138,15 +1704,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Cantidad de registros afectados
         /// </returns>
-        public int deleteBD(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere,
-                            string strParametrosAdicionales, ref CTrans Trans)
+        public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere,
+                            string strParametrosAdicionales, ref CTrans trans)
         {
-            string query = "";
+            var query = "";
             try
             {
                 query = "DELETE FROM " + nomTabla + " WHERE ";
-                bool boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                var boolBandera = false;
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -2161,12 +1727,12 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 query = query + strParametrosAdicionales;
 
-                return Ejecutar(query, ref Trans);
+                return Ejecutar(query, ref trans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("Query en deleteBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2195,21 +1761,21 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   A bool value...
         /// </returns>
-        public bool insertBD(string tabla, ArrayList arrColumnas, ArrayList arrValores)
+        public bool InsertBd(string tabla, ArrayList arrColumnas, ArrayList arrValores)
         {
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "";
+            var query = "";
             try
             {
                 query = "INSERT INTO " + tabla + "(";
-                bool primerReg = true;
+                var primerReg = true;
 
-                for (int intContador = 0; intContador < arrColumnas.Count; intContador++)
+                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2230,7 +1796,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query = query + ") VALUES (";
 
                 primerReg = true;
-                for (int intContador = 0; intContador < arrValores.Count; intContador++)
+                for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2238,8 +1804,8 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
-                        if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
+                        var strValorSet = "";
+                        if (arrValores[intContador].GetType() == arrParam.GetType())
                         {
                             strValorSet = "?";
                             arrPosicionByte.Add(intContador);
@@ -2265,7 +1831,9 @@ namespace ReAl.Lumino.Encuestas.Dal
 
 
                 if (ConexionBd.State == ConnectionState.Closed)
+                {
                     ConexionBd.Open();
+                }
 
                 var command = new NpgsqlCommand(query, ConexionBd);
 
@@ -2277,7 +1845,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                int numReg = command.ExecuteNonQuery();
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return (numReg > 0);
@@ -2285,7 +1853,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en insertBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2315,21 +1883,21 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Exito de la operacion
         /// </returns>
-        public bool insertBD(string tabla, ArrayList arrColumnas, ArrayList arrValores, ref int intIdentity)
+        public bool InsertBd(string tabla, ArrayList arrColumnas, ArrayList arrValores, ref int intIdentity)
         {
 
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "";
+            var query = "";
             try
             {
                 query = "INSERT INTO " + tabla + "(";
-                bool primerReg = true;
-                for (int intContador = 0; intContador < arrColumnas.Count; intContador++)
+                var primerReg = true;
+                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2350,7 +1918,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query = query + ") VALUES (";
 
                 primerReg = true;
-                for (int intContador = 0; intContador < arrValores.Count; intContador++)
+                for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2358,7 +1926,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
+                        var strValorSet = "";
                         if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
                         {
                             strValorSet = "?";
@@ -2392,10 +1960,10 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                NpgsqlParameter parIdentity = command.Parameters.Add("identity", NpgsqlDbType.Integer, 0, "key");
+                var parIdentity = command.Parameters.Add("identity", NpgsqlDbType.Integer, 0, "key");
                 parIdentity.Direction = ParameterDirection.Output;
 
-                int numReg = command.ExecuteNonQuery();
+                var numReg = command.ExecuteNonQuery();
                 intIdentity = int.Parse(command.Parameters[command.Parameters.Count - 1].Value.ToString());
                 command.Dispose();
                 ConexionBd.Close();
@@ -2404,7 +1972,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en insertBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2426,7 +1994,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los valores de las columnas en la consulta [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -2434,20 +2002,20 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Exito de la operación
         /// </returns>
-        public bool insertBD(string tabla, ArrayList arrColumnas, ArrayList arrValores, ref CTrans Trans)
+        public bool InsertBd(string tabla, ArrayList arrColumnas, ArrayList arrValores, ref CTrans trans)
         {
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "";
+            var query = "";
             try
             {
                 query = "INSERT INTO " + tabla + "(";
-                bool primerReg = true;
-                for (int intContador = 0; intContador < arrColumnas.Count; intContador++)
+                var primerReg = true;
+                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2468,7 +2036,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query = query + ") VALUES (";
 
                 primerReg = true;
-                for (int intContador = 0; intContador < arrValores.Count; intContador++)
+                for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2476,7 +2044,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
+                        var strValorSet = "";
                         if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
                         {
                             strValorSet = "?";
@@ -2501,7 +2069,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 query = query + ")";
 
-                var command = new NpgsqlCommand(query, Trans.MyConn);
+                var command = new NpgsqlCommand(query, trans.MyConn);
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
@@ -2510,8 +2078,8 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                command.Transaction = Trans.MyTrans;
-                int numReg = command.ExecuteNonQuery();
+                command.Transaction = trans.MyTrans;
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return (numReg > 0);
@@ -2519,7 +2087,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en insertBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2546,7 +2114,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Valor regresado al momento de insertar la identidad
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -2554,22 +2122,22 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   A bool value...
         /// </returns>
-        public bool insertBD(string tabla, ArrayList arrColumnas, ArrayList arrValores, ref int intIdentity,
-                             ref CTrans Trans)
+        public bool InsertBd(string tabla, ArrayList arrColumnas, ArrayList arrValores, ref int intIdentity,
+                             ref CTrans trans)
         {
 
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "";
+            var query = "";
             try
             {
                 query = "INSERT INTO " + tabla + "(";
-                bool primerReg = true;
-                for (int intContador = 0; intContador < arrColumnas.Count; intContador++)
+                var primerReg = true;
+                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2590,7 +2158,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query = query + ") VALUES (";
 
                 primerReg = true;
-                for (int intContador = 0; intContador < arrValores.Count; intContador++)
+                for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
@@ -2598,7 +2166,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
+                        var strValorSet = "";
                         if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
                         {
                             strValorSet = "?";
@@ -2623,7 +2191,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 query = query + "); SELECT ? = @@IDENTITY";
 
-                var command = new NpgsqlCommand(query, Trans.MyConn);
+                var command = new NpgsqlCommand(query, trans.MyConn);
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
@@ -2632,11 +2200,11 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                NpgsqlParameter parIdentity = command.Parameters.Add("identity", NpgsqlDbType.Integer, 0, "key");
+                var parIdentity = command.Parameters.Add("identity", NpgsqlDbType.Integer, 0, "key");
                 parIdentity.Direction = ParameterDirection.Output;
 
-                command.Transaction = Trans.MyTrans;
-                int numReg = command.ExecuteNonQuery();
+                command.Transaction = trans.MyTrans;
+                var numReg = command.ExecuteNonQuery();
                 intIdentity = int.Parse(command.Parameters[command.Parameters.Count - 1].Value.ToString());
                 command.Dispose();
                 ConexionBd.Close();
@@ -2645,7 +2213,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en insertBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2680,21 +2248,21 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Número de registros afectados por la ejecución del query
         /// </returns>
-        public int updateBD(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
+        public int UpdateBd(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
                             ArrayList arrColumnasWhere, ArrayList arrValoresWhere)
         {
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "UPDATE " + nomTabla.ToUpper() + " SET ";
+            var query = "UPDATE " + nomTabla.ToUpper() + " SET ";
             try
             {
-                bool boolBandera = false;
+                var boolBandera = false;
 
-                for (int intContador = 0; intContador < arrValoresSet.Count; intContador++)
+                for (var intContador = 0; intContador < arrValoresSet.Count; intContador++)
                 {
                     if (arrValoresSet[intContador] == null)
                     {
@@ -2710,7 +2278,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
+                        var strValorSet = "";
                         if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
                         {
                             strValorSet = "?";
@@ -2735,7 +2303,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query += " WHERE ";
 
                 boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -2751,7 +2319,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
 
                 if (ConexionBd.State == ConnectionState.Closed)
+                {
                     ConexionBd.Open();
+                }
 
                 var command = new NpgsqlCommand(query, ConexionBd);
 
@@ -2763,7 +2333,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                int numReg = command.ExecuteNonQuery();
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return numReg;
@@ -2771,7 +2341,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en updateBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2803,7 +2373,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidas a los valores de las columnas del WHERE [SQL]
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="cTrans">
+        /// <param name="trans" type="cTrans">
         ///   <para>
         ///     Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -2811,21 +2381,21 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Cantidad de registros afectados por la consulta
         /// </returns>
-        public int updateBD(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
-                            ArrayList arrColumnasWhere, ArrayList arrValoresWhere, ref CTrans Trans)
+        public int UpdateBd(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
+                            ArrayList arrColumnasWhere, ArrayList arrValoresWhere, ref CTrans trans)
         {
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "";
+            var query = "";
             try
             {
                 query = "update " + nomTabla + " set ";
-                bool boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresSet.Count; intContador++)
+                var boolBandera = false;
+                for (var intContador = 0; intContador < arrValoresSet.Count; intContador++)
                 {
                     if (arrValoresSet[intContador] == null)
                     {
@@ -2841,7 +2411,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
+                        var strValorSet = "";
                         if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
                         {
                             strValorSet = "?";
@@ -2865,7 +2435,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query += " where ";
 
                 boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -2879,7 +2449,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                 }
 
-                var command = new NpgsqlCommand(query, Trans.MyConn);
+                var command = new NpgsqlCommand(query, trans.MyConn);
 
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
@@ -2889,8 +2459,8 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                command.Transaction = Trans.MyTrans;
-                int numReg = command.ExecuteNonQuery();
+                command.Transaction = trans.MyTrans;
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return numReg;
@@ -2898,7 +2468,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en updateBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -2938,21 +2508,21 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   A int value...
         /// </returns>
-        public int updateBD(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
+        public int UpdateBd(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
                             ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string strParametrosAdicionales)
         {
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "";
+            var query = "";
             try
             {
                 query = "update " + nomTabla + " set ";
-                bool boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresSet.Count; intContador++)
+                var boolBandera = false;
+                for (var intContador = 0; intContador < arrValoresSet.Count; intContador++)
                 {
                     if (arrValoresSet[intContador] == null)
                     {
@@ -2968,7 +2538,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
+                        var strValorSet = "";
                         if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
                         {
                             strValorSet = "?";
@@ -2993,7 +2563,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query += " WHERE ";
 
                 boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -3010,7 +2580,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query = query + strParametrosAdicionales;
 
                 if (ConexionBd.State == ConnectionState.Closed)
+                {
                     ConexionBd.Open();
+                }
 
                 var command = new NpgsqlCommand(query, ConexionBd);
 
@@ -3022,7 +2594,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                int numReg = command.ExecuteNonQuery();
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return numReg;
@@ -3030,7 +2602,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en updateBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -3067,7 +2639,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -3075,22 +2647,22 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   A int value...
         /// </returns>
-        public int updateBD(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
+        public int UpdateBd(string nomTabla, ArrayList arrColumnasSet, ArrayList arrValoresSet,
                             ArrayList arrColumnasWhere, ArrayList arrValoresWhere, string strParametrosAdicionales,
-                            ref CTrans Trans)
+                            ref CTrans trans)
         {
             //Para soporte de imagenes---------------------------
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] arrParam = encoding.GetBytes("images");
-            ArrayList arrPosicionByte = new ArrayList();
+            var encoding = new ASCIIEncoding();
+            var arrParam = encoding.GetBytes("images");
+            var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            string query = "";
+            var query = "";
             try
             {
                 query = "update " + nomTabla + " set ";
-                bool boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresSet.Count; intContador++)
+                var boolBandera = false;
+                for (var intContador = 0; intContador < arrValoresSet.Count; intContador++)
                 {
                     if (arrValoresSet[intContador] == null)
                     {
@@ -3106,7 +2678,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
                     else
                     {
-                        string strValorSet = "";
+                        var strValorSet = "";
                         if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
                         {
                             strValorSet = "?";
@@ -3130,7 +2702,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 query += " where ";
 
                 boolBandera = false;
-                for (int intContador = 0; intContador < arrValoresWhere.Count; intContador++)
+                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
@@ -3146,7 +2718,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 query = query + strParametrosAdicionales;
 
-                var command = new NpgsqlCommand(query, Trans.MyConn);
+                var command = new NpgsqlCommand(query, trans.MyConn);
 
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
@@ -3156,8 +2728,8 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
                 //---------------------------------------------------
 
-                command.Transaction = Trans.MyTrans;
-                int numReg = command.ExecuteNonQuery();
+                command.Transaction = trans.MyTrans;
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return numReg;
@@ -3165,7 +2737,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en updateBD", query);
-                throw ex;
+                throw;
             }
         }
 
@@ -3178,18 +2750,18 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// </summary>
         /// <param name="strNombreTabla"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla)
+        public DataTable ExecStoreProcedureSel(string strNombreTabla)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "Sel");
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "Sel");
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3201,18 +2773,18 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strNombreTabla"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ref CTrans myTrans)
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ref CTrans myTrans)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "Sel", ref myTrans);
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "Sel", ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3224,13 +2796,13 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strNombreTabla"></param>
         /// <param name="arrParametrosSelect"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect)
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3242,20 +2814,20 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosSelect = strParametrosSelect + ", " + strSelect;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3268,13 +2840,13 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosSelect"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect, ref CTrans myTrans)
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect, ref CTrans myTrans)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3286,20 +2858,20 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosSelect = strParametrosSelect + ", " + strSelect;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3312,15 +2884,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosWhere"></param>
         /// <param name="arrParametrosValores"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosWhere,
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
 
-            bool bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            var bPrimerElemento = true;
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3331,20 +2903,20 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3358,15 +2930,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosWhere,
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores, ref CTrans myTrans)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
 
-            bool bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            var bPrimerElemento = true;
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3377,20 +2949,20 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3404,14 +2976,14 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosWhere"></param>
         /// <param name="arrParametrosValores"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3424,9 +2996,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3437,22 +3009,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3467,15 +3039,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                ref CTrans myTrans)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3488,9 +3060,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3501,22 +3073,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3531,15 +3103,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="strParamAdicionales"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                string strParamAdicionales)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3552,9 +3124,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3566,24 +3138,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3599,15 +3171,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strParamAdicionales"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                string strParamAdicionales, ref CTrans myTrans)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3620,9 +3192,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3634,24 +3206,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3665,14 +3237,14 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosWhere"></param>
         /// <param name="arrParametrosValores"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3685,9 +3257,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3698,22 +3270,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3728,15 +3300,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  ref CTrans myTrans)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3749,9 +3321,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3762,22 +3334,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3792,15 +3364,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="strParamAdicionales"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3813,9 +3385,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3827,24 +3399,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3860,15 +3432,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strParamAdicionales"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DataTable execStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DataTable ExecStoreProcedureSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales, ref CTrans myTrans)
         {
-            DataTable dtTemp = new DataTable();
+            var dtTemp = new DataTable();
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3881,9 +3453,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -3895,24 +3467,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                dtTemp = execStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                dtTemp = ExecStoreProcedureToDataTable("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return dtTemp;
@@ -3928,16 +3500,16 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// </summary>
         /// <param name="strNombreTabla"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla)
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla)
         {
             try
             {
-                return execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "Sel");
+                return ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "Sel");
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
         }
 
@@ -3947,16 +3519,16 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strNombreTabla"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ref CTrans myTrans)
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ref CTrans myTrans)
         {
             try
             {
-                return execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "Sel", ref myTrans);
+                return ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "Sel", ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
         }
 
@@ -3966,12 +3538,12 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strNombreTabla"></param>
         /// <param name="arrParametrosSelect"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect)
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect)
         {
             DbDataReader drReader = null;
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -3983,20 +3555,20 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosSelect = strParametrosSelect + ", " + strSelect;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4009,13 +3581,13 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosSelect"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect, ref CTrans myTrans)
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect, ref CTrans myTrans)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4027,20 +3599,20 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosSelect = strParametrosSelect + ", " + strSelect;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPick", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4053,15 +3625,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosWhere"></param>
         /// <param name="arrParametrosValores"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosWhere,
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores)
         {
             DbDataReader drReader = null;
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
 
-            bool bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            var bPrimerElemento = true;
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4072,14 +3644,14 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
@@ -4099,15 +3671,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosWhere,
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores, ref CTrans myTrans)
         {
             DbDataReader drReader = null;
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
 
-            bool bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            var bPrimerElemento = true;
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4118,20 +3690,20 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelCnd", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4145,14 +3717,14 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosWhere"></param>
         /// <param name="arrParametrosValores"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4165,9 +3737,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4178,22 +3750,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4208,15 +3780,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                ref CTrans myTrans)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4229,9 +3801,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4242,22 +3814,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4272,15 +3844,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="strParamAdicionales"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                string strParamAdicionales)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4293,9 +3865,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4307,24 +3879,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4340,15 +3912,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strParamAdicionales"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                string strParamAdicionales, ref CTrans myTrans)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4361,9 +3933,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4375,24 +3947,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4406,14 +3978,14 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosWhere"></param>
         /// <param name="arrParametrosValores"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4426,9 +3998,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4439,22 +4011,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4469,15 +4041,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  ref CTrans myTrans)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4490,9 +4062,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4503,22 +4075,22 @@ namespace ReAl.Lumino.Encuestas.Dal
                     strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
             }
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCnd", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4533,15 +4105,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="arrParametrosValores"></param>
         /// <param name="strParamAdicionales"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4554,9 +4126,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4568,24 +4140,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4601,15 +4173,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <param name="strParamAdicionales"></param>
         /// <param name="myTrans"></param>
         /// <returns></returns>
-        public DbDataReader execStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
+        public DbDataReader ExecStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales, ref CTrans myTrans)
         {
             DbDataReader drReader = null;
 
-            string strParametrosSelect = "";
+            var strParametrosSelect = "";
 
-            bool bPrimerElemento = true;
+            var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
@@ -4622,9 +4194,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            string strParametrosWhere = "";
+            var strParametrosWhere = "";
             bPrimerElemento = true;
-            for (int i = 0; i < arrParametrosWhere.Count - 1; i++)
+            for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
@@ -4636,24 +4208,24 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
 
 
-            ArrayList arrNombreParametros = new ArrayList();
+            var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             arrNombreParametros.Add("Parametros");
-            ArrayList arrParametros = new ArrayList();
+            var arrParametros = new ArrayList();
             arrParametros.Add(strParametrosSelect);
             arrParametros.Add(strParametrosWhere);
             arrParametros.Add(strParamAdicionales);
 
             try
             {
-                drReader = execStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
+                drReader = ExecStoreProcedureToDbDataReader("Sp" + strNombreTabla + "SelPickCndExt", arrNombreParametros,
                                                        arrParametros, ref myTrans);
             }
             catch (Exception ex)
             {
                 ex.Data.Add("execStoreProcedureSel", strNombreTabla);
-                throw ex;
+                throw;
             }
 
             return drReader;
@@ -4666,7 +4238,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -4679,15 +4251,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve TRUE o FALSE dependiendo del éxito de la Operacion
         /// </returns>
-        public bool execStoreProcedure(string nombreSP, ArrayList arrParametros)
+        public bool ExecStoreProcedure(string nombreSp, ArrayList arrParametros)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -4791,15 +4363,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -4817,15 +4389,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve TRUE o FALSE dependiendo del éxito de la Operacion
         /// </returns>
-        public bool execStoreProcedure(string nombreSP, ArrayList arrParametros, ref CTrans myTrans)
+        public bool ExecStoreProcedure(string nombreSp, ArrayList arrParametros, ref CTrans myTrans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -4929,15 +4501,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -4955,15 +4527,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Número de registros afectados
         /// </returns>
-        public int execStoreProcedure(string nombreSP, ArrayList arrNombreParametros, ArrayList arrParametros)
+        public int ExecStoreProcedure(string nombreSp, ArrayList arrNombreParametros, ArrayList arrParametros)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -5089,7 +4661,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Connection = ConexionBd;
 
                 command.Connection.Open();
-                int intRes = command.ExecuteNonQuery();
+                var intRes = command.ExecuteNonQuery();
 
                 command.Connection.Close();
                 command.Dispose();
@@ -5097,15 +4669,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5120,7 +4692,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los parametros
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -5128,16 +4700,16 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Número de registros afectados
         /// </returns>
-        public int execStoreProcedure(string nombreSP, ArrayList arrNombreParametros, ArrayList arrParametros,
-                                      ref CTrans Trans)
+        public int ExecStoreProcedure(string nombreSp, ArrayList arrNombreParametros, ArrayList arrParametros,
+                                      ref CTrans trans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -5245,24 +4817,24 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                     }
                 }
-                command.Connection = Trans.MyConn;
-                command.Transaction = Trans.MyTrans;
+                command.Connection = trans.MyConn;
+                command.Transaction = trans.MyTrans;
 
-                int intRes = command.ExecuteNonQuery();
+                var intRes = command.ExecuteNonQuery();
 
                 return intRes;
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado y devuelve la Identidad Recuperada
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5280,10 +4852,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Identidad insertada
         /// </returns>
-        public object execStoreProcedureIdentity(string nombreSP, ArrayList arrNombreParametros, ArrayList arrParametros)
+        public object ExecStoreProcedureIdentity(string nombreSp, ArrayList arrNombreParametros, ArrayList arrParametros)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -5293,7 +4865,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Parameters["@" + arrNombreParametros[0].ToString()].Direction = ParameterDirection.Output;
                 command.Parameters["@" + arrNombreParametros[0].ToString()].Size = 30;
 
-                for (int intContador = 1; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 1; intContador < arrParametros.Count; intContador++)
                 {
                     //Verificamos si el parametro es ID o ID_PERS
 
@@ -5408,9 +4980,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Connection = ConexionBd;
 
                 command.Connection.Open();
-                int intRes = command.ExecuteNonQuery();
+                var intRes = command.ExecuteNonQuery();
 
-                object valorDevuelto = command.Parameters["@" + arrNombreParametros[0].ToString()].Value;
+                var valorDevuelto = command.Parameters["@" + arrNombreParametros[0].ToString()].Value;
 
                 command.Connection.Close();
                 command.Dispose();
@@ -5419,15 +4991,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado y devuelve la Identidad Recuperada
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5442,7 +5014,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los parametros
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -5450,11 +5022,11 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Identidad insertada
         /// </returns>
-        public object execStoreProcedureIdentity(string nombreSP, ArrayList arrNombreParametros, ArrayList arrParametros,
-                                                 ref CTrans Trans)
+        public object ExecStoreProcedureIdentity(string nombreSp, ArrayList arrNombreParametros, ArrayList arrParametros,
+                                                 ref CTrans trans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -5464,7 +5036,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Parameters["@" + arrNombreParametros[0].ToString()].Direction = ParameterDirection.Output;
                 command.Parameters["@" + arrNombreParametros[0].ToString()].Size = 30;
 
-                for (int intContador = 1; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 1; intContador < arrParametros.Count; intContador++)
                 {
                     //Verificamos si el parametro es ID o ID_PERS
 
@@ -5592,19 +5164,19 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
 
                 }
-                command.Connection = Trans.MyConn;
-                command.Transaction = Trans.MyTrans;
+                command.Connection = trans.MyConn;
+                command.Transaction = trans.MyTrans;
 
-                int intRes = command.ExecuteNonQuery();
+                var intRes = command.ExecuteNonQuery();
 
-                object valorDevuelto = command.Parameters["@" + arrNombreParametros[0].ToString()].Value;
+                var valorDevuelto = command.Parameters["@" + arrNombreParametros[0].ToString()].Value;
 
                 return valorDevuelto;
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
@@ -5615,7 +5187,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5623,19 +5195,19 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DataTable con el resultado de la consulta
         /// </returns>
-        public DataTable execStoreProcedureToDataTable(string nombreSP)
+        public DataTable ExecStoreProcedureToDataTable(string nombreSp)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
                 command.Connection = ConexionBd;
 
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
+                var da = new NpgsqlDataAdapter(command);
 
-                DataTable dtTemp = new DataTable();
+                var dtTemp = new DataTable();
                 da.Fill(dtTemp);
 
                 command.Connection.Close();
@@ -5644,15 +5216,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5665,10 +5237,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DataTable con el resultado de la consulta
         /// </returns>
-        public DataTable execStoreProcedureToDataTable(string nombreSP, ref CTrans myTrans)
+        public DataTable ExecStoreProcedureToDataTable(string nombreSp, ref CTrans myTrans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -5676,9 +5248,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Connection = myTrans.MyConn;
                 command.Transaction = myTrans.MyTrans;
 
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
+                var da = new NpgsqlDataAdapter(command);
 
-                DataTable dtTemp = new DataTable();
+                var dtTemp = new DataTable();
                 da.Fill(dtTemp);
 
                 command.Connection.Close();
@@ -5687,15 +5259,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5708,15 +5280,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DataTable con el resultado de la consulta
         /// </returns>
-        public DataTable execStoreProcedureToDataTable(string nombreSP, ArrayList arrParametros)
+        public DataTable ExecStoreProcedureToDataTable(string nombreSp, ArrayList arrParametros)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -5802,9 +5374,9 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 command.Connection = ConexionBd;
 
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
+                var da = new NpgsqlDataAdapter(command);
 
-                DataTable dtTemp = new DataTable();
+                var dtTemp = new DataTable();
                 da.Fill(dtTemp);
 
                 command.Connection.Close();
@@ -5813,15 +5385,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5831,7 +5403,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los parametros
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -5839,15 +5411,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DataTable con el resultado de la consulta
         /// </returns>
-        public DataTable execStoreProcedureToDataTable(string nombreSP, ArrayList arrParametros, ref CTrans Trans)
+        public DataTable ExecStoreProcedureToDataTable(string nombreSp, ArrayList arrParametros, ref CTrans trans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -5932,12 +5504,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
 
 
-                command.Connection = Trans.MyConn;
-                command.Transaction = Trans.MyTrans;
+                command.Connection = trans.MyConn;
+                command.Transaction = trans.MyTrans;
 
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
+                var da = new NpgsqlDataAdapter(command);
 
-                DataTable dtTemp = new DataTable();
+                var dtTemp = new DataTable();
                 da.Fill(dtTemp);
 
                 command.Connection.Close();
@@ -5946,15 +5518,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -5972,16 +5544,16 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DataTable con el resultado de la consulta
         /// </returns>
-        public DataTable execStoreProcedureToDataTable(string nombreSP, ArrayList arrNombreParametros,
+        public DataTable ExecStoreProcedureToDataTable(string nombreSp, ArrayList arrNombreParametros,
                                                        ArrayList arrParametros)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -6068,9 +5640,9 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 command.Connection = ConexionBd;
 
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
+                var da = new NpgsqlDataAdapter(command);
 
-                DataTable dtTemp = new DataTable();
+                var dtTemp = new DataTable();
                 da.Fill(dtTemp);
 
                 command.Connection.Close();
@@ -6079,15 +5651,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -6110,11 +5682,11 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DataTable con el resultado de la consulta
         /// </returns>
-        public DataTable execStoreProcedureToDataTable(string nombreSP, ArrayList arrNombreParametros,
-                                                       ArrayList arrParametros, ref CTrans Trans)
+        public DataTable ExecStoreProcedureToDataTable(string nombreSp, ArrayList arrNombreParametros,
+                                                       ArrayList arrParametros, ref CTrans trans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -6124,7 +5696,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         "Error al ejecutar procedimiento almacenado. El numero de parametros debe ser igual al número de nombres de parametros.");
 
 
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -6208,12 +5780,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                     }
                 }
-                command.Connection = Trans.MyConn;
-                command.Transaction = Trans.MyTrans;
+                command.Connection = trans.MyConn;
+                command.Transaction = trans.MyTrans;
 
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
+                var da = new NpgsqlDataAdapter(command);
 
-                DataTable dtTemp = new DataTable();
+                var dtTemp = new DataTable();
                 da.Fill(dtTemp);
 
                 command.Dispose();
@@ -6221,8 +5793,8 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
@@ -6233,7 +5805,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -6241,10 +5813,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DbDataReader con el resultado de la consulta
         /// </returns>
-        public DbDataReader execStoreProcedureToDbDataReader(string nombreSP)
+        public DbDataReader ExecStoreProcedureToDbDataReader(string nombreSp)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
             try
             {
@@ -6257,15 +5829,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -6278,10 +5850,10 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DbDataReader con el resultado de la consulta
         /// </returns>
-        public DbDataReader execStoreProcedureToDbDataReader(string nombreSP, ref CTrans myTrans)
+        public DbDataReader ExecStoreProcedureToDbDataReader(string nombreSp, ref CTrans myTrans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -6296,15 +5868,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -6317,15 +5889,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DbDataReader con el resultado de la consulta
         /// </returns>
-        public DbDataReader execStoreProcedureToDbDataReader(string nombreSP, ArrayList arrParametros)
+        public DbDataReader ExecStoreProcedureToDbDataReader(string nombreSp, ArrayList arrParametros)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -6419,15 +5991,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -6437,7 +6009,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         ///     Coleccion de objetos referidad a los parametros
         ///   </para>
         /// </param>
-        /// <param name="Trans" type="Conexion.cTrans">
+        /// <param name="trans" type="Conexion.cTrans">
         ///   <para>
         ///     Objeto que contiene la Transaccion activa utilizada para realizar la operacion
         ///   </para>
@@ -6445,15 +6017,15 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DbDataReader con el resultado de la consulta
         /// </returns>
-        public DbDataReader execStoreProcedureToDbDataReader(string nombreSP, ArrayList arrParametros, ref CTrans Trans)
+        public DbDataReader ExecStoreProcedureToDbDataReader(string nombreSp, ArrayList arrParametros, ref CTrans trans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -6538,8 +6110,8 @@ namespace ReAl.Lumino.Encuestas.Dal
                 }
 
 
-                command.Connection = Trans.MyConn;
-                command.Transaction = Trans.MyTrans;
+                command.Connection = trans.MyConn;
+                command.Transaction = trans.MyTrans;
 
                 if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.Default);
@@ -6548,15 +6120,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -6574,16 +6146,16 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DbDataReader con el resultado de la consulta
         /// </returns>
-        public DbDataReader execStoreProcedureToDbDataReader(string nombreSP, ArrayList arrNombreParametros,
+        public DbDataReader ExecStoreProcedureToDbDataReader(string nombreSp, ArrayList arrNombreParametros,
                                                        ArrayList arrParametros)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -6678,15 +6250,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         /// <summary>
         ///   Metodo que ejecuta un Procedimiento Almacenado
         /// </summary>
-        /// <param name="nombreSP" type="string">
+        /// <param name="nombreSp" type="string">
         ///   <para>
         ///     Nombre del Stored procedure
         ///   </para>
@@ -6709,11 +6281,11 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns>
         ///   Devuelve un DbDataReader con el resultado de la consulta
         /// </returns>
-        public DbDataReader execStoreProcedureToDbDataReader(string nombreSP, ArrayList arrNombreParametros,
-                                                       ArrayList arrParametros, ref CTrans Trans)
+        public DbDataReader ExecStoreProcedureToDbDataReader(string nombreSp, ArrayList arrNombreParametros,
+                                                       ArrayList arrParametros, ref CTrans trans)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.CommandText = nombreSP;
+            var command = new NpgsqlCommand();
+            command.CommandText = nombreSp;
             command.CommandType = CommandType.StoredProcedure;
 
             try
@@ -6723,7 +6295,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         "Error al ejecutar procedimiento almacenado. El numero de parametros debe ser igual al número de nombres de parametros.");
 
 
-                for (int intContador = 0; intContador < arrParametros.Count; intContador++)
+                for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
                     if (arrParametros[intContador] == null)
                     {
@@ -6807,8 +6379,8 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                     }
                 }
-                command.Connection = Trans.MyConn;
-                command.Transaction = Trans.MyTrans;
+                command.Connection = trans.MyConn;
+                command.Transaction = trans.MyTrans;
 
                 if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.Default);
@@ -6817,24 +6389,26 @@ namespace ReAl.Lumino.Encuestas.Dal
             }
             catch (Exception ex)
             {
-                ex.Data.Add("StoredProcedure", nombreSP);
-                throw ex;
+                ex.Data.Add("StoredProcedure", nombreSp);
+                throw;
             }
         }
 
         #endregion
 
 
-        public int ejecutarQuery(string strQuery)
+        public int EjecutarQuery(string strQuery)
         {
             try
             {
                 if (ConexionBd.State == ConnectionState.Closed)
+                {
                     ConexionBd.Open();
+                }
 
                 var command = new NpgsqlCommand(strQuery, ConexionBd);
 
-                int numReg = command.ExecuteNonQuery();
+                var numReg = command.ExecuteNonQuery();
                 command.Dispose();
                 ConexionBd.Close();
                 return numReg;
@@ -6842,7 +6416,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             catch (Exception ex)
             {
                 ex.Data.Add("Query en updateBD", strQuery);
-                throw ex;
+                throw;
             }
         }
     }
