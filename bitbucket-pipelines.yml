@@ -16,3 +16,4 @@ pipelines:
           - dotnet restore ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
           - dotnet build ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
           - dotnet test ReAl.Lumino.Encuestas.Test
+          - dotnet publish ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
