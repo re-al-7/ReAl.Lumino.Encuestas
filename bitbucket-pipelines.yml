@@ -3,13 +3,12 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: microsoft/dotnet:2.0-sdk
-
 pipelines:
   default:
     - step:
         caches:
           - dotnetcore
+        image: microsoft/dotnet:2.0-sdk
         script: # Modify the commands below to build your repository.
           - export PROJECT_NAME=real_lumino_encuestas
           - export TEST_NAME=real_lumino_encuestas.Test
@@ -17,3 +16,14 @@ pipelines:
           - dotnet build ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
           - dotnet test ReAl.Lumino.Encuestas.Test
           - dotnet publish ReAl.Lumino.Encuestas/ReAl.Lumino.Encuestas.csproj
+        services:
+          - postgres
+
+definitions: 
+  services: 
+    postgres: 
+      image: postgres 
+      environment: 
+        POSTGRES_DB: 'pipelines' 
+        POSTGRES_USER: 'test_user'
+        POSTGRES_PASSWORD: 'test_user_password'          
