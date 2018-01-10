@@ -25,8 +25,8 @@ namespace ReAl.Lumino.Encuestas.Models
 	[Table("ope_movimientos")]
 	public class OpeMovimientos
 	{
-		public const string StrNombreTabla = "Ope_movimientos";
-		public const string StrAliasTabla = "ope_movimientos";
+		public static readonly  string StrNombreTabla = "Ope_movimientos";
+		public static readonly  string StrAliasTabla = "ope_movimientos";
 
 		public enum Fields
 		{

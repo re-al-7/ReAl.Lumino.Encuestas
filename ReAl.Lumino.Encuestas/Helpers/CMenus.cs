@@ -39,16 +39,15 @@ namespace ReAl.Lumino.Encuestas.Helpers
             //Obtenemos el objeto de Aplicaciones en base a la SIGLA
             var objApp = context.SegAplicaciones.SingleOrDefault(app => app.Sigla == currentApp);
 
-            if (objApp == null)
-                return new List<SegPaginas>();
-            else
-                return context.SegPaginas
-                    .Join(context.SegRolesPagina, pag => pag.Idspg, rolpag => rolpag.Idspg,
-                        (pag, rolpag) => new {pag, rolpag})
-                    .Where(@t => (@t.pag.Idsap == objApp.Idsap))
-                    .Where(@t => (@t.rolpag.Idsro == idRol))
-                    .Select(@t => @t.pag)
-                    .OrderBy(paginas => paginas.Prioridad).ToList();
+            if (objApp == null) return new List<SegPaginas>();
+            
+            return context.SegPaginas
+                .Join(context.SegRolesPagina, pag => pag.Idspg, rolpag => rolpag.Idspg,
+                    (pag, rolpag) => new {pag, rolpag})
+                .Where(@t => (@t.pag.Idsap == objApp.Idsap))
+                .Where(@t => (@t.rolpag.Idsro == idRol))
+                .Select(@t => @t.pag)
+                .OrderBy(paginas => paginas.Prioridad).ToList();
         }
         
     }

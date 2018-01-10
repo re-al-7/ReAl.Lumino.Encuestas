@@ -25,8 +25,8 @@ namespace ReAl.Lumino.Encuestas.Models
 	[Table("seg_roles_tabla_transaccion")]
 	public class SegRolesTablaTransaccion
 	{
-		public const string StrNombreTabla = "Seg_roles_tabla_transaccion";
-		public const string StrAliasTabla = "seg_roles_tabla_transaccion";
+		public static readonly  string StrNombreTabla = "Seg_roles_tabla_transaccion";
+		public static readonly  string StrAliasTabla = "seg_roles_tabla_transaccion";
 
 		public enum Fields
 		{
