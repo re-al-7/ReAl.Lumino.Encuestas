@@ -17,7 +17,6 @@ pipelines:
     - step:
         caches:
           - dotnetcore
-          - postgres
         image: microsoft/dotnet:2.0-sdk
         script: # Modify the commands below to build your repository.
           - psql -c 'drop database if exists db_encuestas;' -U postgres
