@@ -4,7 +4,9 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -497,38 +499,39 @@ namespace ReAl.Lumino.Encuestas.Dal
         internal DataTable CargarDataTableAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                             ArrayList arrValoresWhere, string sParametrosAdicionales)
         {
-            var query = "SELECT ";
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
             var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
             var boolBandera = false;
             for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
-            query = query + sParametrosAdicionales;
+            query.AppendLine(sParametrosAdicionales);
 
             try
             {
-                return CargarDataTable(query);
+                return CargarDataTable(query.ToString());
             }
             catch (Exception ex)
             {
@@ -1087,38 +1090,39 @@ namespace ReAl.Lumino.Encuestas.Dal
         internal DbDataReader CargarDataReaderAnd(string tabla, ArrayList arrColumnas, ArrayList arrColumnasWhere,
                                             ArrayList arrValoresWhere, string sParametrosAdicionales)
         {
-            var query = "SELECT ";
+            var query = new StringBuilder();
+            query.AppendLine("SELECT ");
             var primerReg = true;
             foreach (string columna in arrColumnas)
             {
                 if (primerReg)
                 {
-                    query = query + columna;
+                    query.AppendLine(columna);
                     primerReg = false;
                 }
                 else
-                    query = query + ", " + columna;
+                    query.AppendLine(", " + columna);
             }
-            query = query + " FROM " + tabla + " WHERE ";
+            query.AppendLine(" FROM " + tabla + " WHERE ");
 
             var boolBandera = false;
             for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
             {
                 if (boolBandera)
                 {
-                    query = query + " AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                 }
                 else
                 {
-                    query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                    query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     boolBandera = true;
                 }
             }
-            query = query + sParametrosAdicionales;
+            query.AppendLine(sParametrosAdicionales);
 
             try
             {
-                return CargarDataReader(query);
+                return CargarDataReader(query.ToString());
             }
             catch (Exception ex)
             {
@@ -1535,31 +1539,8 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// </returns>
         public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere)
         {
-            var query = "";
-            try
-            {
-                query = "DELETE FROM " + nomTabla + " WHERE ";
-                var boolBandera = false;
-                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-                {
-                    if (boolBandera)
-                    {
-                        query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    }
-                    else
-                    {
-                        query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                        boolBandera = true;
-                    }
-                }
+            return DeleteBd(nomTabla, arrColumnasWhere, arrValoresWhere, "");
 
-                return Ejecutar(query);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en deleteBD", query);
-                throw;
-            }
         }
 
         /// <summary>
@@ -1590,31 +1571,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// </returns>
         public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere, ref CTrans trans)
         {
-            var query = "";
-            try
-            {
-                query = "DELETE FROM " + nomTabla + " WHERE ";
-                var boolBandera = false;
-                for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
-                {
-                    if (boolBandera)
-                    {
-                        query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                    }
-                    else
-                    {
-                        query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
-                        boolBandera = true;
-                    }
-                }
-
-                return Ejecutar(query, ref trans);
-            }
-            catch (Exception ex)
-            {
-                ex.Data.Add("Query en deleteBD", query);
-                throw;
-            }
+            return DeleteBd(nomTabla, arrColumnasWhere, arrValoresWhere, "", ref trans);
         }
 
         /// <summary>
@@ -1646,25 +1603,25 @@ namespace ReAl.Lumino.Encuestas.Dal
         public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere,
                             string strParametrosAdicionales)
         {
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "DELETE FROM " + nomTabla + " WHERE ";
+                query.AppendLine("DELETE FROM " + nomTabla + " WHERE ");
                 var boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
-                        query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                        query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                        query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                         boolBandera = true;
                     }
                 }
-                query = query + strParametrosAdicionales;
-                return Ejecutar(query);
+                query.AppendLine(strParametrosAdicionales);
+                return Ejecutar(query.ToString());
             }
             catch (Exception ex)
             {
@@ -1707,27 +1664,27 @@ namespace ReAl.Lumino.Encuestas.Dal
         public int DeleteBd(string nomTabla, ArrayList arrColumnasWhere, ArrayList arrValoresWhere,
                             string strParametrosAdicionales, ref CTrans trans)
         {
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "DELETE FROM " + nomTabla + " WHERE ";
+                query.AppendLine("DELETE FROM " + nomTabla + " WHERE ");
                 var boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
-                        query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                        query.AppendLine(" and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador];
+                        query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                         boolBandera = true;
                     }
                 }
 
-                query = query + strParametrosAdicionales;
+                query.AppendLine(strParametrosAdicionales);
 
-                return Ejecutar(query, ref trans);
+                return Ejecutar(query.ToString(), ref trans);
             }
             catch (Exception ex)
             {
@@ -1769,32 +1726,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "INSERT INTO " + tabla + "(";
+                query.AppendLine("INSERT INTO " + tabla + "(");
                 var primerReg = true;
 
-                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
-                {
-                    if (arrValores[intContador] == null)
-                    {
-                        throw new ArgumentException();
-                    }
-                    else
-                    {
-                        if (primerReg)
-                        {
-                            query = query + arrColumnas[intContador].ToString();
-                            primerReg = false;
-                        }
-                        else
-                            query = query + ", " + arrColumnas[intContador].ToString();
-                    }
-                }
-
-                query = query + ") VALUES (";
-
+                query.AppendLine(string.Join(",", arrColumnas.OfType<string>()));                
+                query.AppendLine(") VALUES (");
+                
                 primerReg = true;
                 for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
@@ -1802,32 +1742,30 @@ namespace ReAl.Lumino.Encuestas.Dal
                     {
                         throw new ArgumentException();;
                     }
+
+                    var strValorSet = "";
+                    if (arrValores[intContador].GetType() == arrParam.GetType())
+                    {
+                        strValorSet = "?";
+                        arrPosicionByte.Add(intContador);
+                    }
                     else
                     {
-                        var strValorSet = "";
-                        if (arrValores[intContador].GetType() == arrParam.GetType())
-                        {
-                            strValorSet = "?";
-                            arrPosicionByte.Add(intContador);
-                        }
-                        else
-                        {
-                            strValorSet = arrValores[intContador].ToString();
-                        }
+                        strValorSet = arrValores[intContador].ToString();
+                    }
 
-                        if (primerReg)
-                        {
-                            query = query + strValorSet;
-                            primerReg = false;
-                        }
-                        else
-                        {
-                            query = query + " , " + strValorSet;
-                        }
+                    if (primerReg)
+                    {
+                        query.AppendLine(strValorSet);
+                        primerReg = false;
+                    }
+                    else
+                    {
+                        query.AppendLine(" , " + strValorSet);
                     }
                 }
 
-                query = query + ")";
+                query.AppendLine(")");
 
 
                 if (ConexionBd.State == ConnectionState.Closed)
@@ -1835,13 +1773,13 @@ namespace ReAl.Lumino.Encuestas.Dal
                     ConexionBd.Open();
                 }
 
-                var command = new NpgsqlCommand(query, ConexionBd);
+                var command = new NpgsqlCommand(query.ToString(), ConexionBd);
 
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion.ToString(), NpgsqlDbType.Bytea));
-                    command.Parameters["@parametro" + posicion.ToString()].Value = (byte[])arrValores[posicion];
+                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion, NpgsqlDbType.Bytea));
+                    command.Parameters["@parametro" + posicion].Value = (byte[])arrValores[posicion];
                 }
                 //---------------------------------------------------
 
@@ -1892,66 +1830,46 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "INSERT INTO " + tabla + "(";
+                query.AppendLine("INSERT INTO " + tabla + "(");
+                query.AppendLine(string.Join(",", arrColumnas.OfType<string>()));                
+                query.AppendLine(") VALUES (");
+
                 var primerReg = true;
-                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
-                {
-                    if (arrValores[intContador] == null)
-                    {
-                        throw new ArgumentException();
-                    }
-                    else
-                    {
-                        if (primerReg)
-                        {
-                            query = query + arrColumnas[intContador];
-                            primerReg = false;
-                        }
-                        else
-                            query = query + ", " + arrColumnas[intContador];
-                    }
-                }
-
-                query = query + ") VALUES (";
-
-                primerReg = true;
                 for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
                         throw new ArgumentException();;
                     }
+
+                    var strValorSet = "";
+                    if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
+                    {
+                        strValorSet = "?";
+                        arrPosicionByte.Add(intContador);
+                    }
                     else
                     {
-                        var strValorSet = "";
-                        if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
-                        {
-                            strValorSet = "?";
-                            arrPosicionByte.Add(intContador);
-                        }
-                        else
-                        {
-                            strValorSet = arrValores[intContador].ToString();
-                        }
+                        strValorSet = arrValores[intContador].ToString();
+                    }
 
-                        if (primerReg)
-                        {
-                            query = query + strValorSet;
-                            primerReg = false;
-                        }
-                        else
-                        {
-                            query = query + " , " + strValorSet;
-                        }
+                    if (primerReg)
+                    {
+                        query.AppendLine(strValorSet);
+                        primerReg = false;
+                    }
+                    else
+                    {
+                        query.AppendLine(" , " + strValorSet);
                     }
                 }
 
-                query = query + "); SELECT ? = @@IDENTITY";
+                query.AppendLine("); SELECT ? = @@IDENTITY");
 
-                var command = new NpgsqlCommand(query, ConexionBd);
+                var command = new NpgsqlCommand(query.ToString(), ConexionBd);
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
@@ -2010,71 +1928,51 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "INSERT INTO " + tabla + "(";
+                query.AppendLine("INSERT INTO " + tabla + "(");
+                query.AppendLine(string.Join(",", arrColumnas.OfType<string>()));                
+                query.AppendLine(") VALUES (");
+
                 var primerReg = true;
-                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
-                {
-                    if (arrValores[intContador] == null)
-                    {
-                        throw new ArgumentException();;
-                    }
-                    else
-                    {
-                        if (primerReg)
-                        {
-                            query = query + arrColumnas[intContador].ToString();
-                            primerReg = false;
-                        }
-                        else
-                            query = query + ", " + arrColumnas[intContador].ToString();
-                    }
-                }
-
-                query = query + ") VALUES (";
-
-                primerReg = true;
                 for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
                         throw new ArgumentException();;
                     }
+
+                    var strValorSet = "";
+                    if (arrValores[intContador].GetType() == arrParam.GetType())
+                    {
+                        strValorSet = "?";
+                        arrPosicionByte.Add(intContador);
+                    }
                     else
                     {
-                        var strValorSet = "";
-                        if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
-                        {
-                            strValorSet = "?";
-                            arrPosicionByte.Add(intContador);
-                        }
-                        else
-                        {
-                            strValorSet = arrValores[intContador].ToString();
-                        }
+                        strValorSet = arrValores[intContador].ToString();
+                    }
 
-                        if (primerReg)
-                        {
-                            query = query + strValorSet;
-                            primerReg = false;
-                        }
-                        else
-                        {
-                            query = query + " , " + strValorSet;
-                        }
+                    if (primerReg)
+                    {
+                        query.AppendLine(strValorSet);
+                        primerReg = false;
+                    }
+                    else
+                    {
+                        query.AppendLine(" , " + strValorSet);
                     }
                 }
 
-                query = query + ")";
+                query.AppendLine( ")");
 
-                var command = new NpgsqlCommand(query, trans.MyConn);
+                var command = new NpgsqlCommand(query.ToString(), trans.MyConn);
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion.ToString(), NpgsqlDbType.Bytea));
-                    command.Parameters["@parametro" + posicion.ToString()].Value = (byte[])arrValores[posicion];
+                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion, NpgsqlDbType.Bytea));
+                    command.Parameters["@parametro" + posicion].Value = (byte[])arrValores[posicion];
                 }
                 //---------------------------------------------------
 
@@ -2132,66 +2030,47 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "INSERT INTO " + tabla + "(";
+                query.AppendLine("INSERT INTO " + tabla + "(");
+                query.AppendLine(string.Join(",", arrColumnas.OfType<string>()));                
+
+                query.AppendLine(") VALUES (");
+
                 var primerReg = true;
-                for (var intContador = 0; intContador < arrColumnas.Count; intContador++)
-                {
-                    if (arrValores[intContador] == null)
-                    {
-                        throw new ArgumentException();;
-                    }
-                    else
-                    {
-                        if (primerReg)
-                        {
-                            query = query + arrColumnas[intContador];
-                            primerReg = false;
-                        }
-                        else
-                            query = query + ", " + arrColumnas[intContador];
-                    }
-                }
-
-                query = query + ") VALUES (";
-
-                primerReg = true;
                 for (var intContador = 0; intContador < arrValores.Count; intContador++)
                 {
                     if (arrValores[intContador] == null)
                     {
                         throw new ArgumentException();;
                     }
+
+                    var strValorSet = "";
+                    if (arrValores[intContador].GetType() == arrParam.GetType())
+                    {
+                        strValorSet = "?";
+                        arrPosicionByte.Add(intContador);
+                    }
                     else
                     {
-                        var strValorSet = "";
-                        if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
-                        {
-                            strValorSet = "?";
-                            arrPosicionByte.Add(intContador);
-                        }
-                        else
-                        {
-                            strValorSet = arrValores[intContador].ToString();
-                        }
+                        strValorSet = arrValores[intContador].ToString();
+                    }
 
-                        if (primerReg)
-                        {
-                            query = query + strValorSet;
-                            primerReg = false;
-                        }
-                        else
-                        {
-                            query = query + " , " + strValorSet;
-                        }
+                    if (primerReg)
+                    {
+                        query.AppendLine(strValorSet);
+                        primerReg = false;
+                    }
+                    else
+                    {
+                        query.AppendLine(" , " + strValorSet);
                     }
                 }
 
-                query = query + "); SELECT ? = @@IDENTITY";
+                query.AppendLine("); SELECT ? = @@IDENTITY");
 
-                var command = new NpgsqlCommand(query, trans.MyConn);
+                var command = new NpgsqlCommand(query.ToString(), trans.MyConn);
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
@@ -2257,7 +2136,8 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "UPDATE " + nomTabla.ToUpper() + " SET ";
+            var query= new StringBuilder();
+            query.AppendLine("UPDATE " + nomTabla + " SET ");
             try
             {
                 var boolBandera = false;
@@ -2268,18 +2148,18 @@ namespace ReAl.Lumino.Encuestas.Dal
                     {
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador].ToString().ToUpper() + " = null ";
+                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString().ToUpper() + " = null ");
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador].ToString().ToUpper() + " = null ";
+                            query.AppendLine(arrColumnasSet[intContador].ToString().ToUpper() + " = null ");
                             boolBandera = true;
                         }
                     }
                     else
                     {
                         var strValorSet = "";
-                        if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
+                        if (arrValoresSet[intContador].GetType() == arrParam.GetType())
                         {
                             strValorSet = "?";
                             arrPosicionByte.Add(intContador);
@@ -2290,30 +2170,30 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador].ToString().ToUpper() + " = " +
-                                    strValorSet;
+                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString().ToUpper() + " = " +
+                                    strValorSet);
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador].ToString().ToUpper() + " = " + strValorSet;
+                            query.AppendLine(arrColumnasSet[intContador].ToString().ToUpper() + " = " + strValorSet);
                             boolBandera = true;
                         }
                     }
                 }
-                query += " WHERE ";
+                query.AppendLine(" WHERE ");
 
                 boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
-                        query = query + " and " + arrColumnasWhere[intContador].ToString().ToUpper() + " = " +
-                                arrValoresWhere[intContador] + "";
+                        query.AppendLine(" AND " + arrColumnasWhere[intContador].ToString().ToUpper() + " = " +
+                                arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query = query + arrColumnasWhere[intContador].ToString().ToUpper() + " = " +
-                                arrValoresWhere[intContador] + "";
+                        query.AppendLine(arrColumnasWhere[intContador].ToString().ToUpper() + " = " +
+                                arrValoresWhere[intContador]);
                         boolBandera = true;
                     }
                 }
@@ -2323,13 +2203,13 @@ namespace ReAl.Lumino.Encuestas.Dal
                     ConexionBd.Open();
                 }
 
-                var command = new NpgsqlCommand(query, ConexionBd);
+                var command = new NpgsqlCommand(query.ToString(), ConexionBd);
 
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion.ToString(), NpgsqlDbType.Bytea));
-                    command.Parameters["@parametro" + posicion.ToString()].Value = (byte[])arrValoresSet[posicion];
+                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion, NpgsqlDbType.Bytea));
+                    command.Parameters["@parametro" + posicion].Value = (byte[])arrValoresSet[posicion];
                 }
                 //---------------------------------------------------
 
@@ -2390,10 +2270,10 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "update " + nomTabla + " set ";
+                query.AppendLine("UPDATE " + nomTabla + " SET ");
                 var boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresSet.Count; intContador++)
                 {
@@ -2401,18 +2281,18 @@ namespace ReAl.Lumino.Encuestas.Dal
                     {
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador] + " = null ";
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = null ");
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador] + " = null ";
+                            query.AppendLine(arrColumnasSet[intContador] + " = null ");
                             boolBandera = true;
                         }
                     }
                     else
                     {
                         var strValorSet = "";
-                        if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
+                        if (arrValoresSet[intContador].GetType() == arrParam.GetType())
                         {
                             strValorSet = "?";
                             arrPosicionByte.Add(intContador);
@@ -2423,39 +2303,38 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador] + " = " + strValorSet;
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = " + strValorSet);
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador] + " = " + strValorSet;
+                            query.AppendLine(arrColumnasSet[intContador] + " = " + strValorSet);
                             boolBandera = true;
                         }
                     }
                 }
-                query += " where ";
+                query.AppendLine(" WHERE ");
 
                 boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
-                        query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] +
-                                "";
+                        query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] + "";
+                        query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] + "");
                         boolBandera = true;
                     }
                 }
 
-                var command = new NpgsqlCommand(query, trans.MyConn);
+                var command = new NpgsqlCommand(query.ToString(), trans.MyConn);
 
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion.ToString(), NpgsqlDbType.Bytea));
-                    command.Parameters["@parametro" + posicion.ToString()].Value = (byte[])arrValoresSet[posicion];
+                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion, NpgsqlDbType.Bytea));
+                    command.Parameters["@parametro" + posicion].Value = (byte[])arrValoresSet[posicion];
                 }
                 //---------------------------------------------------
 
@@ -2517,10 +2396,10 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "update " + nomTabla + " set ";
+                query.AppendLine("UPDATE " + nomTabla + " SET ");
                 var boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresSet.Count; intContador++)
                 {
@@ -2528,18 +2407,18 @@ namespace ReAl.Lumino.Encuestas.Dal
                     {
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador] + " = null ";
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = null ");
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador] + " = null ";
+                            query.AppendLine(arrColumnasSet[intContador] + " = null ");
                             boolBandera = true;
                         }
                     }
                     else
                     {
                         var strValorSet = "";
-                        if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
+                        if (arrValoresSet[intContador].GetType() == arrParam.GetType())
                         {
                             strValorSet = "?";
                             arrPosicionByte.Add(intContador);
@@ -2550,47 +2429,46 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador] + " = " + strValorSet;
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = " + strValorSet);
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador] + " = " + strValorSet;
+                            query.AppendLine(arrColumnasSet[intContador] + " = " + strValorSet);
                             boolBandera = true;
                         }
                     }
 
                 }
-                query += " WHERE ";
+                query.AppendLine(" WHERE ");
 
                 boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
-                        query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] +
-                                "";
+                        query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] + "";
+                        query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] + "");
                         boolBandera = true;
                     }
                 }
 
-                query = query + strParametrosAdicionales;
+                query.AppendLine(strParametrosAdicionales);
 
                 if (ConexionBd.State == ConnectionState.Closed)
                 {
                     ConexionBd.Open();
                 }
 
-                var command = new NpgsqlCommand(query, ConexionBd);
+                var command = new NpgsqlCommand(query.ToString(), ConexionBd);
 
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion.ToString(), NpgsqlDbType.Bytea));
-                    command.Parameters["@parametro" + posicion.ToString()].Value = (byte[])arrValoresSet[posicion];
+                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion, NpgsqlDbType.Bytea));
+                    command.Parameters["@parametro" + posicion].Value = (byte[])arrValoresSet[posicion];
                 }
                 //---------------------------------------------------
 
@@ -2657,10 +2535,10 @@ namespace ReAl.Lumino.Encuestas.Dal
             var arrPosicionByte = new ArrayList();
             //---------------------------------------------------
 
-            var query = "";
+            var query = new StringBuilder();
             try
             {
-                query = "update " + nomTabla + " set ";
+                query.AppendLine("UPDATE " + nomTabla + " SET ");
                 var boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresSet.Count; intContador++)
                 {
@@ -2668,18 +2546,18 @@ namespace ReAl.Lumino.Encuestas.Dal
                     {
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador] + " = null ";
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = null ");
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador] + " = null ";
+                            query.AppendLine(arrColumnasSet[intContador] + " = null ");
                             boolBandera = true;
                         }
                     }
                     else
                     {
                         var strValorSet = "";
-                        if (arrValoresSet[intContador].GetType().Equals(arrParam.GetType()))
+                        if (arrValoresSet[intContador].GetType() == arrParam.GetType())
                         {
                             strValorSet = "?";
                             arrPosicionByte.Add(intContador);
@@ -2690,41 +2568,40 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                         if (boolBandera)
                         {
-                            query = query + " , " + arrColumnasSet[intContador] + " = " + strValorSet;
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = " + strValorSet);
                         }
                         else
                         {
-                            query = query + arrColumnasSet[intContador] + " = " + strValorSet;
+                            query.AppendLine(arrColumnasSet[intContador] + " = " + strValorSet);
                             boolBandera = true;
                         }
                     }
                 }
-                query += " where ";
+                query.AppendLine(" WHERE ");
 
                 boolBandera = false;
                 for (var intContador = 0; intContador < arrValoresWhere.Count; intContador++)
                 {
                     if (boolBandera)
                     {
-                        query = query + " and " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] +
-                                "";
+                        query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query = query + arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] + "";
+                        query.AppendLine(arrColumnasWhere[intContador] + " = " + arrValoresWhere[intContador] + "");
                         boolBandera = true;
                     }
                 }
 
-                query = query + strParametrosAdicionales;
+                query.AppendLine(strParametrosAdicionales);
 
-                var command = new NpgsqlCommand(query, trans.MyConn);
+                var command = new NpgsqlCommand(query.ToString(), trans.MyConn);
 
                 //Para soporte de imagenes---------------------------
                 foreach (int posicion in arrPosicionByte)
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion.ToString(), NpgsqlDbType.Bytea));
-                    command.Parameters["@parametro" + posicion.ToString()].Value = (byte[])arrValoresSet[posicion];
+                    command.Parameters.Add(new NpgsqlParameter("@parametro" + posicion, NpgsqlDbType.Bytea));
+                    command.Parameters["@parametro" + posicion].Value = (byte[])arrValoresSet[posicion];
                 }
                 //---------------------------------------------------
 
@@ -2798,7 +2675,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
             var strParametrosSelect = "";
 
@@ -2816,8 +2693,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
             var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
+            var arrParametros = new ArrayList {strParametrosSelect};
 
             try
             {
@@ -2842,7 +2718,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect, ref CTrans myTrans)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
             var strParametrosSelect = "";
 
@@ -2887,7 +2763,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
             var strParametrosWhere = "";
 
@@ -2896,7 +2772,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -2905,8 +2781,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
             var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosWhere);
+            var arrParametros = new ArrayList {strParametrosWhere};
 
             try
             {
@@ -2933,7 +2808,7 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores, ref CTrans myTrans)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
             var strParametrosWhere = "";
 
@@ -2942,7 +2817,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3002,7 +2877,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3066,7 +2941,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3130,7 +3005,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3198,7 +3073,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3263,7 +3138,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3327,7 +3202,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3391,7 +3266,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3459,7 +3334,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3637,7 +3512,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3683,7 +3558,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3743,7 +3618,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3807,7 +3682,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3871,7 +3746,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -3939,7 +3814,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -4004,7 +3879,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -4068,7 +3943,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -4132,7 +4007,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -4200,7 +4075,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i].ToString() + " = " + arrParametrosValores[i].ToString();
+                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
                     bPrimerElemento = false;
                 }
                 else
@@ -4263,7 +4138,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrParametros[intContador] == null)
                     {
-                        command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(), DBNull.Value));
+                        command.Parameters.Add(new NpgsqlParameter("@" + intContador, DBNull.Value));
                     }
                     else
                     {
@@ -4343,12 +4218,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -4401,7 +4276,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrParametros[intContador] == null)
                     {
-                        command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(), DBNull.Value));
+                        command.Parameters.Add(new NpgsqlParameter("@" + intContador, DBNull.Value));
                     }
                     else
                     {
@@ -4481,12 +4356,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -4647,12 +4522,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], arrParametros[intContador]));
                                 }
                                 break;
                         }
@@ -4713,7 +4588,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrParametros[intContador] == null)
                     {
-                        command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                        command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                    DBNull.Value));
                     }
                     else
@@ -4805,12 +4680,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -4861,9 +4736,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             try
             {
                 //Primero la identidad 
-                command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[0].ToString(), arrParametros[0]));
-                command.Parameters["@" + arrNombreParametros[0].ToString()].Direction = ParameterDirection.Output;
-                command.Parameters["@" + arrNombreParametros[0].ToString()].Size = 30;
+                command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[0], arrParametros[0]));
+                command.Parameters["@" + arrNombreParametros[0]].Direction = ParameterDirection.Output;
+                command.Parameters["@" + arrNombreParametros[0]].Size = 30;
 
                 for (var intContador = 1; intContador < arrParametros.Count; intContador++)
                 {
@@ -4871,7 +4746,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                     if (arrParametros[intContador] == null)
                     {
-                        command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                        command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                    DBNull.Value));
                     }
                     else
@@ -4963,12 +4838,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -4982,7 +4857,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Connection.Open();
                 var intRes = command.ExecuteNonQuery();
 
-                var valorDevuelto = command.Parameters["@" + arrNombreParametros[0].ToString()].Value;
+                var valorDevuelto = command.Parameters["@" + arrNombreParametros[0]].Value;
 
                 command.Connection.Close();
                 command.Dispose();
@@ -5032,9 +4907,9 @@ namespace ReAl.Lumino.Encuestas.Dal
             try
             {
                 //Primero la identidad 
-                command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[0].ToString(), arrParametros[0]));
-                command.Parameters["@" + arrNombreParametros[0].ToString()].Direction = ParameterDirection.Output;
-                command.Parameters["@" + arrNombreParametros[0].ToString()].Size = 30;
+                command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[0], arrParametros[0]));
+                command.Parameters["@" + arrNombreParametros[0]].Direction = ParameterDirection.Output;
+                command.Parameters["@" + arrNombreParametros[0]].Size = 30;
 
                 for (var intContador = 1; intContador < arrParametros.Count; intContador++)
                 {
@@ -5042,7 +4917,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                     if (arrParametros[intContador] == null)
                     {
-                        command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                        command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                    DBNull.Value));
                     }
                     else
@@ -5100,46 +4975,46 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 if (arrParametros[intContador] == null)
                                 {
                                     command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             DBNull.Value));
                                 }
                                 else
                                 {
                                     //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             arrParametros[intContador]));
-                                    command.Parameters["@" + arrNombreParametros[intContador].ToString()].NpgsqlDbType =
+                                    command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType =
                                         NpgsqlDbType.Text;
                                 }
                                 break;
                             case "System.DateTime":
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), DBNull.Value));
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], DBNull.Value));
                                 }
                                 else
                                 {
                                     //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             arrParametros[intContador]));
-                                    command.Parameters["@" + arrNombreParametros[intContador].ToString()].NpgsqlDbType =
+                                    command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType =
                                         NpgsqlDbType.Timestamp;
                                 }
                                 break;
                             case "System.Numerics.BigInteger":
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), DBNull.Value));
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], DBNull.Value));
                                 }
                                 else
                                 {
                                     //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             arrParametros[intContador]));
-                                    command.Parameters["@" + arrNombreParametros[intContador].ToString()].NpgsqlDbType =
+                                    command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType =
                                         NpgsqlDbType.Bigint;
                                 }
                                 break;
@@ -5147,16 +5022,16 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 if (arrParametros[intContador] == null)
                                 {
                                     command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             DBNull.Value));
                                 }
                                 else
                                 {
                                     //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             arrParametros[intContador]));
-                                    command.Parameters["@" + arrNombreParametros[intContador].ToString()].NpgsqlDbType =
+                                    command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType =
                                         NpgsqlDbType.Text;
                                 }
                                 break;
@@ -5169,7 +5044,7 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 var intRes = command.ExecuteNonQuery();
 
-                var valorDevuelto = command.Parameters["@" + arrNombreParametros[0].ToString()].Value;
+                var valorDevuelto = command.Parameters["@" + arrNombreParametros[0]].Value;
 
                 return valorDevuelto;
             }
@@ -5359,12 +5234,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -5490,12 +5365,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -5625,12 +5500,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -5768,12 +5643,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -5968,12 +5843,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -6096,12 +5971,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador.ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -6227,12 +6102,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                 }
                                 break;
@@ -6367,12 +6242,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                             default:
                                 if (arrParametros[intContador] == null)
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                DBNull.Value));
                                 }
                                 else
                                 {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(),
+                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                 }
                                 break;
