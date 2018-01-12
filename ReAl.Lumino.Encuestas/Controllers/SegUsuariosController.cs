@@ -167,9 +167,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     ViewData["Idcde"] = 
                         new SelectList(_context.CatDepartamentos, 
                         CatDepartamentos.Fields.Idcde.ToString(), 
@@ -251,10 +255,21 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
 
+                    ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
+                        CatDepartamentos.Fields.Idcde.ToString(), 
+                        CatDepartamentos.Fields.Idcde.ToString());
+                    ViewData["Idobr"] = new SelectList(_context.OpeBrigadas, 
+                        OpeBrigadas.Fields.Idobr.ToString(), 
+                        OpeBrigadas.Fields.Codigo.ToString());
+                    
                     return View(segUsuarios);
                 }
                 return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
@@ -277,9 +292,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 			catch (Exception exp)
             {
                 if (exp.InnerException is NpgsqlException)
-                    ViewBag.ErrorDb = exp.InnerException.Message;                        
+                {
+                    ViewBag.ErrorDb = exp.InnerException.Message;
+                }
                 else
+                {
                     ModelState.AddModelError("", exp.Message);
+                }
                 ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                     CatDepartamentos.Fields.Idcde.ToString(), 
                     CatDepartamentos.Fields.Idcde.ToString());

@@ -74,9 +74,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     ViewData["Idsap"] = 
                         new SelectList(_context.SegAplicaciones, 
                         SegAplicaciones.Fields.Idsap.ToString(), 
@@ -146,9 +150,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     ViewData["Idsap"] = 
                         new SelectList(_context.SegAplicaciones, 
                         SegAplicaciones.Fields.Idsap.ToString(), 
@@ -198,9 +206,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 			catch (Exception exp)
             {
                 if (exp.InnerException is NpgsqlException)
-                    ViewBag.ErrorDb = exp.InnerException.Message;                        
+                {
+                    ViewBag.ErrorDb = exp.InnerException.Message;
+                }
                 else
+                {
                     ModelState.AddModelError("", exp.Message);
+                }
                 ViewData["Idsap"] = new SelectList(_context.SegAplicaciones, 
                     SegAplicaciones.Fields.Idsap.ToString(), 
                     SegAplicaciones.Fields.Apiestado.ToString());

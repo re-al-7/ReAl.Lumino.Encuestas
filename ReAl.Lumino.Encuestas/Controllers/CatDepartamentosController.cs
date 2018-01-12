@@ -69,9 +69,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     return View();
                 }  
             }
@@ -129,9 +133,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     return View(catDepartamentos);
                 }
                 return RedirectToAction(nameof(Index));
@@ -172,9 +180,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 			catch (Exception exp)
             {
                 if (exp.InnerException is NpgsqlException)
-                    ViewBag.ErrorDb = exp.InnerException.Message;                        
+                {
+                    ViewBag.ErrorDb = exp.InnerException.Message;
+                }
                 else
+                {
                     ModelState.AddModelError("", exp.Message);
+                }
                 return View();
             }     
         }

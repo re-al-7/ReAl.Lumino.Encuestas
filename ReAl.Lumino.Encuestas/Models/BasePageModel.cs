@@ -8,12 +8,12 @@ namespace ReAl.Lumino.Encuestas.Models
 {
     public class BasePageModel : PageModel
     {
-        public readonly db_encuestasContext _context;
-        public List<SegAplicaciones> ListApp { get; internal set; }
-        public List<SegPaginas> ListPages { get; internal set; }
-        public string Usuario { get; internal  set; }
-        public string CurrentApp { get; internal  set; }        
-        public string ErrorDb { get; internal  set; }
+        protected readonly db_encuestasContext _context;
+        protected List<SegAplicaciones> ListApp { get; set; }
+        protected List<SegPaginas> ListPages { get; set; }
+        protected string Usuario { get; set; }
+        protected string CurrentApp { get; set; }        
+        protected string ErrorDb { get; set; }
 
         public BasePageModel(db_encuestasContext context)
         {
@@ -22,7 +22,7 @@ namespace ReAl.Lumino.Encuestas.Models
         
         public string GetCurrentApp()
         {
-            return this.HttpContext.Session.Keys.Contains("currentApp") ? this.HttpContext.Session.GetString("currentApp").ToString() : null;
+            return HttpContext.Session.Keys.Contains("currentApp") ? HttpContext.Session.GetString("currentApp") : null;
         }
         
         public string GetLogin()
@@ -32,35 +32,38 @@ namespace ReAl.Lumino.Encuestas.Models
 
         public string GetUserName()
         {
-            if (!User.Identity.IsAuthenticated) return null;
+            if (!User.Identity.IsAuthenticated)
+            {
+                return null;
+            }
             var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
-            if (obj == null) return User.Identity.GetGivenName().Length > 30 ? User.Identity.GetGivenName().Split(' ')[0] : User.Identity.GetGivenName();
-                
-            if ((obj.Nombres + " " + obj.Apellidos).ToString().Length > 30) return obj.Nombres;
-                
-            return obj.Nombres + " " + obj.Apellidos;
+            if (obj == null)
+            {
+                return User.Identity.GetGivenName().Length > 30 ? User.Identity.GetGivenName().Split(' ')[0] : User.Identity.GetGivenName();
+            }                
+            return ((obj.Nombres + " " + obj.Apellidos).Length > 30)  ? obj.Nombres: obj.Nombres + " " + obj.Apellidos;
         }
 
         public SegUsuarios GetUser()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
-                var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
-                return obj;
-            }
-            else
                 return null;
+            }
+            var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
+            return obj;
+
         }
 
         public SegRoles GetUserRole()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
-                var obj = _context.SegRoles.SingleOrDefault(m => m.Idsro.ToString() == User.Identity.GetRole());                
-                return obj; 
-            }
-            else
                 return null;
+            }
+            var obj = _context.SegRoles.SingleOrDefault(m => m.Idsro.ToString() == User.Identity.GetRole());                
+            return obj;
+
         }
         
         protected List<SegAplicaciones> GetAplicaciones()
@@ -72,7 +75,7 @@ namespace ReAl.Lumino.Encuestas.Models
         protected List<SegPaginas> GetPages()
         {
             var objRol = GetUserRole();
-            return objRol == null ? CMenus.GetPages(this.HttpContext, _context,-1) : CMenus.GetPages(this.HttpContext, _context,objRol.Idsro);
+            return objRol == null ? CMenus.GetPages(HttpContext, _context,-1) : CMenus.GetPages(HttpContext, _context,objRol.Idsro);
         }
         
     }

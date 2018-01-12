@@ -119,9 +119,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     var Upms1 = 
                         _context.OpeUpms
                             .Where(oup => oup.Idcde == GetDepartamentoId() && oup.Idopy == GetProyectoId())                    
@@ -221,9 +225,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     var Upms1 = 
                         _context.OpeUpms
                             .Where(oup => oup.Idcde == GetDepartamentoId() && oup.Idopy == GetProyectoId())                    
@@ -296,9 +304,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 			catch (Exception exp)
             {
                 if (exp.InnerException is NpgsqlException)
-                    ViewBag.ErrorDb = exp.InnerException.Message;                        
+                {
+                    ViewBag.ErrorDb = exp.InnerException.Message;
+                }
                 else
+                {
                     ModelState.AddModelError("", exp.Message);
+                }
                 var Upms = 
                     _context.OpeUpms
                         .Where(oup => oup.Idcde == GetDepartamentoId() && oup.Idopy == GetProyectoId())                    

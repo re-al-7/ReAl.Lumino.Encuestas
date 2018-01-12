@@ -93,9 +93,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     ViewData["Idspg"] = 
                         new SelectList(_context.SegPaginas, 
                         SegPaginas.Fields.Idspg.ToString(), 
@@ -177,9 +181,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     ViewData["Idspg"] = 
                         new SelectList(_context.SegPaginas, 
                         SegPaginas.Fields.Idspg.ToString(), 
@@ -238,9 +246,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 			catch (Exception exp)
             {
                 if (exp.InnerException is NpgsqlException)
-                    ViewBag.ErrorDb = exp.InnerException.Message;                        
+                {
+                    ViewBag.ErrorDb = exp.InnerException.Message;
+                }
                 else
+                {
                     ModelState.AddModelError("", exp.Message);
+                }
                 ViewData["Idspg"] = new SelectList(_context.SegPaginas, 
                     SegPaginas.Fields.Idspg.ToString(), 
                     SegPaginas.Fields.Apiestado.ToString());

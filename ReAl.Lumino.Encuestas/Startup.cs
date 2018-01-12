@@ -100,7 +100,7 @@ namespace ReAl.Lumino.Encuestas
             //Internationalizacion
             //KB: https://stackoverflow.com/questions/40828570/asp-net-core-model-binding-error-messages-localization
             var supportedCultures = new[] { new CultureInfo("es"), new CultureInfo("es") };
-            app.UseRequestLocalization(new RequestLocalizationOptions()
+            app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture(new CultureInfo("es")),
                 SupportedCultures = supportedCultures,

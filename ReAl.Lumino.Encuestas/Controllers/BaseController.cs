@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using ReAl.Lumino.Encuestas.Helpers;
@@ -51,92 +52,69 @@ namespace ReAl.Lumino.Encuestas.Controllers
         
         public string GetCurrentApp()
         {
-            if (this.HttpContext.Session.Keys.Contains("currentApp"))
-                return this.HttpContext.Session.GetString("currentApp").ToString();
-            return null;
+            return this.HttpContext.Session.Keys.Contains("currentApp") ? this.HttpContext.Session.GetString("currentApp").ToString() : null;
         }
         
         public string GetLogin()
         {
-            if (User.Identity.IsAuthenticated)
-                return User.Identity.Name;
-            return null;
+            return User.Identity.IsAuthenticated ? User.Identity.Name : null;
         }
 
         public string GetUserName()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
-                var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
-                if (obj == null)
-                {
-                    if (User.Identity.GetGivenName().Length > 20)
-                        return User.Identity.GetGivenName().Split(' ')[0];
-                    else
-                        return User.Identity.GetGivenName();
-                }
-                else
-                {
-                    
-                    if ((obj.Nombres + " " + obj.Apellidos).ToString().Length > 20)
-                        return obj.Nombres;
-                    else
-                        return obj.Nombres + " " + obj.Apellidos;                    
-                }
+                return null;
             }
-            return null;
+            var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login == User.Identity.GetGivenName());
+            if (obj == null)
+            {
+                return User.Identity.GetGivenName().Length > 20 ? User.Identity.GetGivenName().Split(' ')[0] : User.Identity.GetGivenName();
+            }
+            return ((obj.Nombres + " " + obj.Apellidos).ToString().Length > 20) ? obj.Nombres : obj.Nombres + " " + obj.Apellidos;  
         }
 
         public SegUsuarios GetUser()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
-                var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login.Equals(User.Identity.Name));                
-                return obj;
-            }
-            else
                 return null;
+            }
+            var obj = _context.SegUsuarios.SingleOrDefault(m => m.Login.Equals(User.Identity.Name));                
+            return obj;
+
         }
 
         public SegRoles GetUserRole()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
-                var obj = _context.SegRoles.SingleOrDefault(m => m.Idsro.ToString() == User.Identity.GetRole());                
-                return obj; 
-            }
-            else
                 return null;
+            }
+            var obj = _context.SegRoles.SingleOrDefault(m => m.Idsro.ToString() == User.Identity.GetRole());                
+            return obj;
         }
         
         public int GetProyectoId()
         {
-            if (User.Identity.IsAuthenticated)
-                return int.Parse(User.Identity.GetGroupSid());
-            return -1;
+            return (User.Identity.IsAuthenticated) ? int.Parse(User.Identity.GetGroupSid()) : -1;
         }
         
         public int GetDepartamentoId()
         {
-            if (User.Identity.IsAuthenticated)
-                return int.Parse(User.Identity.GetPrimarySid());
-            return -1;
+            return (User.Identity.IsAuthenticated) ? int.Parse(User.Identity.GetPrimarySid()) : -1;
         }
         
         protected List<SegAplicaciones> GetAplicaciones()
         {
             var objRol = GetUserRole();
-            if (objRol == null)
-                return CMenus.GetAplicaciones(_context, -1);
-            return CMenus.GetAplicaciones(_context, objRol.Idsro);
+            return objRol == null ? CMenus.GetAplicaciones(_context, -1) : CMenus.GetAplicaciones(_context, objRol.Idsro);
         }
                 
         protected List<SegPaginas> GetPages()
         {
             var objRol = GetUserRole();
-            if (objRol == null)
-                return CMenus.GetPages(this.HttpContext, _context,-1);
-            return CMenus.GetPages(this.HttpContext, _context,objRol.Idsro);
+            return objRol == null ? CMenus.GetPages(this.HttpContext, _context,-1) : CMenus.GetPages(this.HttpContext, _context,objRol.Idsro);
         }
         
     }

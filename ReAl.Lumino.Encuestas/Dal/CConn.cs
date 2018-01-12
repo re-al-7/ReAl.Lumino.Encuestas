@@ -2148,11 +2148,11 @@ namespace ReAl.Lumino.Encuestas.Dal
                     {
                         if (boolBandera)
                         {
-                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString().ToUpper() + " = null ");
+                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString() + " = null ");
                         }
                         else
                         {
-                            query.AppendLine(arrColumnasSet[intContador].ToString().ToUpper() + " = null ");
+                            query.AppendLine(arrColumnasSet[intContador].ToString() + " = null ");
                             boolBandera = true;
                         }
                     }
@@ -2170,12 +2170,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                         if (boolBandera)
                         {
-                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString().ToUpper() + " = " +
+                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString() + " = " +
                                     strValorSet);
                         }
                         else
                         {
-                            query.AppendLine(arrColumnasSet[intContador].ToString().ToUpper() + " = " + strValorSet);
+                            query.AppendLine(arrColumnasSet[intContador].ToString() + " = " + strValorSet);
                             boolBandera = true;
                         }
                     }
@@ -2187,12 +2187,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (boolBandera)
                     {
-                        query.AppendLine(" AND " + arrColumnasWhere[intContador].ToString().ToUpper() + " = " +
+                        query.AppendLine(" AND " + arrColumnasWhere[intContador].ToString() + " = " +
                                 arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query.AppendLine(arrColumnasWhere[intContador].ToString().ToUpper() + " = " +
+                        query.AppendLine(arrColumnasWhere[intContador].ToString() + " = " +
                                 arrValoresWhere[intContador]);
                         boolBandera = true;
                     }
@@ -4970,24 +4970,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                                                DataRowVersion.Proposed,
                                                                                arrParametros[intContador]));
                                 }
-                                break;
-                            case "System.String":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
-                                                            DBNull.Value));
-                                }
-                                else
-                                {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
-                                    command.Parameters.Add(
-                                        new NpgsqlParameter("@" + arrNombreParametros[intContador],
-                                                            arrParametros[intContador]));
-                                    command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType =
-                                        NpgsqlDbType.Text;
-                                }
-                                break;
+                                break;                            
                             case "System.DateTime":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -5019,6 +5002,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 break;
                             default:
+                                //Strings y demas
                                 if (arrParametros[intContador] == null)
                                 {
                                     command.Parameters.Add(

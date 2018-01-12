@@ -52,13 +52,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 
         // GET: EncSecciones/Create
         public IActionResult Create()
-        {			
-        ViewData["Idcnv"] = new SelectList(_context.CatNiveles, 
-            CatNiveles.Fields.Idcnv.ToString(), 
-            CatNiveles.Fields.Descripcion.ToString());
-        ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()), 
-            OpeProyectos.Fields.Idopy.ToString(), 
-            OpeProyectos.Fields.Nombre.ToString());
+        {
+            ViewData["Idcnv"] = new SelectList(_context.CatNiveles,
+                CatNiveles.Fields.Idcnv.ToString(),
+                CatNiveles.Fields.Descripcion.ToString());
+            ViewData["Idopy"] = new SelectList(_context.OpeProyectos.Where(proy => proy.Idopy == GetProyectoId()),
+                OpeProyectos.Fields.Idopy.ToString(),
+                OpeProyectos.Fields.Nombre.ToString());
             return View();
         }
 
@@ -81,9 +81,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 				catch (Exception exp)
                 {
                     if (exp.InnerException is NpgsqlException)
-                        ViewBag.ErrorDb = exp.InnerException.Message;                        
+                    {
+                        ViewBag.ErrorDb = exp.InnerException.Message;
+                    }
                     else
+                    {
                         ModelState.AddModelError("", exp.Message);
+                    }
                     ViewData["Idcnv"] = 
                         new SelectList(_context.CatNiveles, 
                         CatNiveles.Fields.Idcnv.ToString(), 
@@ -226,9 +230,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 			catch (Exception exp)
             {
                 if (exp.InnerException is NpgsqlException)
-                    ViewBag.ErrorDb = exp.InnerException.Message;                        
+                {
+                    ViewBag.ErrorDb = exp.InnerException.Message;
+                }
                 else
+                {
                     ModelState.AddModelError("", exp.Message);
+                }
                 ViewData["Idcnv"] = new SelectList(_context.CatNiveles, 
                     CatNiveles.Fields.Idcnv.ToString(), 
                     CatNiveles.Fields.Descripcion.ToString());

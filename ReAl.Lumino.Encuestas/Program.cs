@@ -8,7 +8,7 @@ namespace ReAl.Lumino.Encuestas
     {
         public static void Main(string[] args)
         {
-            //BuildWebHost(args).Run();
+            //ANTES BuildWebHost(args).Run();
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())

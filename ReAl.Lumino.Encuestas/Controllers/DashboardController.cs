@@ -16,7 +16,9 @@ namespace ReAl.Lumino.Encuestas.Controllers
         public IActionResult Index(string app = "")
         {
             if (app != "")
+            {
                 HttpContext.Session.SetString("currentApp", app);
+            }
             
             return View();
         }

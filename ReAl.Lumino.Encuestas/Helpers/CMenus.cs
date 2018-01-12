@@ -6,8 +6,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Http;
 using ReAl.Lumino.Encuestas.Models;
 
@@ -22,7 +20,7 @@ namespace ReAl.Lumino.Encuestas.Helpers
         
         public static List<SegAplicaciones> GetAplicaciones(db_encuestasContext context, long idRol)
         {
-            //return context.SegAplicaciones.OrderBy(x => x.Nombre).ToList();
+            //ANTES: return context.SegAplicaciones.OrderBy(x => x.Nombre).ToList();
             return context.SegAplicaciones
                 .Join(context.SegPaginas, app => app.Idsap, pag => pag.Idsap, (app, pag) => new {app, pag})
                 .Join(context.SegRolesPagina, pag => pag.pag.Idspg, rolpag => rolpag.Idspg, (pag, rolpag) => new {pag, rolpag})
@@ -32,14 +30,17 @@ namespace ReAl.Lumino.Encuestas.Helpers
         
         public static List<SegPaginas> GetPages(HttpContext miContexto, db_encuestasContext context, long idRol)
         {
-            string currentApp = "--";
+            var currentApp = "--";
             if (miContexto.Session.Keys.Contains("currentApp"))
                 currentApp  = miContexto.Session.GetString("currentApp").ToString();
             
             //Obtenemos el objeto de Aplicaciones en base a la SIGLA
             var objApp = context.SegAplicaciones.SingleOrDefault(app => app.Sigla == currentApp);
 
-            if (objApp == null) return new List<SegPaginas>();
+            if (objApp == null)
+            {
+                return new List<SegPaginas>();
+            }
             
             return context.SegPaginas
                 .Join(context.SegRolesPagina, pag => pag.Idspg, rolpag => rolpag.Idspg,
