@@ -1881,7 +1881,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                     }
 
                     var strValorSet = "";
-                    if (arrValores[intContador].GetType().Equals(arrParam.GetType()))
+                    if (arrValores[intContador].GetType() == arrParam.GetType())
                     {
                         strValorSet = "?";
                         arrPosicionByte.Add(intContador);
@@ -2712,23 +2712,24 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             DataTable dtTemp;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                {
+                    strParametrosSelect.AppendLine(", " + strSelect);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            var arrParametros = new ArrayList {strParametrosSelect};
+            var arrNombreParametros = new ArrayList {"Columnas"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString()};
 
             try
             {
@@ -2755,24 +2756,24 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             DataTable dtTemp;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                {
+                    strParametrosSelect.AppendLine(", " + strSelect);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
+            var arrNombreParametros = new ArrayList {"Columnas"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString()};
 
             try
             {
@@ -2800,23 +2801,24 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             DataTable dtTemp;
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
 
             var bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList {strParametrosWhere};
+            var arrNombreParametros = new ArrayList {"ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosWhere.ToString()};
 
             try
             {
@@ -2845,24 +2847,24 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             DataTable dtTemp;
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
 
             var bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosWhere.ToString()};
 
             try
             {
@@ -2889,42 +2891,45 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DataTable ExecStoreProcedureSel(string strNombreTabla, ArrayList arrParametrosSelect,
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                {
+                    strParametrosSelect.AppendLine(strParametrosSelect + ", " + strSelect);
+                }
             }
 
-
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
             var arrNombreParametros = new ArrayList();
             arrNombreParametros.Add("Columnas");
             arrNombreParametros.Add("ColumnasWhere");
             var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            arrParametros.Add(strParametrosSelect.ToString());
+            arrParametros.Add(strParametrosWhere.ToString());
 
             try
             {
@@ -2955,40 +2960,40 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var dtTemp = new DataTable();
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                {
+                    strParametrosSelect.AppendLine(", " + strSelect);
+                }
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString(), strParametrosWhere.ToString()};
 
             try
             {
@@ -3019,43 +3024,43 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var dtTemp = new DataTable();
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(strParametrosSelect + ", " + strSelect);
             }
 
-
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -3085,45 +3090,46 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                string strParamAdicionales, ref CTrans myTrans)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -3152,40 +3158,40 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             var dtTemp = new DataTable();
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(), 
+                strParametrosWhere.ToString()
+            };
 
             try
             {
@@ -3214,42 +3220,37 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  ref CTrans myTrans)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
-
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString(), strParametrosWhere.ToString()};
 
             try
             {
@@ -3278,45 +3279,44 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -3346,45 +3346,44 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales, ref CTrans myTrans)
         {
-            var dtTemp = new DataTable();
+            DataTable dtTemp;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -3450,25 +3449,23 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect)
         {
-            DbDataReader drReader = null;
-            var strParametrosSelect = "";
+            DbDataReader drReader;
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
+            var arrNombreParametros = new ArrayList {"Columnas"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString()};
 
             try
             {
@@ -3493,26 +3490,24 @@ namespace ReAl.Lumino.Encuestas.Dal
         /// <returns></returns>
         public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosSelect, ref CTrans myTrans)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
+            var arrNombreParametros = new ArrayList {"Columnas"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString()};
 
             try
             {
@@ -3538,26 +3533,26 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
 
             var bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosWhere.ToString()};
 
             try
             {
@@ -3584,26 +3579,26 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DbDataReader ExecStoreProcedureDataReaderSel(string strNombreTabla, ArrayList arrParametrosWhere,
                                                ArrayList arrParametrosValores, ref CTrans myTrans)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
 
             var bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosWhere.ToString()};
 
             try
             {
@@ -3632,40 +3627,37 @@ namespace ReAl.Lumino.Encuestas.Dal
         {
             DbDataReader drReader = null;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
-
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString(), strParametrosWhere.ToString()};
 
             try
             {
@@ -3694,42 +3686,39 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                ref CTrans myTrans)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
-
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString(), strParametrosWhere.ToString()};
 
             try
             {
@@ -3758,45 +3747,46 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                string strParamAdicionales)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -3826,45 +3816,45 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                string strParamAdicionales, ref CTrans myTrans)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
-
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " AND " + strParametrosWhere;
+                {
+                    strParametrosWhere.AppendLine(" AND " + strParametrosWhere);
+                }
             }
 
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -3891,42 +3881,38 @@ namespace ReAl.Lumino.Encuestas.Dal
         public DbDataReader ExecStoreProcedureDataReaderSelOr(string strNombreTabla, ArrayList arrParametrosSelect,
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString(), strParametrosWhere.ToString()};
 
             try
             {
@@ -3955,42 +3941,38 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  ref CTrans myTrans)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
+            var arrParametros = new ArrayList {strParametrosSelect.ToString(), strParametrosWhere.ToString()};
 
             try
             {
@@ -4019,45 +4001,43 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
-
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
 
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -4087,45 +4067,43 @@ namespace ReAl.Lumino.Encuestas.Dal
                                                  ArrayList arrParametrosWhere, ArrayList arrParametrosValores,
                                                  string strParamAdicionales, ref CTrans myTrans)
         {
-            DbDataReader drReader = null;
+            DbDataReader drReader;
 
-            var strParametrosSelect = "";
+            var strParametrosSelect = new StringBuilder();
 
             var bPrimerElemento = true;
             foreach (string strSelect in arrParametrosSelect)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosSelect = strSelect;
+                    strParametrosSelect.AppendLine(strSelect);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosSelect = strParametrosSelect + ", " + strSelect;
+                    strParametrosSelect.AppendLine(", " + strSelect);
             }
 
 
-            var strParametrosWhere = "";
+            var strParametrosWhere = new StringBuilder();
             bPrimerElemento = true;
             for (var i = 0; i < arrParametrosWhere.Count - 1; i++)
             {
                 if (bPrimerElemento)
                 {
-                    strParametrosWhere = arrParametrosWhere[i] + " = " + arrParametrosValores[i];
+                    strParametrosWhere.AppendLine(arrParametrosWhere[i] + " = " + arrParametrosValores[i]);
                     bPrimerElemento = false;
                 }
                 else
-                    strParametrosWhere = strParametrosWhere + " OR " + strParametrosWhere;
+                    strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
             }
 
-
-            var arrNombreParametros = new ArrayList();
-            arrNombreParametros.Add("Columnas");
-            arrNombreParametros.Add("ColumnasWhere");
-            arrNombreParametros.Add("Parametros");
-            var arrParametros = new ArrayList();
-            arrParametros.Add(strParametrosSelect);
-            arrParametros.Add(strParametrosWhere);
-            arrParametros.Add(strParamAdicionales);
+            var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
+            var arrParametros = new ArrayList
+            {
+                strParametrosSelect.ToString(),
+                strParametrosWhere.ToString(),
+                strParamAdicionales
+            };
 
             try
             {
@@ -4218,7 +4196,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Text;
@@ -4231,7 +4208,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -4243,8 +4219,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador, DBNull.Value));
                                 }
                                 else
-                                {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
+                                {                                    
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Bigint;
@@ -4356,7 +4331,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Text;
@@ -4369,7 +4343,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -4382,7 +4355,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Bigint;
@@ -4522,7 +4494,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Text;
@@ -4535,7 +4506,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -4548,7 +4518,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Bigint;
@@ -4680,7 +4649,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
+
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Text;
@@ -4693,7 +4662,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -4706,7 +4674,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Bigint;
@@ -4838,7 +4805,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Text;
@@ -4851,7 +4817,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -4864,7 +4829,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Bigint;
@@ -5013,7 +4977,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(
                                         new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             arrParametros[intContador]));
@@ -5028,7 +4991,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(
                                         new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             arrParametros[intContador]));
@@ -5046,7 +5008,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(
                                         new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                             arrParametros[intContador]));
@@ -5231,7 +5192,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Text;
@@ -5244,7 +5204,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -5362,7 +5321,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Text;
@@ -5375,7 +5333,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -5497,7 +5454,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Text;
@@ -5510,7 +5466,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -5587,7 +5542,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (arrNombreParametros.Count != arrParametros.Count)
                 {
-                    throw new Exception(
+                    throw new ArgumentException(
                         "Error al ejecutar procedimiento almacenado. El numero de parametros debe ser igual al número de nombres de parametros.");
                 }
 
@@ -5641,7 +5596,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Text;
@@ -5654,7 +5608,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -5850,7 +5803,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Text;
@@ -5863,7 +5815,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -5984,7 +5935,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Text;
@@ -5997,7 +5947,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + intContador,
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + intContador].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -6118,7 +6067,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Text;
@@ -6131,7 +6079,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Timestamp;
@@ -6211,7 +6158,7 @@ namespace ReAl.Lumino.Encuestas.Dal
             {
                 if (arrNombreParametros.Count != arrParametros.Count)
                 {
-                    throw new Exception(
+                    throw new ArgumentException(
                         "Error al ejecutar procedimiento almacenado. El numero de parametros debe ser igual al número de nombres de parametros.");
                 }
 
@@ -6265,7 +6212,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Text;
@@ -6278,7 +6224,6 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 else
                                 {
-                                    //command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador].ToString(), arrParametros[intContador]));
                                     command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador],
                                                                                arrParametros[intContador]));
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Timestamp;

@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace ReAl.Lumino.Encuestas
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
-            //ANTES BuildWebHost(args).Run();
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
