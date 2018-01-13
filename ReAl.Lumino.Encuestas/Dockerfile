@@ -1,3 +1,4 @@
+MAINTAINER re_al_
 FROM microsoft/aspnetcore:2.0
 ARG source
 WORKDIR /app
