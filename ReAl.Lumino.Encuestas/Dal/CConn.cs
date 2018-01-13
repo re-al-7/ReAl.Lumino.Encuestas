@@ -3035,7 +3035,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosSelect.AppendLine(strParametrosSelect + ", " + strSelect);
+                }
             }
 
             var strParametrosWhere = new StringBuilder();

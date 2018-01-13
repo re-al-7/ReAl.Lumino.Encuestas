@@ -67,7 +67,7 @@
         <div class="login-panel panel panel-default">
             <div class="panel-heading">Log in</div>
             <div class="panel-body">
-                <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
+                <form asp-controller="Account" asp-action="Login" asp-route-strReturnUrl="@ViewData["ReturnUrl"]" method="post" role="form">
                 <fieldset>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Login, new { @class = "form-control", @placeholder = "Usuario", @autofocus="" })

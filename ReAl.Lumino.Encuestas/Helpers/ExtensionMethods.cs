@@ -5,6 +5,7 @@
 // // <date>2018-01-04 11:27</date>
 
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace ReAl.Lumino.Encuestas.Helpers
@@ -13,7 +14,7 @@ namespace ReAl.Lumino.Encuestas.Helpers
     {
         public static string ToUnderscoreCase(this string str)
         {
-            return string.Concat(str.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLower();
+            return string.Concat(str.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLowerInvariant();
         }
 
         public static string ToCamelCase(this string str)
@@ -24,10 +25,10 @@ namespace ReAl.Lumino.Encuestas.Helpers
         public static string ToPascalCase(this string str)
         {
             var words = str.Split(new[] { '-', '_' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(word => word.Substring(0, 1).ToUpper() +
-                                word.Substring(1).ToLower());
+                .Select(word => word.Substring(0, 1).ToUpperInvariant() +
+                                word.Substring(1).ToLowerInvariant());
 
-            var result = String.Concat(words);
+            var result = string.Concat(words);
             return result;
         }
     }

@@ -30,9 +30,9 @@ namespace ReAl.Lumino.Encuestas.Controllers
         [HttpPost, ActionName("Login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(SegUsuarios user, string returnUrl)
+        public async Task<IActionResult> Login(SegUsuarios user, string strReturnUrl)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["ReturnUrl"] = strReturnUrl;
             if (ModelState.IsValid)
             {
                 const string badUserNameOrPasswordMessage = "Usuario o contraseña incorrectos.";
@@ -91,13 +91,13 @@ namespace ReAl.Lumino.Encuestas.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
                 
-                if (returnUrl == null)
+                if (strReturnUrl == null)
                 {
-                    returnUrl = TempData["returnUrl"]?.ToString();
+                    strReturnUrl = TempData["returnUrl"]?.ToString();
                 }
-                if (returnUrl != null)
+                if (strReturnUrl != null)
                 {
-                    return Redirect(returnUrl);
+                    return Redirect(strReturnUrl);
                 }
                 return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
             }
