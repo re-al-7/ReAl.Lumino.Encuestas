@@ -217,10 +217,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
 				catch (Exception exp)
                 {

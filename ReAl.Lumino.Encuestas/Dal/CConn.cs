@@ -55,11 +55,17 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 if (TipoConexion == EnumTipoConexion.UseDataReader)
                 {
-                    if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                    if (command.Connection.State == ConnectionState.Closed)
+                    {
+                        command.Connection.Open();
+                    }
                     DbDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
                     dt.Load(dr);
                     dr.Close();
-                    if (command.Connection.State != ConnectionState.Closed) command.Connection.Close();
+                    if (command.Connection.State != ConnectionState.Closed)
+                    {
+                        command.Connection.Close();
+                    }
                 }
                 else
                 {
@@ -104,7 +110,10 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 if (TipoConexion == EnumTipoConexion.UseDataReader)
                 {
-                    if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                    if (command.Connection.State == ConnectionState.Closed)
+                    {
+                        command.Connection.Open();
+                    }
                     var dr = (NpgsqlDataReader)command.ExecuteReader(CommandBehavior.Default);
                     dt.Load(dr);
                     dr.Close();
@@ -146,7 +155,10 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 dr = (DbDataReader)command.ExecuteReader(CommandBehavior.CloseConnection);
                 dr.Close();
-                if (command.Connection.State != ConnectionState.Closed) command.Connection.Close();
+                if (command.Connection.State != ConnectionState.Closed)
+                {
+                    command.Connection.Close();
+                }
                 command.Dispose();
             }
             catch (Exception ex)
@@ -181,7 +193,10 @@ namespace ReAl.Lumino.Encuestas.Dal
                 var command = new NpgsqlCommand(query, trans.MyConn);
                 command.Transaction = trans.MyTrans;
 
-                if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                {
+                    command.Connection.Open();
+                }
                 dr = (NpgsqlDataReader)command.ExecuteReader(CommandBehavior.Default);
                 dr.Close();
 
@@ -1740,7 +1755,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        throw new ArgumentException();;
+                        throw new ArgumentException("El elemento " + intContador + " de arrValores es NULO");
                     }
 
                     var strValorSet = "";
@@ -1842,7 +1857,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        throw new ArgumentException();;
+                        throw new ArgumentException("El elemento " + intContador + " de arrValores es NULO");;
                     }
 
                     var strValorSet = "";
@@ -1940,7 +1955,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        throw new ArgumentException();;
+                        throw new ArgumentException("El elemento " + intContador + " de arrValores es NULO");
                     }
 
                     var strValorSet = "";
@@ -2043,7 +2058,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (arrValores[intContador] == null)
                     {
-                        throw new ArgumentException();;
+                        throw new ArgumentException("El elemento " + intContador + " de arrValores es NULO");
                     }
 
                     var strValorSet = "";
@@ -2148,11 +2163,11 @@ namespace ReAl.Lumino.Encuestas.Dal
                     {
                         if (boolBandera)
                         {
-                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString() + " = null ");
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = null ");
                         }
                         else
                         {
-                            query.AppendLine(arrColumnasSet[intContador].ToString() + " = null ");
+                            query.AppendLine(arrColumnasSet[intContador] + " = null ");
                             boolBandera = true;
                         }
                     }
@@ -2170,12 +2185,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                         }
                         if (boolBandera)
                         {
-                            query.AppendLine(" , " + arrColumnasSet[intContador].ToString() + " = " +
+                            query.AppendLine(" , " + arrColumnasSet[intContador] + " = " +
                                     strValorSet);
                         }
                         else
                         {
-                            query.AppendLine(arrColumnasSet[intContador].ToString() + " = " + strValorSet);
+                            query.AppendLine(arrColumnasSet[intContador] + " = " + strValorSet);
                             boolBandera = true;
                         }
                     }
@@ -2187,12 +2202,12 @@ namespace ReAl.Lumino.Encuestas.Dal
                 {
                     if (boolBandera)
                     {
-                        query.AppendLine(" AND " + arrColumnasWhere[intContador].ToString() + " = " +
+                        query.AppendLine(" AND " + arrColumnasWhere[intContador] + " = " +
                                 arrValoresWhere[intContador]);
                     }
                     else
                     {
-                        query.AppendLine(arrColumnasWhere[intContador].ToString() + " = " +
+                        query.AppendLine(arrColumnasWhere[intContador] + " = " +
                                 arrValoresWhere[intContador]);
                         boolBandera = true;
                     }
@@ -5680,9 +5695,15 @@ namespace ReAl.Lumino.Encuestas.Dal
             try
             {
                 command.Connection = ConexionBd;
-                if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                {
+                    command.Connection.Open();
+                }
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
-                if (command.Connection.State != ConnectionState.Closed) command.Connection.Close();
+                if (command.Connection.State != ConnectionState.Closed)
+                {
+                    command.Connection.Close();
+                }
                 command.Dispose();
                 return dr;
             }
@@ -5720,7 +5741,10 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Connection = myTrans.MyConn;
                 command.Transaction = myTrans.MyTrans;
 
-                if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                {
+                    command.Connection.Open();
+                }
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.Default);
                 command.Dispose();
                 return dr;
@@ -5842,9 +5866,15 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 command.Connection = ConexionBd;
 
-                if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                {
+                    command.Connection.Open();
+                }
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
-                if (command.Connection.State != ConnectionState.Closed) command.Connection.Close();
+                if (command.Connection.State != ConnectionState.Closed)
+                {
+                    command.Connection.Close();
+                }
                 command.Dispose();
                 return dr;
             }
@@ -5972,7 +6002,10 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Connection = trans.MyConn;
                 command.Transaction = trans.MyTrans;
 
-                if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                {
+                    command.Connection.Open();
+                }
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.Default);
                 command.Dispose();
                 return dr;
@@ -6101,9 +6134,15 @@ namespace ReAl.Lumino.Encuestas.Dal
 
                 command.Connection = ConexionBd;
 
-                if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                {
+                    command.Connection.Open();
+                }
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
-                if (command.Connection.State != ConnectionState.Closed) command.Connection.Close();
+                if (command.Connection.State != ConnectionState.Closed)
+                {
+                    command.Connection.Close();
+                }
                 command.Dispose();
                 return dr;
             }
@@ -6241,7 +6280,10 @@ namespace ReAl.Lumino.Encuestas.Dal
                 command.Connection = trans.MyConn;
                 command.Transaction = trans.MyTrans;
 
-                if (command.Connection.State == ConnectionState.Closed) command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                {
+                    command.Connection.Open();
+                }
                 DbDataReader dr = command.ExecuteReader(CommandBehavior.Default);
                 command.Dispose();
                 return dr;

@@ -254,7 +254,10 @@ namespace ReAl.Lumino.Encuestas.Controllers
             }
 
             var segUsuariosRestriccion = await _context.SegUsuariosRestriccion.SingleOrDefaultAsync(m => m.Idsur == id);
-            if (segUsuariosRestriccion == null) return NotFound();
+            if (segUsuariosRestriccion == null)
+            {
+                return NotFound();
+            }
             
             ViewData["Idcde"] = new SelectList(_context.CatDepartamentos, 
                 CatDepartamentos.Fields.Idcde.ToString(), 
@@ -282,7 +285,10 @@ namespace ReAl.Lumino.Encuestas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Idsur,Idsus,Idsro,Idcde,Idopy,Rolactivo,Vigente,Apiestado,Apitransaccion,Usucre,Feccre,Usumod,Fecmod")] SegUsuariosRestriccion segUsuariosRestriccion)
         {
-            if (id != segUsuariosRestriccion.Idsur) return NotFound();
+            if (id != segUsuariosRestriccion.Idsur)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
