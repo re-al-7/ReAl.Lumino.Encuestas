@@ -57,7 +57,7 @@ namespace ReAl.Lumino.Encuestas.Controllers
                     return View();
                 }
                     
-                if (!CFunciones.generarMD5(user.Password).ToUpper().Equals(obj.Password.ToUpper()))
+                if (!CFunciones.GenerarMd5(user.Password).ToUpper().Equals(obj.Password.ToUpper()))
                 {
                     ModelState.AddModelError("", badUserNameOrPasswordMessage);
                     return View();

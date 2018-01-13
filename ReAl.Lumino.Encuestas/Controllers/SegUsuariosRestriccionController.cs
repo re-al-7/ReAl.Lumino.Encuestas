@@ -73,7 +73,10 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 var user = User as ClaimsPrincipal;
                 var identity = user.Identity as ClaimsIdentity;
 
-                if (identity == null) return RedirectToAction(nameof(CambiarRolActual));
+                if (identity == null)
+                {
+                    return RedirectToAction(nameof(CambiarRolActual));
+                }
                 
                 var claim = (from c in user.Claims
                     where c.Type == ClaimTypes.Role

@@ -525,7 +525,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -605,7 +607,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -680,7 +684,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -826,7 +832,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -906,7 +914,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -1116,7 +1126,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -1196,7 +1208,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -1271,7 +1285,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -1417,7 +1433,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -1497,7 +1515,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     primerReg = false;
                 }
                 else
+                {
                     query.AppendLine(", " + columna);
+                }
             }
             query.AppendLine(" FROM " + tabla + " WHERE ");
 
@@ -5566,9 +5586,10 @@ namespace ReAl.Lumino.Encuestas.Dal
             try
             {
                 if (arrNombreParametros.Count != arrParametros.Count)
+                {
                     throw new Exception(
                         "Error al ejecutar procedimiento almacenado. El numero de parametros debe ser igual al número de nombres de parametros.");
-
+                }
 
                 for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {
@@ -6189,9 +6210,10 @@ namespace ReAl.Lumino.Encuestas.Dal
             try
             {
                 if (arrNombreParametros.Count != arrParametros.Count)
+                {
                     throw new Exception(
                         "Error al ejecutar procedimiento almacenado. El numero de parametros debe ser igual al número de nombres de parametros.");
-
+                }
 
                 for (var intContador = 0; intContador < arrParametros.Count; intContador++)
                 {

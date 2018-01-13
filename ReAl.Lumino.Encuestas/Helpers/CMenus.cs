@@ -32,7 +32,7 @@ namespace ReAl.Lumino.Encuestas.Helpers
             var currentApp = "--";
             if (miContexto.Session.Keys.Contains("currentApp"))
             {
-                currentApp  = miContexto.Session.GetString("currentApp").ToString();
+                currentApp  = miContexto.Session.GetString("currentApp");
             }
             
             //Obtenemos el objeto de Aplicaciones en base a la SIGLA
