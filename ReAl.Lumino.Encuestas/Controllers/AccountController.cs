@@ -93,12 +93,10 @@ namespace ReAl.Lumino.Encuestas.Controllers
                 
                 if (strReturnUrl == null)
                 {
-                    strReturnUrl = TempData["returnUrl"]?.ToString();
+                    if (TempData["returnUrl"] != null)
+                        return Redirect(TempData["returnUrl"].ToString());
                 }
-                if (strReturnUrl != null)
-                {
-                    return Redirect(strReturnUrl);
-                }
+                
                 return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
             }
 

@@ -1,4 +1,4 @@
-MAINTAINER re_al_
+MAINTAINER Alonzo Vera <re-al-@hotmail.com>
 FROM microsoft/aspnetcore:2.0
 ARG source
 WORKDIR /app

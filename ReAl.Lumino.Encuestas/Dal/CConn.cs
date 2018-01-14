@@ -3187,7 +3187,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
             var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
@@ -3252,7 +3254,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
             var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
@@ -3314,7 +3318,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
 
@@ -3383,7 +3389,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
 
@@ -3932,7 +3940,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
             var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
@@ -3994,7 +4004,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
             var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere"};
@@ -4055,7 +4067,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
 
@@ -4124,7 +4138,9 @@ namespace ReAl.Lumino.Encuestas.Dal
                     bPrimerElemento = false;
                 }
                 else
+                {
                     strParametrosWhere.AppendLine(" OR " + strParametrosWhere);
+                }
             }
 
             var arrNombreParametros = new ArrayList {"Columnas", "ColumnasWhere", "Parametros"};
@@ -4188,21 +4204,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Integer, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Integer, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -4325,21 +4327,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Integer, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Integer, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -4471,22 +4459,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Bytea;
                                 }
                                 break;
-                            case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int32":                                
                             case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
@@ -4627,22 +4600,8 @@ namespace ReAl.Lumino.Encuestas.Dal
                                     command.Parameters["@" + arrNombreParametros[intContador]].NpgsqlDbType = NpgsqlDbType.Bytea;
                                 }
                                 break;
-                            case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int32":  
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -4784,21 +4743,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 break;
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Integer, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Integer, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -4952,23 +4897,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                                 }
                                 break;
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Integer,
-                                                                               4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Integer,
-                                                                               4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -5171,21 +5100,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -5300,21 +5215,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -5433,21 +5334,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -5575,21 +5462,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -5782,21 +5655,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -5914,21 +5773,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + intContador, NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -6046,21 +5891,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
@@ -6191,21 +6022,7 @@ namespace ReAl.Lumino.Encuestas.Dal
                         switch (arrParametros[intContador].GetType().ToString())
                         {
                             case "System.Int32":
-                                if (arrParametros[intContador] == null)
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               DBNull.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new NpgsqlParameter("@" + arrNombreParametros[intContador], NpgsqlDbType.Numeric, 4, "",
-                                                                               ParameterDirection.Input, false, 0, 0,
-                                                                               DataRowVersion.Proposed,
-                                                                               arrParametros[intContador]));
-                                }
-                                break;
+                            case "System.Int64":
                             case "System.Decimal":
                                 if (arrParametros[intContador] == null)
                                 {
