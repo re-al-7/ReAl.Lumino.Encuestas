@@ -7,11 +7,9 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using Microsoft.AspNetCore.Http;
 using Octokit;
 
 namespace ReAl.Lumino.Encuestas.Helpers
@@ -20,7 +18,7 @@ namespace ReAl.Lumino.Encuestas.Helpers
     {
         private const string GITHUB_ACCESS_TOKEN = "f67cc42cfec27fb43f3dd0ddb24ffc16ef05af4f";
         private const string GITHUB_OWNER = "re-al-7";
-        private const string GITHUB_REPOSITORY = "ReAl.Template.Lumino.PostgreSql";
+        private const string GITHUB_REPOSITORY = "ReAl.Lumino.Encuestas";
 
         /// <summary>
         /// Metodo para crear un Issue en GitHub
@@ -44,7 +42,7 @@ namespace ReAl.Lumino.Encuestas.Helpers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                // ignored
             }
         }
 
@@ -88,17 +86,30 @@ namespace ReAl.Lumino.Encuestas.Helpers
             {
                 strIssue.AppendLine("**Tipo #" + j + ":** " + ex.GetType() );
                 if (!string.IsNullOrEmpty(ex.Message))
+                {
                     strIssue.AppendLine("**Mensaje #" + j + ":** " + ex.Message );
+                }
+
                 if (!string.IsNullOrEmpty(ex.Source))
+                {
                     strIssue.AppendLine("**Origen #" + j + ":** " + ex.Source );
+                }
+
                 if (!string.IsNullOrEmpty(ex.HelpLink))
+                {
                     strIssue.AppendLine("**Enlace de ayuda #" + j + ":** " + ex.HelpLink );
+                }
+
                 if (ex.TargetSite != null)
+                {
                     strIssue.AppendLine("**Target Site #" + j + ":** " + ex.TargetSite );
+                }
+
                 foreach (DictionaryEntry de in ex.Data)
+                {
                     strIssue.AppendLine("**" + de.Key + ":** " + de.Value );
-                strIssue.AppendLine("-------------------------------------------------------------" +
-                                    Environment.NewLine);
+                }
+                strIssue.AppendLine("-------------------------------------------------------------");
             }
 
             strIssue.AppendLine("**StackTrace:**" );
@@ -109,14 +120,16 @@ namespace ReAl.Lumino.Encuestas.Helpers
             strIssue.AppendLine(exp.Source );
 
             strIssue.AppendLine("-------------------------------------------------------------" );
-            if (stackFrame != null)
+
+            if (stackFrame == null)
             {
-                strIssue.AppendLine("**File Name:** " + stackFrame.GetFileName() );
-                strIssue.AppendLine("**Class Name:** " + stackFrame.GetMethod().DeclaringType );
-                strIssue.AppendLine("**Method Name:** " + stackFrame.GetMethod().Name );
-                strIssue.AppendLine("**Line Number:** " + stackFrame.GetFileLineNumber() );
-                strIssue.AppendLine("**Column Number:** " + stackFrame.GetFileColumnNumber() );
+                return strIssue.ToString();
             }
+            strIssue.AppendLine("**File Name:** " + stackFrame.GetFileName() );
+            strIssue.AppendLine("**Class Name:** " + stackFrame.GetMethod().DeclaringType );
+            strIssue.AppendLine("**Method Name:** " + stackFrame.GetMethod().Name );
+            strIssue.AppendLine("**Line Number:** " + stackFrame.GetFileLineNumber() );
+            strIssue.AppendLine("**Column Number:** " + stackFrame.GetFileColumnNumber() );
 
             return strIssue.ToString();
         }
