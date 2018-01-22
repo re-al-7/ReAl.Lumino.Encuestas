@@ -10,7 +10,7 @@ namespace ReAl.Lumino.Encuestas.Models
 {
     public partial class db_encuestasContext : DbContext
     {
-        protected db_encuestasContext(DbContextOptions<db_encuestasContext> options) :  
+        public db_encuestasContext(DbContextOptions<db_encuestasContext> options) :  
             base(options)  
         {  
         }
