@@ -10,21 +10,38 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using Manatee.Trello;
+using Manatee.Trello.ManateeJson;
+using Manatee.Trello.WebApi;
 using Octokit;
 
 namespace ReAl.Lumino.Encuestas.Helpers
 {
     public static class CExceptions
     {
+        private const bool GITHUB = true;
         private const string GITHUB_ACCESS_TOKEN = "f67cc42cfec27fb43f3dd0ddb24ffc16ef05af4f";
         private const string GITHUB_OWNER = "re-al-7";
         private const string GITHUB_REPOSITORY = "ReAl.Lumino.Encuestas";
 
+        private const bool TRELLO = true;
+        private const string TRELLO_BOARD = "NBkW54dw";
+        private const string TRELLO_LIST = "5a49ad5e1090560f319bfbdf";
+
+        public static void ReportIssue(Exception ex)
+        {
+            if (GITHUB)
+                CreateIssueOnGithub(ex);
+            if (TRELLO)
+                CreateCardOnTrello(ex);
+        }
+        
+        
         /// <summary>
         /// Metodo para crear un Issue en GitHub
         /// </summary>
         /// <param name="ex">Excepcion desde la que se crea el Issue</param>
-        public static void CreateIssueGithub(Exception ex)
+        private static void CreateIssueOnGithub(Exception ex)
         {
             try
             {
@@ -43,6 +60,44 @@ namespace ReAl.Lumino.Encuestas.Helpers
             catch (Exception e)
             {
                 // ignored
+            }
+        }
+
+        /// <summary>
+        /// Metodo para crear una tarjeta en una lista de Trello
+        /// </summary>
+        /// <param name="ex">Excepcion desde la que se crea el Issue</param>
+        private static void CreateCardOnTrello(Exception ex)
+        {
+            try
+            {
+                var serializer = new ManateeSerializer();
+                TrelloConfiguration.Serializer = serializer;
+                TrelloConfiguration.Deserializer = serializer;
+                TrelloConfiguration.JsonFactory = new ManateeFactory();
+                TrelloConfiguration.RestClientProvider = new WebApiClientProvider();
+                TrelloAuthorization.Default.AppKey = "d40bd5f52fc8890e76d2f46ad995ce45";
+                TrelloAuthorization.Default.UserToken = "899b39d4a2fa6817263e1b37d239ffc123909c87f22a5fabec82b71821702823";
+
+                //Obtenemos el Board
+                var board = new Board(TRELLO_BOARD);
+            
+                //Obtenemos la lista
+                var listaToDo = board.Lists[TRELLO_LIST];
+
+                if (listaToDo != null)
+                {
+                    //Agregamos nueva tarjeta
+                    var nuevo = listaToDo.Cards.Add(ex.Message, 
+                        description: CrearIssueBody(ex), 
+                        dueDate: DateTime.Now.AddDays(2), 
+                        members: new []{board.Members[0]}, 
+                        labels:new[]{board.Labels[1]});
+                }
+            }
+            catch (Exception e)
+            {
+                //ignored
             }
         }
 
